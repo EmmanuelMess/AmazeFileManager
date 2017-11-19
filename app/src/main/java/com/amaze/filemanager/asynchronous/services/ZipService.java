@@ -28,7 +28,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Binder;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.text.format.Formatter;
@@ -78,17 +77,10 @@ public class ZipService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, final int startId) {
-        Bundle b = new Bundle();
-        String path = intent.getStringExtra(KEY_COMPRESS_PATH);
+        mZipPath = intent.getStringExtra(KEY_COMPRESS_PATH);
 
-        ArrayList<HybridFileParcelable> baseFiles = intent.getParcelableArrayListExtra(KEY_COMPRESS_FILES);
-
-        File zipFile = new File(path);
-        mZipPath = path;
+        File zipFile = new File(mZipPath);
         mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        if (!mZipPath.equals(path)) {
-            mZipPath.concat(mZipPath.endsWith("/")? (zipFile.getName()):("/" + zipFile.getName()));
-        }
 
         if (!zipFile.exists()) {
             try {
@@ -99,18 +91,19 @@ public class ZipService extends Service {
             }
         }
 
-        mBuilder = new NotificationCompat.Builder(this);
         Intent notificationIntent = new Intent(this, MainActivity.class);
         notificationIntent.putExtra(MainActivity.KEY_INTENT_PROCESS_VIEWER, true);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+
+        mBuilder = new NotificationCompat.Builder(this);
         mBuilder.setContentIntent(pendingIntent);
         mBuilder.setContentTitle(getResources().getString(R.string.compressing))
                 .setSmallIcon(R.drawable.ic_zip_box_grey600_36dp);
         startForeground(Integer.parseInt("789" + startId), mBuilder.build());
-        b.putInt("id", startId);
-        b.putParcelableArrayList(KEY_COMPRESS_FILES, baseFiles);
-        b.putString(KEY_COMPRESS_PATH, mZipPath);
-        new DoWork().execute(b);
+
+        ArrayList<HybridFileParcelable> baseFiles = intent.getParcelableArrayListExtra(KEY_COMPRESS_FILES);
+
+        new DoWork(startId, baseFiles, mZipPath).execute();
         // If we get killed, after returning from here, restart
         return START_STICKY;
     }
@@ -132,14 +125,20 @@ public class ZipService extends Service {
         void refresh();
     }
 
-    public class DoWork extends AsyncTask<Bundle, Void, Integer> {
+    public class DoWork extends AsyncTask<Void, Void, Void> {
 
         ZipOutputStream zos;
 
         String zipPath;
         ServiceWatcherUtil watcherUtil;
 
-        public DoWork() {
+        private final int notificationId;
+        private ArrayList<HybridFileParcelable> baseFiles;
+
+        public DoWork(int id, ArrayList<HybridFileParcelable> baseFiles, String zipPath) {
+            notificationId = id;
+            this.baseFiles = baseFiles;
+            this.zipPath = zipPath;
         }
 
         public ArrayList<File> toFileArray(ArrayList<HybridFileParcelable> a) {
@@ -150,16 +149,13 @@ public class ZipService extends Service {
             return b;
         }
 
-        protected Integer doInBackground(Bundle... p1) {
-            final int id = p1[0].getInt("id");
-            ArrayList<HybridFileParcelable> baseFiles = p1[0].getParcelableArrayList(KEY_COMPRESS_FILES);
-
+        protected Void doInBackground(Void... p) {
             // setting up service watchers and initial data packages
             // finding total size on background thread (this is necessary condition for SMB!)
             totalBytes = FileUtils.getTotalBytes(baseFiles, c);
             progressHandler = new ProgressHandler(baseFiles.size(), totalBytes);
             progressHandler.setProgressListener((fileName, sourceFiles, sourceProgress, totalSize, writtenSize, speed) -> {
-                publishResults(id, fileName, sourceFiles, sourceProgress, totalSize, writtenSize, speed, false);
+                publishResults(notificationId, fileName, sourceFiles, sourceProgress, totalSize, writtenSize, speed, false);
             });
 
             CopyDataParcelable intent1 = new CopyDataParcelable();
@@ -173,13 +169,12 @@ public class ZipService extends Service {
             intent1.setCompleted(false);
             putDataPackage(intent1);
 
-            zipPath = p1[0].getString(KEY_COMPRESS_PATH);
             execute(toFileArray(baseFiles), zipPath);
-            return id;
+            return null;
         }
 
         @Override
-        public void onPostExecute(Integer b) {
+        public void onPostExecute(Void b) {
 
             watcherUtil.stopWatch();
             Intent intent = new Intent(MainActivity.KEY_INTENT_LOAD_LIST);
