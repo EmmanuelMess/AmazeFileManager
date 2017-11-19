@@ -12,7 +12,6 @@ import android.support.annotation.ColorRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.Toast;
@@ -23,6 +22,8 @@ import com.amaze.filemanager.filesystem.HybridFileParcelable;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Contains useful functions and methods (NOTHING HERE DEALS WITH FILES)
@@ -281,6 +282,15 @@ public class Utils {
             default:
                 return null;
         }
+    }
+
+    /**
+     * Converts ArrayList of HybridFileParcelable to ArrayList of File
+     */
+    public static ArrayList<File> hybridListToFileArrayList(List<HybridFileParcelable> a) {
+        ArrayList<File> b = new ArrayList<>(a.size());
+        for (HybridFileParcelable hybrid : a) b.add(new File(hybrid.getPath()));
+        return b;
     }
 
 }
