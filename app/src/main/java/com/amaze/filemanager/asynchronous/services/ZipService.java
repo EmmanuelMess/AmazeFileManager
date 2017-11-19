@@ -54,8 +54,9 @@ import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-public class ZipService extends Service {
+public class ZipService extends Service implements ProgressHandler.ProgressListener {
 
+    private int startId;
     NotificationManager mNotifyManager;
     NotificationCompat.Builder mBuilder;
     String mZipPath;
@@ -78,6 +79,7 @@ public class ZipService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, final int startId) {
+        this.startId = startId;
         mZipPath = intent.getStringExtra(KEY_COMPRESS_PATH);
 
         File zipFile = new File(mZipPath);
@@ -104,7 +106,7 @@ public class ZipService extends Service {
 
         ArrayList<HybridFileParcelable> baseFiles = intent.getParcelableArrayListExtra(KEY_COMPRESS_FILES);
 
-        new DoWork(startId, baseFiles, mZipPath).execute();
+        new DoWork(baseFiles, mZipPath).execute();
         // If we get killed, after returning from here, restart
         return START_STICKY;
     }
@@ -122,8 +124,6 @@ public class ZipService extends Service {
 
     public interface ProgressListener {
         void onUpdate(CopyDataParcelable dataPackage);
-
-        void refresh();
     }
 
     public class DoWork extends AsyncTask<Void, Void, Void> {
@@ -133,11 +133,9 @@ public class ZipService extends Service {
         String zipPath;
         ServiceWatcherUtil watcherUtil;
 
-        private final int notificationId;
         private ArrayList<HybridFileParcelable> baseFiles;
 
-        public DoWork(int id, ArrayList<HybridFileParcelable> baseFiles, String zipPath) {
-            notificationId = id;
+        public DoWork(ArrayList<HybridFileParcelable> baseFiles, String zipPath) {
             this.baseFiles = baseFiles;
             this.zipPath = zipPath;
         }
@@ -147,9 +145,7 @@ public class ZipService extends Service {
             // finding total size on background thread (this is necessary condition for SMB!)
             totalBytes = FileUtils.getTotalBytes(baseFiles, c);
             progressHandler = new ProgressHandler(baseFiles.size(), totalBytes);
-            progressHandler.setProgressListener((fileName, sourceFiles, sourceProgress, totalSize, writtenSize, speed) -> {
-                publishResults(notificationId, fileName, sourceFiles, sourceProgress, totalSize, writtenSize, speed, false);
-            });
+            progressHandler.setProgressListener(ZipService.this);
 
             CopyDataParcelable intent1 = new CopyDataParcelable();
             intent1.setName(baseFiles.get(0).getName());
@@ -236,19 +232,29 @@ public class ZipService extends Service {
         }
     }
 
-    private void publishResults(int id, String fileName, int sourceFiles, int sourceProgress,
-                                long total, long done, int speed, boolean isCompleted) {
+    public void publishCompletedResult(int id1) {
+        try {
+            mNotifyManager.cancel(id1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onProgressed(String fileName, int sourceFiles, int sourceProgress, long totalSize, long writtenSize, int speed) {
+        boolean isCompleted = false;
+
         if (!progressHandler.getCancelled()) {
-            float progressPercent = ((float) done / total) * 100;
+            float progressPercent = ((float) writtenSize / totalSize) * 100;
             mBuilder.setProgress(100, Math.round(progressPercent), false);
             mBuilder.setOngoing(true);
             int title = R.string.compressing;
             mBuilder.setContentTitle(c.getResources().getString(title));
             mBuilder.setContentText(new File(fileName).getName() + " " +
-                    Formatter.formatFileSize(c, done) + "/" + Formatter.formatFileSize(c, total));
-            int id1 = Integer.parseInt("789" + id);
+                    Formatter.formatFileSize(c, writtenSize) + "/" + Formatter.formatFileSize(c, totalSize));
+            int id1 = Integer.parseInt("789" + startId);
             mNotifyManager.notify(id1, mBuilder.build());
-            if (done == total || total == 0) {
+            if (writtenSize == totalSize || totalSize == 0) {
                 mBuilder.setContentTitle(getString(R.string.compression_complete));
                 mBuilder.setContentText("");
                 mBuilder.setProgress(100, 100, false);
@@ -262,8 +268,8 @@ public class ZipService extends Service {
             intent.setName(fileName);
             intent.setSourceFiles(sourceFiles);
             intent.setSourceProgress(sourceProgress);
-            intent.setTotal(total);
-            intent.setByteProgress(done);
+            intent.setTotal(totalSize);
+            intent.setByteProgress(writtenSize);
             intent.setSpeedRaw(speed);
             intent.setMove(false);
             intent.setCompleted(isCompleted);
@@ -271,18 +277,9 @@ public class ZipService extends Service {
             putDataPackage(intent);
             if (progressListener != null) {
                 progressListener.onUpdate(intent);
-                if (isCompleted) progressListener.refresh();
             }
         } else {
-            publishCompletedResult(Integer.parseInt("789" + id));
-        }
-    }
-
-    public void publishCompletedResult(int id1) {
-        try {
-            mNotifyManager.cancel(id1);
-        } catch (Exception e) {
-            e.printStackTrace();
+            publishCompletedResult(Integer.parseInt("789" + startId));
         }
     }
 
@@ -290,7 +287,6 @@ public class ZipService extends Service {
      * Class used for the client Binder.  Because we know this service always
      * runs in the same process as its clients, we don't need to deal with IPC.
      */
-
     private BroadcastReceiver receiver1 = new BroadcastReceiver() {
 
         @Override
