@@ -100,7 +100,7 @@ public class EncryptService extends Service {
             notificationBuilder.setSmallIcon(R.drawable.ic_folder_lock_open_white_36dp);
         }
 
-        NotificationConstants.setMetadata(getApplicationContext(), notificationBuilder);
+        NotificationConstants.setMetadata(getApplicationContext(), notificationBuilder, NotificationConstants.NORMAL);
 
         startForeground(ID_NOTIFICATION, notificationBuilder.build());
 
@@ -257,7 +257,7 @@ public class EncryptService extends Service {
             .setContentText(context.getString(R.string.copy_error, error))
             .setAutoCancel(true);
 
-        NotificationConstants.setMetadata(context, mBuilder);
+        NotificationConstants.setMetadata(context, mBuilder, NotificationConstants.NORMAL);
 
         progressHandler.setCancelled(true);
 

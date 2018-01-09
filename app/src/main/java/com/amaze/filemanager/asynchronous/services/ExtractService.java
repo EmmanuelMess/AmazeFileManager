@@ -109,7 +109,7 @@ public class ExtractService extends Service {
         mBuilder.setContentTitle(getResources().getString(R.string.extracting))
                 .setContentText(new File(file).getName())
                 .setSmallIcon(R.drawable.ic_zip_box_grey600_36dp);
-        NotificationConstants.setMetadata(getApplicationContext(), mBuilder);
+        NotificationConstants.setMetadata(getApplicationContext(), mBuilder, NotificationConstants.NORMAL);
         startForeground(Integer.parseInt("123" + startId), mBuilder.build());
 
         new DoWork(this, progressHandler, file, extractPath, entries).execute();
