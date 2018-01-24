@@ -165,7 +165,7 @@ public class ServiceWatcherUtil {
                 .setSmallIcon(R.drawable.ic_all_inclusive_white_36dp)
                 .setProgress(0, 0, true);
 
-        NotificationConstants.setMetadata(context, mBuilder);
+        NotificationConstants.setMetadata(context, mBuilder, NotificationConstants.NORMAL);
 
         Runnable runnable = new Runnable() {
             @Override

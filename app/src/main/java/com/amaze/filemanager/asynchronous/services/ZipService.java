@@ -110,7 +110,7 @@ public class ZipService extends Service {
         mBuilder.setContentIntent(pendingIntent)
                 .setContentTitle(getResources().getString(R.string.compressing))
                 .setSmallIcon(R.drawable.ic_zip_box_grey600_36dp);
-        NotificationConstants.setMetadata(this, mBuilder);
+        NotificationConstants.setMetadata(this, mBuilder, NotificationConstants.NORMAL);
         startForeground(Integer.parseInt("789" + startId), mBuilder.build());
 
         b.putInt("id", startId);

@@ -116,7 +116,7 @@ public class CopyService extends Service {
                 .setContentTitle(getResources().getString(R.string.copying))
                 .setSmallIcon(R.drawable.ic_content_copy_white_36dp);
 
-        NotificationConstants.setMetadata(c, mBuilder);
+        NotificationConstants.setMetadata(c, mBuilder, NotificationConstants.NORMAL);
 
         startForeground(Integer.parseInt("456" + startId), mBuilder.build());
 

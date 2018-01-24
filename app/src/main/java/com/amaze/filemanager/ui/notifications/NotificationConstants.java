@@ -17,21 +17,64 @@ import com.amaze.filemanager.R;
 
 public class NotificationConstants {
 
+    public static final int NORMAL = 0, FTP = 1;
+
     public static final String CHANNEL_NORMAL_ID = "normalChannel";
+    public static final String CHANNEL_FTP_ID = "ftpChannel";
 
     /**
      * This creates a channel (API >= 26) or applies the correct metadata to a notification (API < 26)
      */
-    public static void setMetadata(Context context, NotificationCompat.Builder notification) {
+    public static void setMetadata(Context context, NotificationCompat.Builder notification, int type) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            createNormalChannel(context);
+            switch (type) {
+                case NORMAL:
+                    createNormalChannel(context);
+                    break;
+                case FTP:
+                    createFtpChannel(context);
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unrecognized type:" + type);
+            }
         } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                notification.setCategory(Notification.CATEGORY_SERVICE);
+            switch (type) {
+                case NORMAL:
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        notification.setCategory(Notification.CATEGORY_SERVICE);
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        notification.setPriority(Notification.PRIORITY_MIN);
+                    }
+                    break;
+                case FTP:
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        notification.setCategory(Notification.CATEGORY_SERVICE);
+                        notification.setVisibility(Notification.VISIBILITY_PUBLIC);
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        notification.setPriority(Notification.PRIORITY_MAX);
+                    }
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unrecognized type:" + type);
             }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                notification.setPriority(Notification.PRIORITY_MIN);
-            }
+        }
+    }
+
+    /**
+     * You CANNOT call this from android < O.
+     * THis channel is set so it doesn't bother the user, but it has importance.
+     */
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private static void createFtpChannel(Context context) {
+        NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if(mNotificationManager.getNotificationChannel(CHANNEL_FTP_ID) == null) {
+            NotificationChannel mChannel = new NotificationChannel(CHANNEL_FTP_ID,
+                    context.getString(R.string.channelname_ftp), NotificationManager.IMPORTANCE_HIGH);
+            // Configure the notification channel.
+            mChannel.setDescription(context.getString(R.string.channeldescription_ftp));
+            mNotificationManager.createNotificationChannel(mChannel);
         }
     }
 
