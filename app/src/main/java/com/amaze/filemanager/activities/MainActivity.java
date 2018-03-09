@@ -943,7 +943,7 @@ public class MainActivity extends ThemedActivity implements OnRequestPermissions
                 MaterialDialog.Builder builder = new MaterialDialog.Builder(mainActivity);
                 builder.theme(getAppTheme().getMaterialDialogTheme());
                 builder.title(R.string.directorysort);
-                int current = Integer.parseInt(getPrefs().getString(PreferencesConstants.PREFERENCE_DIRECTORY_SORT_MODE, "0"));
+                int current = Integer.parseInt(getString(PreferencesConstants.PREFERENCE_DIRECTORY_SORT_MODE));
 
                 final MainFragment mainFrag = ma;
 
@@ -1542,7 +1542,7 @@ public class MainActivity extends ThemedActivity implements OnRequestPermissions
 
             if (SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 if (intent.getAction().equals(UsbManager.ACTION_USB_DEVICE_ATTACHED)) {
-                    if (getPrefs().getString(KEY_PREF_OTG, null) == null) {
+                    if (getString(KEY_PREF_OTG) == null) {
                         getPrefs().edit().putString(KEY_PREF_OTG, VALUE_PREF_OTG_NULL).apply();
                         drawer.refreshDrawer();
                     }

@@ -280,7 +280,7 @@ public class MainFragment extends android.support.v4.app.Fragment implements Bot
         }
 
         listView.setHasFixedSize(true);
-        columns = Integer.parseInt(sharedPref.getString(PREFERENCE_GRID_COLUMNS, "-1"));
+        columns = Integer.parseInt(getMainActivity().getString(PREFERENCE_GRID_COLUMNS));
         if (IS_LIST) {
             mLayoutManager = new LinearLayoutManager(getContext());
             listView.setLayoutManager(mLayoutManager);
@@ -1389,7 +1389,7 @@ public class MainFragment extends android.support.v4.app.Fragment implements Bot
      * Final value of {@link #sortby} varies from 0 to 3
      */
     public void getSortModes() {
-        int t = Integer.parseInt(sharedPref.getString("sortby", "0"));
+        int t = Integer.parseInt(getMainActivity().getString("sortby"));
         if (t <= 3) {
             sortby = t;
             asc = 1;
@@ -1398,7 +1398,7 @@ public class MainFragment extends android.support.v4.app.Fragment implements Bot
             sortby = t - 4;
         }
 
-        dsort = Integer.parseInt(sharedPref.getString(PREFERENCE_DIRECTORY_SORT_MODE, "0"));
+        dsort = Integer.parseInt(getMainActivity().getString(PREFERENCE_DIRECTORY_SORT_MODE));
     }
 
     @Override

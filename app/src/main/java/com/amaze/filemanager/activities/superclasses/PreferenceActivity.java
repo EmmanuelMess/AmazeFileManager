@@ -4,12 +4,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
+import com.amaze.filemanager.activities.MainActivity;
 import com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants;
 
 import static com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants.PREFERENCE_BOOKMARKS_ADDED;
 import static com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants.PREFERENCE_CHANGEPATHS;
 import static com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants.PREFERENCE_COLORED_NAVIGATION;
 import static com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants.PREFERENCE_COLORIZE_ICONS;
+import static com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants.PREFERENCE_GRID_COLUMNS;
 import static com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants.PREFERENCE_NEED_TO_SET_HOME;
 import static com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants.PREFERENCE_ROOTMODE;
 import static com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants.PREFERENCE_SHOW_DIVIDERS;
@@ -82,6 +84,28 @@ public class PreferenceActivity extends BasicActivity {
         }
 
         return sharedPrefs.getBoolean(key, defaultValue);
+    }
+
+    public String getString(String key) {
+        String defaultValue;
+
+        switch (key) {
+            case MainActivity.KEY_PREF_OTG:
+            case PreferencesConstants.PREFERENCE_DRAWER_HEADER_PATH:
+                defaultValue = null;
+                break;
+            case PreferencesConstants.PREFERENCE_DIRECTORY_SORT_MODE:
+            case "sortby":
+                defaultValue = "0";
+                break;
+            case PREFERENCE_GRID_COLUMNS:
+                defaultValue = "-1";
+                break;
+            default:
+                throw new IllegalArgumentException("Please map \'" + key + "\'");
+        }
+
+        return sharedPrefs.getString(key, defaultValue);
     }
 
 }

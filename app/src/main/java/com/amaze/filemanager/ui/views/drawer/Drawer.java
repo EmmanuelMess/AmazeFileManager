@@ -538,8 +538,7 @@ public class Drawer implements NavigationView.OnNavigationItemSelectedListener {
                 pendingPath = meta.path;
 
                 if (meta.path.contains(OTGUtil.PREFIX_OTG) &&
-                        mainActivity.getPrefs()
-                                .getString(MainActivity.KEY_PREF_OTG, null)
+                        mainActivity.getString(MainActivity.KEY_PREF_OTG)
                                 .equals(MainActivity.VALUE_PREF_OTG_NULL)) {
                     // we've not gotten otg path yet
                     // start system request for storage access framework
@@ -608,8 +607,8 @@ public class Drawer implements NavigationView.OnNavigationItemSelectedListener {
     }
 
     public void setDrawerHeaderBackground() {
-        String path1 = mainActivity.getPrefs().getString(PreferencesConstants.PREFERENCE_DRAWER_HEADER_PATH, null);
-        if (path1 == null) { return; }
+            String path1 = mainActivity.getString(PreferencesConstants.PREFERENCE_DRAWER_HEADER_PATH);
+            if (path1 == null) return;
         try {
             final ImageView headerImageView = new ImageView(mainActivity);
             headerImageView.setImageDrawable(drawerHeaderParent.getBackground());
