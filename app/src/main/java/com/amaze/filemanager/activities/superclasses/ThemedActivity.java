@@ -29,7 +29,7 @@ public class ThemedActivity extends PreferenceActivity {
         super.onCreate(savedInstanceState);
 
         // checking if theme should be set light/dark or automatic
-        int colorPickerPref = getPrefs().getInt(PreferencesConstants.PREFERENCE_COLOR_CONFIG, ColorPickerDialog.NO_DATA);
+        int colorPickerPref = getInt(PreferencesConstants.PREFERENCE_COLOR_CONFIG);
         if (colorPickerPref == ColorPickerDialog.RANDOM_INDEX) {
             getColorPreference().randomize().saveToPreferences(getPrefs());
         }

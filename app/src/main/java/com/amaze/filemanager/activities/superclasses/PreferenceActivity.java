@@ -6,11 +6,14 @@ import android.preference.PreferenceManager;
 
 import com.amaze.filemanager.activities.MainActivity;
 import com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants;
+import com.amaze.filemanager.ui.dialogs.ColorPickerDialog;
+import com.amaze.filemanager.utils.PreferenceUtils;
 
 import static com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants.PREFERENCE_BOOKMARKS_ADDED;
 import static com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants.PREFERENCE_CHANGEPATHS;
 import static com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants.PREFERENCE_COLORED_NAVIGATION;
 import static com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants.PREFERENCE_COLORIZE_ICONS;
+import static com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants.PREFERENCE_COLOR_CONFIG;
 import static com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants.PREFERENCE_GRID_COLUMNS;
 import static com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants.PREFERENCE_NEED_TO_SET_HOME;
 import static com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants.PREFERENCE_ROOTMODE;
@@ -106,6 +109,23 @@ public class PreferenceActivity extends BasicActivity {
         }
 
         return sharedPrefs.getString(key, defaultValue);
+    }
+
+    public int getInt(String key) {
+        int defaultValue;
+
+        switch (key) {
+            case PREFERENCE_COLOR_CONFIG:
+                defaultValue = ColorPickerDialog.NO_DATA;
+                break;
+            case PreferenceUtils.KEY_CURRENT_TAB:
+                defaultValue = PreferenceUtils.DEFAULT_CURRENT_TAB;
+                break;
+            default:
+                throw new IllegalArgumentException("Please map \'" + key + "\'");
+        }
+
+        return sharedPrefs.getInt(key, defaultValue);
     }
 
 }

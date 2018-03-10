@@ -1337,7 +1337,7 @@ public class MainActivity extends ThemedActivity implements OnRequestPermissions
     }
 
     void initialisePreferences() {
-        currentTab = getPrefs().getInt(PreferenceUtils.KEY_CURRENT_TAB, PreferenceUtils.DEFAULT_CURRENT_TAB);
+        currentTab = getInt(PreferenceUtils.KEY_CURRENT_TAB);
         skinStatusBar = (PreferenceUtils.getStatusColor(getColorPreference().getColorAsString(ColorUsage.getPrimary(MainActivity.currentTab))));
     }
 
