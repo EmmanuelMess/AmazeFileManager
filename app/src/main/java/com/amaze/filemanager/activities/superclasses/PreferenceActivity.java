@@ -6,8 +6,12 @@ import android.preference.PreferenceManager;
 
 import com.amaze.filemanager.activities.MainActivity;
 import com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants;
+import com.amaze.filemanager.ui.ChangedPreferencesUpdater;
 import com.amaze.filemanager.ui.dialogs.ColorPickerDialog;
 import com.amaze.filemanager.utils.PreferenceUtils;
+
+import java.util.List;
+import java.util.Set;
 
 import static com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants.PREFERENCE_BOOKMARKS_ADDED;
 import static com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants.PREFERENCE_CHANGEPATHS;
@@ -45,6 +49,28 @@ public class PreferenceActivity extends BasicActivity {
         super.onCreate(savedInstanceState);
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        ChangedPreferencesUpdater instance = ChangedPreferencesUpdater.getInstance(false);
+
+        if(instance != null) {
+            if(!instance.getChangedKeys().isEmpty()) {
+                onPreferencesChanged(instance.getChangedKeys());
+            }
+            instance.destroyInternalReference();
+        }
+    }
+
+    /**
+     * This method will be called after onResume(); all views that have changed with preferences
+     * should be updated.
+     */
+    protected void onPreferencesChanged(Set<String> changedPrefs) {
+
     }
 
     public SharedPreferences getPrefs() {

@@ -46,11 +46,14 @@ import com.amaze.filemanager.fragments.preference_fragments.FoldersPref;
 import com.amaze.filemanager.fragments.preference_fragments.PrefFrag;
 import com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants;
 import com.amaze.filemanager.fragments.preference_fragments.QuickAccessPref;
+import com.amaze.filemanager.ui.ChangedPreferencesUpdater;
 import com.amaze.filemanager.utils.PreferenceUtils;
 import com.amaze.filemanager.utils.Utils;
 import com.amaze.filemanager.utils.color.ColorUsage;
 import com.amaze.filemanager.utils.theme.AppTheme;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
+
+import java.util.List;
 
 import static android.os.Build.VERSION.SDK_INT;
 
@@ -93,6 +96,10 @@ public class PreferencesActivity extends ThemedActivity {
         } else {
             selectItem(0);
         }
+
+        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener((sharedPreferences, key) -> {
+            ChangedPreferencesUpdater.getInstance(true).addChangedKey(key);// TODO: 11/03/18 fix values not changed
+        });
     }
 
     @Override
