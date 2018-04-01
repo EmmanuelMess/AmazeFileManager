@@ -61,10 +61,17 @@ import com.cloudrail.si.services.OneDrive;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Set;
 
 import static android.os.Build.VERSION.SDK_INT;
+import static com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants.PREFERENCE_ACCENT;
+import static com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants.PREFERENCE_COLOR_CONFIG;
+import static com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants.PREFERENCE_ICON_SKIN;
+import static com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants.PREFERENCE_ROOTMODE;
 import static com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants.PREFERENCE_SHOW_SIDEBAR_FOLDERS;
 import static com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants.PREFERENCE_SHOW_SIDEBAR_QUICKACCESSES;
+import static com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants.PREFERENCE_SKIN;
+import static com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants.PREFERENCE_SKIN_TWO;
 
 /**
  * @author Emmanuel Messulam <emmanuelbendavid@gmail.com>
@@ -591,6 +598,19 @@ public class Drawer implements NavigationView.OnNavigationItemSelectedListener {
                 } else if (path.startsWith(CloudHandler.CLOUD_PREFIX_ONE_DRIVE)) {
                     GeneralDialogCreation.showCloudDialog(mainActivity, mainActivity.getAppTheme(), OpenMode.ONEDRIVE);
                 }
+        }
+    }
+
+    public void onPreferencesChanged(Set<String> changedPrefs) {
+        if(changedPrefs.contains(PREFERENCE_SHOW_SIDEBAR_FOLDERS)
+                || changedPrefs.contains(PREFERENCE_SHOW_SIDEBAR_QUICKACCESSES)
+                || changedPrefs.contains(PREFERENCE_ROOTMODE)
+                || changedPrefs.contains(PREFERENCE_SKIN)
+                || changedPrefs.contains(PREFERENCE_SKIN_TWO)
+                || changedPrefs.contains(PREFERENCE_ACCENT)
+                || changedPrefs.contains(PREFERENCE_ICON_SKIN)
+                || changedPrefs.contains(PREFERENCE_COLOR_CONFIG)) {
+            refreshDrawer();
         }
     }
 

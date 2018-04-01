@@ -137,6 +137,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import eu.chainfire.libsuperuser.Shell;
@@ -1093,6 +1094,13 @@ public class MainActivity extends ThemedActivity implements OnRequestPermissions
             otgFilter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
             registerReceiver(mOtgReceiver, otgFilter);
         }
+    }
+
+    @Override
+    protected void onPreferencesChanged(Set<String> changedPrefs) {
+        getDrawer().onPreferencesChanged(changedPrefs);
+        ((MainFragment) getTabFragment().getFragmentAtIndex(0)).onPreferencesChanged(changedPrefs);
+        ((MainFragment) getTabFragment().getFragmentAtIndex(1)).onPreferencesChanged(changedPrefs);
     }
 
     /**

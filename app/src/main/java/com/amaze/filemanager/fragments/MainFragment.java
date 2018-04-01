@@ -113,6 +113,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import jcifs.smb.SmbException;
 import jcifs.smb.SmbFile;
@@ -1413,6 +1414,26 @@ public class MainFragment extends android.support.v4.app.Fragment implements Bot
             (getActivity()).registerReceiver(decryptReceiver, new IntentFilter(EncryptDecryptUtils.DECRYPT_BROADCAST));
         }
         startFileObserver();
+    }
+
+    public void onPreferencesChanged(Set<String> changedPrefs) {
+        if(changedPrefs.contains(PREFERENCE_SHOW_FILE_SIZE)
+                || changedPrefs.contains(PREFERENCE_SHOW_PERMISSIONS)
+                || changedPrefs.contains(PREFERENCE_SHOW_DIVIDERS)
+                || changedPrefs.contains(PREFERENCE_SHOW_HEADERS)
+                || changedPrefs.contains(PREFERENCE_SHOW_GOBACK_BUTTON)
+                || changedPrefs.contains(PREFERENCE_SHOW_HIDDENFILES)
+                || changedPrefs.contains(PREFERENCE_SHOW_LAST_MODIFIED)
+                || changedPrefs.contains(PREFERENCE_USE_CIRCULAR_IMAGES)
+                || changedPrefs.contains(PREFERENCE_SHOW_THUMB)
+                || changedPrefs.contains(PREFERENCE_SKIN)
+                || changedPrefs.contains(PREFERENCE_SKIN_TWO)
+                || changedPrefs.contains(PREFERENCE_ACCENT)
+                || changedPrefs.contains(PREFERENCE_ICON_SKIN)
+                || changedPrefs.contains(PREFERENCE_COLORED_NAVIGATION)
+                || changedPrefs.contains(PREFERENCE_COLOR_CONFIG)) {
+            loadlist(CURRENT_PATH, true, openMode);
+        }
     }
 
     @Override
