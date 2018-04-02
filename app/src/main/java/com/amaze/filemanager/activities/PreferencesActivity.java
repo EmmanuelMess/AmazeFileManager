@@ -109,6 +109,11 @@ public class PreferencesActivity extends ThemedActivity {
     }
 
     @Override
+    protected boolean getPreferenceUpdates() {
+        return false;
+    }
+
+    @Override
     public void onBackPressed() {
         if(currentFragment instanceof ColorPref) {
             if(((ColorPref) currentFragment).onBackPressed()) return;
