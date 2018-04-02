@@ -1431,7 +1431,8 @@ public class MainFragment extends android.support.v4.app.Fragment implements Bot
                 || changedPrefs.contains(PREFERENCE_ACCENT)
                 || changedPrefs.contains(PREFERENCE_ICON_SKIN)
                 || changedPrefs.contains(PREFERENCE_COLORED_NAVIGATION)
-                || changedPrefs.contains(PREFERENCE_COLOR_CONFIG)) {
+                || changedPrefs.contains(PREFERENCE_COLOR_CONFIG)
+                || changedPrefs.contains(FRAGMENT_THEME)) {
             loadlist(CURRENT_PATH, true, openMode);
         }
     }

@@ -57,7 +57,7 @@ public class PreferenceActivity extends BasicActivity {
 
         ChangedPreferencesUpdater instance = ChangedPreferencesUpdater.getInstance(false);
 
-        if(instance != null) {
+        if(getPreferenceUpdates() && instance != null) {
             if(!instance.getChangedKeys().isEmpty()) {
                 onPreferencesChanged(instance.getChangedKeys());
             }
@@ -71,6 +71,13 @@ public class PreferenceActivity extends BasicActivity {
      */
     protected void onPreferencesChanged(Set<String> changedPrefs) {
 
+    }
+
+    /**
+     * Should this PreferenceActivity get preference updates. Override to disable
+     */
+    protected boolean getPreferenceUpdates() {
+        return true;
     }
 
     public SharedPreferences getPrefs() {

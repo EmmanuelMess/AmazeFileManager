@@ -146,6 +146,7 @@ import jahirfiquitiva.libs.fabsmenu.FABsMenuListener;
 import jahirfiquitiva.libs.fabsmenu.TitleFAB;
 
 import static android.os.Build.VERSION.SDK_INT;
+import static com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants.FRAGMENT_THEME;
 import static com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants.PREFERENCE_BOOKMARKS_ADDED;
 import static com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants.PREFERENCE_COLORED_NAVIGATION;
 import static com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants.PREFERENCE_NEED_TO_SET_HOME;
@@ -313,19 +314,7 @@ public class MainActivity extends ThemedActivity implements OnRequestPermissions
             drawer.setSomethingSelected(savedInstanceState.getBoolean(KEY_DRAWER_SELECTED));
         }
 
-        // setting window background color instead of each item, in order to reduce pixel overdraw
-        if (getAppTheme().equals(AppTheme.LIGHT)) {
-            /*if(Main.IS_LIST)
-                getWindow().setBackgroundDrawableResource(android.R.color.white);
-            else
-                getWindow().setBackgroundDrawableResource(R.color.grid_background_light);
-            */
-            getWindow().setBackgroundDrawableResource(android.R.color.white);
-        } else if (getAppTheme().equals(AppTheme.BLACK)) {
-            getWindow().setBackgroundDrawableResource(android.R.color.black);
-        } else {
-            getWindow().setBackgroundDrawableResource(R.color.holo_dark_background);
-        }
+        colorWindow();
 
         /*findViewById(R.id.drawer_buttton).setOnClickListener(new ImageView.OnClickListener() {
             @Override
@@ -1098,9 +1087,30 @@ public class MainActivity extends ThemedActivity implements OnRequestPermissions
 
     @Override
     protected void onPreferencesChanged(Set<String> changedPrefs) {
+        if (changedPrefs.contains(FRAGMENT_THEME)) {
+            colorWindow();
+        }
+
         getDrawer().onPreferencesChanged(changedPrefs);
         ((MainFragment) getTabFragment().getFragmentAtIndex(0)).onPreferencesChanged(changedPrefs);
         ((MainFragment) getTabFragment().getFragmentAtIndex(1)).onPreferencesChanged(changedPrefs);
+    }
+
+    /**
+     * Setting window background color instead of each item, in order to reduce pixel overdraw.
+     */
+    private void colorWindow() {
+        switch (getAppTheme()) {
+            case LIGHT:
+                getWindow().setBackgroundDrawableResource(android.R.color.white);
+                break;
+            case DARK:
+                getWindow().setBackgroundDrawableResource(R.color.holo_dark_background);
+                break;
+            case BLACK:
+                getWindow().setBackgroundDrawableResource(android.R.color.black);
+                break;
+        }
     }
 
     /**
