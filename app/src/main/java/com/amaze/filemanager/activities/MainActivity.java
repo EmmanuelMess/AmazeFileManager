@@ -1090,6 +1090,10 @@ public class MainActivity extends ThemedActivity implements OnRequestPermissions
         if (changedPrefs.contains(FRAGMENT_THEME)) {
             colorWindow();
             drawer.recolorUI();
+            colorSmokeScreen();
+            colorFabTitle(findViewById(R.id.menu_new_folder));
+            colorFabTitle(findViewById(R.id.menu_new_file));
+            colorFabTitle(findViewById(R.id.menu_new_cloud));
         }
 
         getDrawer().onPreferencesChanged(changedPrefs);
@@ -1374,14 +1378,7 @@ public class MainActivity extends ThemedActivity implements OnRequestPermissions
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         fabBgView = findViewById(R.id.fab_bg);
 
-        switch (getAppTheme().getSimpleTheme()) {
-            case DARK:
-                fabBgView.setBackgroundResource(R.drawable.fab_shadow_dark);
-                break;
-            case BLACK:
-                fabBgView.setBackgroundResource(R.drawable.fab_shadow_black);
-                break;
-        }
+        colorSmokeScreen();
 
         fabBgView.setOnClickListener(view -> {
             if (getAppbar().getSearchView().isEnabled()) getAppbar().getSearchView().hideSearchView();
@@ -1407,6 +1404,20 @@ public class MainActivity extends ThemedActivity implements OnRequestPermissions
             } else window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             if ( getBoolean(PREFERENCE_COLORED_NAVIGATION))
                 window.setNavigationBarColor(skinStatusBar);
+        }
+    }
+
+    private void colorSmokeScreen() {
+        switch (getAppTheme().getSimpleTheme()) {
+            case LIGHT:
+                fabBgView.setBackgroundResource(R.drawable.fab_shadow_light);
+                break;
+            case DARK:
+                fabBgView.setBackgroundResource(R.drawable.fab_shadow_dark);
+                break;
+            case BLACK:
+                fabBgView.setBackgroundResource(R.drawable.fab_shadow_black);
+                break;
         }
     }
 
@@ -1484,7 +1495,15 @@ public class MainActivity extends ThemedActivity implements OnRequestPermissions
             floatingActionButton.collapse();
         });
 
+        colorFabTitle(fabTitle);
+    }
+
+    private void colorFabTitle(TitleFAB fabTitle) {
         switch (getAppTheme().getSimpleTheme()) {
+            case LIGHT:
+                fabTitle.setTitleBackgroundColor(Color.WHITE);
+                fabTitle.setTitleTextColor(Utils.getColor(this, R.color.text_light));
+                break;
             case DARK:
                 fabTitle.setTitleBackgroundColor(Utils.getColor(this, R.color.holo_dark_background));
                 fabTitle.setTitleTextColor(Utils.getColor(this, R.color.text_dark));
