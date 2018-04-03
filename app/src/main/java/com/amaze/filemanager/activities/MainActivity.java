@@ -1089,6 +1089,7 @@ public class MainActivity extends ThemedActivity implements OnRequestPermissions
     protected void onPreferencesChanged(Set<String> changedPrefs) {
         if (changedPrefs.contains(FRAGMENT_THEME)) {
             colorWindow();
+            drawer.recolorUI();
         }
 
         getDrawer().onPreferencesChanged(changedPrefs);

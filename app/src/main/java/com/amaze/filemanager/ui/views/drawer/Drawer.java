@@ -140,38 +140,8 @@ public class Drawer implements NavigationView.OnNavigationItemSelectedListener {
 
         navView.setNavigationItemSelectedListener(this);
 
-        int accentColor = mainActivity.getColorPreference().getColor(ColorUsage.ACCENT),
-                idleColor;
-
-        if (mainActivity.getAppTheme().equals(AppTheme.LIGHT)) {
-            idleColor = mainActivity.getResources().getColor(R.color.item_light_theme);
-        } else {
-            idleColor = Color.WHITE;
-        }
-
-        actionViewStateManager = new ActionViewStateManager(navView, idleColor, accentColor);
-
-        ColorStateList drawerColors = new ColorStateList(
-                new int[][] {
-                        new int[] {android.R.attr.state_checked},
-                        new int[] {android.R.attr.state_enabled},
-                        new int[] {android.R.attr.state_pressed},
-                        new int[] {android.R.attr.state_focused},
-                        new int[] {android.R.attr.state_pressed}
-                },
-                new int[] {accentColor, idleColor, idleColor, idleColor, idleColor}
-        );
-
-        navView.setItemTextColor(drawerColors);
-        navView.setItemIconTintList(drawerColors);
-
-        if (mainActivity.getAppTheme().equals(AppTheme.DARK)) {
-            navView.setBackgroundColor(Utils.getColor(mainActivity, R.color.holo_dark_background));
-        } else if (mainActivity.getAppTheme().equals(AppTheme.BLACK)) {
-            navView.setBackgroundColor(Utils.getColor(mainActivity, android.R.color.black));
-        } else {
-            navView.setBackgroundColor(Color.WHITE);
-        }
+        colorBackground();
+        colorItems();
 
         mDrawerLayout = mainActivity.findViewById(R.id.drawer_layout);
         //mDrawerLayout.setStatusBarBackgroundColor(Color.parseColor((currentTab==1 ? skinTwo : skin)));
@@ -458,6 +428,53 @@ public class Drawer implements NavigationView.OnNavigationItemSelectedListener {
 
             item.getActionView().setOnClickListener((view) -> onNavigationItemActionClick(item));
         }
+    }
+
+    public void recolorUI() {
+        colorBackground();
+        colorItems();
+        navView.invalidate();
+    }
+
+    private void colorBackground() {
+        switch (mainActivity.getAppTheme()) {
+            case LIGHT:
+                navView.setBackgroundColor(Color.WHITE);
+                break;
+            case DARK:
+                navView.setBackgroundColor(Utils.getColor(mainActivity, R.color.holo_dark_background));
+                break;
+            case BLACK:
+                navView.setBackgroundColor(Utils.getColor(mainActivity, android.R.color.black));
+                break;
+        }
+    }
+
+    private void colorItems() {
+        int accentColor = mainActivity.getColorPreference().getColor(ColorUsage.ACCENT),
+                idleColor;
+
+        if (mainActivity.getAppTheme().equals(AppTheme.LIGHT)) {
+            idleColor = mainActivity.getResources().getColor(R.color.item_light_theme);
+        } else {
+            idleColor = Color.WHITE;
+        }
+
+        actionViewStateManager = new ActionViewStateManager(navView, idleColor, accentColor);
+
+        ColorStateList drawerColors = new ColorStateList(
+                new int[][]{
+                        new int[]{android.R.attr.state_checked},
+                        new int[]{android.R.attr.state_enabled},
+                        new int[]{android.R.attr.state_pressed},
+                        new int[]{android.R.attr.state_focused},
+                        new int[]{android.R.attr.state_pressed}
+                },
+                new int[] {accentColor, idleColor, idleColor, idleColor, idleColor}
+        );
+
+        navView.setItemTextColor(drawerColors);
+        navView.setItemIconTintList(drawerColors);
     }
 
     public void onActivityResult(int requestCode, int responseCode, Intent intent) {
