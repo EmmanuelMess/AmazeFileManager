@@ -77,7 +77,14 @@ public class ThemedActivity extends PreferenceActivity {
         }
     }
 
-    void setTheme() {
+    /**
+     * WARNING: After calling this method, you should redraw *everything*. No automatic changes.
+     */
+    protected void resetTheme() {
+        setTheme();
+    }
+
+    private void setTheme() {
         AppTheme theme = getAppTheme().getSimpleTheme();
         if (Build.VERSION.SDK_INT >= 21) {
 

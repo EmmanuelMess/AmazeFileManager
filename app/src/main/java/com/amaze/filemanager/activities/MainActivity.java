@@ -1088,6 +1088,8 @@ public class MainActivity extends ThemedActivity implements OnRequestPermissions
     @Override
     protected void onPreferencesChanged(Set<String> changedPrefs) {
         if (changedPrefs.contains(FRAGMENT_THEME)) {
+            resetTheme();
+            supportInvalidateOptionsMenu();// TODO: 2018-04-11 This does not work on emulators
             colorWindow();
             drawer.recolorUI();
             colorSmokeScreen();
