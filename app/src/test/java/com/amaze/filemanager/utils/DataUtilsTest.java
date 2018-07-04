@@ -20,6 +20,7 @@ import org.robolectric.fakes.RoboMenuItem;
 
 import java.util.ArrayList;
 
+import static com.amaze.filemanager.activities.MainActivity.CLOUD_AUTHENTICATOR_REDIRECT_URI;
 import static org.junit.Assert.*;
 
 public class DataUtilsTest {
@@ -237,7 +238,7 @@ public class DataUtilsTest {
     /* Test Add Accounts */
     @Test
     public void testAddAccount() {
-        CloudStorage testStorage = new GoogleDrive(context, "testID", "testSecret");
+        CloudStorage testStorage = new GoogleDrive(context, "testID", "testSecret", CLOUD_AUTHENTICATOR_REDIRECT_URI, "testState");
         dataUtils.addAccount(testStorage);
         assertTrue(dataUtils.getAccounts().contains(testStorage));
     }
@@ -245,7 +246,7 @@ public class DataUtilsTest {
     /* Test Get Accounts */
     @Test
     public void testGetAccountForGoogleDrive() {
-        CloudStorage testStorage = new GoogleDrive(context, "testID", "testSecret");
+        CloudStorage testStorage = new GoogleDrive(context, "testID", "testSecret", CLOUD_AUTHENTICATOR_REDIRECT_URI, "testState");
         dataUtils.addAccount(testStorage);
 
         assertSame(testStorage, dataUtils.getAccount(OpenMode.GDRIVE));
@@ -319,7 +320,7 @@ public class DataUtilsTest {
      * */
     @Test
     public void testRemoveAccountForGoogleDrive() {
-        CloudStorage testStorage = new GoogleDrive(context, "testID", "testSecret");
+        CloudStorage testStorage = new GoogleDrive(context, "testID", "testSecret", CLOUD_AUTHENTICATOR_REDIRECT_URI, "testState");
         dataUtils.addAccount(testStorage);
         dataUtils.removeAccount(OpenMode.GDRIVE);
 
@@ -355,7 +356,7 @@ public class DataUtilsTest {
 
     @Test
     public void testRemoveAccountForWrongAccount() {
-        CloudStorage testStorage = new GoogleDrive(context, "testID", "testSecret");
+        CloudStorage testStorage = new GoogleDrive(context, "testID", "testSecret", CLOUD_AUTHENTICATOR_REDIRECT_URI, "testState");
         dataUtils.addAccount(testStorage); // Add google drive account
         dataUtils.removeAccount(OpenMode.DROPBOX); //remove dropbox account
 
@@ -364,7 +365,7 @@ public class DataUtilsTest {
 
     @Test
     public void testRemoveAccountForInvalidServiceType() {
-        CloudStorage testStorage = new GoogleDrive(context, "testID", "testSecret");
+        CloudStorage testStorage = new GoogleDrive(context, "testID", "testSecret", CLOUD_AUTHENTICATOR_REDIRECT_URI, "testState");
         dataUtils.addAccount(testStorage); // Add google drive account
         dataUtils.removeAccount(OpenMode.UNKNOWN); // remove invalid account
 
@@ -375,7 +376,7 @@ public class DataUtilsTest {
     public void testContainsAccountsForOpenModeParameter() {
         CloudStorage dropBoxStorage = new Dropbox(context, "testID", "testSecret");
         dataUtils.addAccount(dropBoxStorage); // index = 0 ;
-        CloudStorage googleDriveStorage = new GoogleDrive(context, "testID", "testSecret");
+        CloudStorage googleDriveStorage = new GoogleDrive(context, "testID", "testSecret", CLOUD_AUTHENTICATOR_REDIRECT_URI, "testState");
         dataUtils.addAccount(googleDriveStorage); // index = 1
         CloudStorage boxStorage = new Box(context, "testID", "testSecret");
         dataUtils.addAccount(boxStorage); // index = 2
@@ -390,7 +391,7 @@ public class DataUtilsTest {
 
     @Test
     public void testContainsAccountsForWrongAccount() {
-        CloudStorage testStorage = new GoogleDrive(context, "testID", "testSecret");
+        CloudStorage testStorage = new GoogleDrive(context, "testID", "testSecret", CLOUD_AUTHENTICATOR_REDIRECT_URI, "testState");
         dataUtils.addAccount(testStorage); // Microsoft account is not supported
 
         assertEquals(-1, dataUtils.containsAccounts(OpenMode.DROPBOX)); // Wrong Account
