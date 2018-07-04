@@ -22,45 +22,38 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
-/**
- * Created by kille on 2018-03-30.
- */
-
-
 public class DataUtilsTest {
-
-    private DataUtils dataUtils ;
-    private Context context ;
-    private Activity activity ;
+    private DataUtils dataUtils;
+    private Context context;
 
     @Before
-    public void setUp() throws Exception {
-        dataUtils = DataUtils.getInstance() ;
-        context = new Activity() ;
+    public void setUp() {
+        dataUtils = DataUtils.getInstance();
+        context = new Activity();
 
         assertNotNull(context);
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         dataUtils.clear();
     }
 
     /* Test Generate Instance */
     @Test
     public void testGetInstance() {
-        assertNotNull(dataUtils) ;
+        assertNotNull(dataUtils);
     }
 
     @Test
     public void testClear() {
         dataUtils.clear();
-        assertTrue(dataUtils.getBooks().isEmpty()) ;
-        assertTrue(dataUtils.getServers().isEmpty()) ;
-        assertTrue(dataUtils.getAccounts().isEmpty()) ;
-        assertTrue(dataUtils.getStorages().isEmpty()) ;
-        assertTrue(dataUtils.getHistory().isEmpty()) ;
-        assertEquals(0, dataUtils.getHiddenFiles().size()) ;
+        assertTrue(dataUtils.getBooks().isEmpty());
+        assertTrue(dataUtils.getServers().isEmpty());
+        assertTrue(dataUtils.getAccounts().isEmpty());
+        assertTrue(dataUtils.getStorages().isEmpty());
+        assertTrue(dataUtils.getHistory().isEmpty());
+        assertEquals(0, dataUtils.getHiddenFiles().size());
     }
 
 
@@ -68,18 +61,18 @@ public class DataUtilsTest {
     /* Test to add element to array for books */
     @Test
     public void testAddBook() {
-        String[] books = {"nameTest", "pathTest" } ;
-        dataUtils.addBook(books) ;
+        String[] books = {"nameTest", "pathTest"};
+        dataUtils.addBook(books);
         assertTrue(dataUtils.getBooks().contains(books));
     }
 
     @Test
     public void testAddBookRefresh() {
-        String[] books = {"nameTest", "pathTest" } ;
+        String[] books = {"nameTest", "pathTest"};
         dataUtils.addBook(books, true);
         assertTrue(dataUtils.getBooks().contains(books));
 
-        String[] anotherBooks = {"nameTest1", "pathTest1" } ;
+        String[] anotherBooks = {"nameTest1", "pathTest1"};
         dataUtils.addBook(anotherBooks, false);
         assertTrue(dataUtils.getBooks().contains(anotherBooks));
     }
@@ -90,9 +83,9 @@ public class DataUtilsTest {
      * @testRemoveBookAtNegativeIndex() : At negative index */
     @Test
     public void testRemoveBook() {
-        String[] books = {"nameTest", "pathTest" } ;
+        String[] books = {"nameTest", "pathTest"};
         dataUtils.addBook(books);
-        int targetIndex = dataUtils.getBooks().indexOf(books) ;
+        int targetIndex = dataUtils.getBooks().indexOf(books);
         dataUtils.removeBook(targetIndex);
 
         assertFalse(dataUtils.getBooks().contains(books));
@@ -100,30 +93,30 @@ public class DataUtilsTest {
 
     @Test
     public void testRemoveBookAtOverIndex() {
-        String[] books = {"nameTest", "pathTest" } ;
+        String[] books = {"nameTest", "pathTest"};
         dataUtils.addBook(books);
 
-        int currentBookSize = dataUtils.getBooks().size() ;
-        int overIndex = currentBookSize + 1 ;
+        int currentBookSize = dataUtils.getBooks().size();
+        int overIndex = currentBookSize + 1;
         dataUtils.removeBook(overIndex);
 
-        assertEquals(currentBookSize, dataUtils.getBooks().size()) ;
+        assertEquals(currentBookSize, dataUtils.getBooks().size());
     }
 
     @Test(expected = ArrayIndexOutOfBoundsException.class)
-    public void testRemoveBookAtNegativeIndex() throws Exception {
-        String[] books = {"nameTest", "pathTest" } ;
+    public void testRemoveBookAtNegativeIndex() {
+        String[] books = {"nameTest", "pathTest"};
         dataUtils.addBook(books);
 
-        int negativeIndex = -1 ;
+        int negativeIndex = -1;
         dataUtils.removeBook(negativeIndex);
     }
 
     @Test
     public void testSortBook() {
-        String[] book1 = {"abc", "pathTest" } ;
-        String[] book2 = {"def", "pathTest" } ;
-        String[] book3 = {"abc", "a_pathTest" } ;
+        String[] book1 = {"abc", "pathTest"};
+        String[] book2 = {"def", "pathTest"};
+        String[] book3 = {"abc", "a_pathTest"};
         dataUtils.addBook(book1);
         dataUtils.addBook(book2);
         dataUtils.addBook(book3);
@@ -136,12 +129,12 @@ public class DataUtilsTest {
 
     @Test
     public void testContainsBooksForStringArrParameter() {
-        String[] books = {"bookName", "bookPath" } ;
-        String[] fakeBooks = {"fakeName", "fakePath"} ;
+        String[] books = {"bookName", "bookPath"};
+        String[] fakeBooks = {"fakeName", "fakePath"};
 
-        int bias = 3 ;
-        for (int i = 0 ; i < bias ; i ++) {
-            dataUtils.addBook(fakeBooks) ;
+        int bias = 3;
+        for (int i = 0; i < bias; i++) {
+            dataUtils.addBook(fakeBooks);
         }
         dataUtils.addBook(books);
 
@@ -153,8 +146,8 @@ public class DataUtilsTest {
     /* Test add elements to array for server */
     @Test
     public void testAddServerAboutSize() {
-        String[] servers = {"serverName", "serverPath"} ;
-        dataUtils.addServer(servers); ;
+        String[] servers = {"serverName", "serverPath"};
+        dataUtils.addServer(servers);
         assertTrue(dataUtils.getServers().contains(servers));
     }
 
@@ -164,9 +157,9 @@ public class DataUtilsTest {
      * @testRemoveServerAtNegativeIndex() : At negative index */
     @Test
     public void testRemoveServer() {
-        String[] servers = {"serverName", "serverPath"} ;
+        String[] servers = {"serverName", "serverPath"};
         dataUtils.addServer(servers);
-        int targetIndex = dataUtils.getServers().indexOf(servers) ;
+        int targetIndex = dataUtils.getServers().indexOf(servers);
         dataUtils.removeServer(targetIndex);
 
         assertFalse(dataUtils.getServers().contains(servers));
@@ -174,35 +167,35 @@ public class DataUtilsTest {
 
     @Test
     public void testRemoveServerAtOverIndex() {
-        String[] servers = {"serverName", "serverPath"} ;
+        String[] servers = {"serverName", "serverPath"};
         dataUtils.addServer(servers);
 
-        int currentServerSize = dataUtils.getServers().size() ;
-        int overIndex = currentServerSize + 1 ;
+        int currentServerSize = dataUtils.getServers().size();
+        int overIndex = currentServerSize + 1;
         dataUtils.removeServer(overIndex);
 
-        assertEquals(currentServerSize, dataUtils.getServers().size()) ;
+        assertEquals(currentServerSize, dataUtils.getServers().size());
     }
 
     @Test
     public void testRemoveServerAtNegativeIndex() {
-        String[] servers = {"serverName", "serverPath"} ;
+        String[] servers = {"serverName", "serverPath"};
         dataUtils.addServer(servers);
 
-        int currentServerSize = dataUtils.getServers().size() ;
-        int overIndex = currentServerSize + 1 ;
+        int currentServerSize = dataUtils.getServers().size();
+        int overIndex = currentServerSize + 1;
         dataUtils.removeServer(overIndex);
 
-        assertEquals(currentServerSize, dataUtils.getServers().size()) ;
+        assertEquals(currentServerSize, dataUtils.getServers().size());
     }
 
     @Test
     public void testContainsServerForStringArrParameter() {
-        String[] servers = {"serverName", "serverPath"} ;
-        String[] fakeServers = {"fakeServer", "fakePath"} ;
+        String[] servers = {"serverName", "serverPath"};
+        String[] fakeServers = {"fakeServer", "fakePath"};
 
-        int bias = 3 ;
-        for (int i = 0 ; i < bias ; i ++) {
+        int bias = 3;
+        for (int i = 0; i < bias; i++) {
             dataUtils.addServer(fakeServers);
         }
         dataUtils.addServer(servers);
@@ -212,12 +205,12 @@ public class DataUtilsTest {
 
     @Test
     public void testContainsServerForStringParameter() {
-        String serverPath = "serverPath" ;
-        String[] servers = {"serverName", "serverPath"} ; // servers.path == serverPath
-        String[] fakeServers = {"serverName", "fakePath"} ; // fakeServers.path != serverPath
+        String serverPath = "serverPath";
+        String[] servers = {"serverName", "serverPath"}; // servers.path == serverPath
+        String[] fakeServers = {"serverName", "fakePath"}; // fakeServers.path != serverPath
 
-        int bias = 2 ;
-        for (int i = 0 ; i < bias ; i ++) {
+        int bias = 2;
+        for (int i = 0; i < bias; i++) {
             dataUtils.addServer(fakeServers);
         }
         dataUtils.addServer(servers);
@@ -227,15 +220,15 @@ public class DataUtilsTest {
 
     @Test
     public void testContainsServerForNoOperate() {
-        String serverPath = "serverPath" ;
-        String[] fakeServers = {"serverName", "fakePath"} ; // fakeServers.path != serverPath
+        String serverPath = "serverPath";
+        String[] fakeServers = {"serverName", "fakePath"}; // fakeServers.path != serverPath
 
-        int bias = 4 ;
-        for (int i = 0 ; i < bias ; i ++) {
+        int bias = 4;
+        for (int i = 0; i < bias; i++) {
             dataUtils.addServer(fakeServers);
         }
         // There are no elements which path equals serverPath
-        int error = -1 ;
+        int error = -1;
         assertEquals(error, dataUtils.containsServer(serverPath));
     }
 
@@ -244,16 +237,16 @@ public class DataUtilsTest {
     /* Test Add Accounts */
     @Test
     public void testAddAccount() {
-        CloudStorage testStorage = new GoogleDrive(context, "testID", "testSecret") ;
-        dataUtils.addAccount(testStorage) ;
+        CloudStorage testStorage = new GoogleDrive(context, "testID", "testSecret");
+        dataUtils.addAccount(testStorage);
         assertTrue(dataUtils.getAccounts().contains(testStorage));
     }
 
     /* Test Get Accounts */
     @Test
     public void testGetAccountForGoogleDrive() {
-        CloudStorage testStorage = new GoogleDrive(context, "testID", "testSecret") ;
-        dataUtils.addAccount(testStorage) ;
+        CloudStorage testStorage = new GoogleDrive(context, "testID", "testSecret");
+        dataUtils.addAccount(testStorage);
 
         assertSame(testStorage, dataUtils.getAccount(OpenMode.GDRIVE));
         assertNull(dataUtils.getAccount(OpenMode.BOX));
@@ -263,8 +256,8 @@ public class DataUtilsTest {
 
     @Test
     public void testGetAccountForDropBox() {
-        CloudStorage testStorage = new Dropbox(context, "testID", "testSecret") ;
-        dataUtils.addAccount(testStorage) ;
+        CloudStorage testStorage = new Dropbox(context, "testID", "testSecret");
+        dataUtils.addAccount(testStorage);
 
         assertSame(testStorage, dataUtils.getAccount(OpenMode.DROPBOX));
         assertNull(dataUtils.getAccount(OpenMode.BOX));
@@ -274,8 +267,8 @@ public class DataUtilsTest {
 
     @Test
     public void testGetAccountForBox() {
-        CloudStorage testStorage = new Box(context, "testID", "testSecret") ;
-        dataUtils.addAccount(testStorage) ;
+        CloudStorage testStorage = new Box(context, "testID", "testSecret");
+        dataUtils.addAccount(testStorage);
 
         assertSame(testStorage, dataUtils.getAccount(OpenMode.BOX));
         assertNull(dataUtils.getAccount(OpenMode.ONEDRIVE));
@@ -285,8 +278,8 @@ public class DataUtilsTest {
 
     @Test
     public void testGetAccountForOneDrive() {
-        CloudStorage testStorage = new OneDrive(context, "testID", "testSecret") ;
-        dataUtils.addAccount(testStorage) ;
+        CloudStorage testStorage = new OneDrive(context, "testID", "testSecret");
+        dataUtils.addAccount(testStorage);
 
         assertSame(testStorage, dataUtils.getAccount(OpenMode.ONEDRIVE));
         assertNull(dataUtils.getAccount(OpenMode.BOX));
@@ -296,8 +289,8 @@ public class DataUtilsTest {
 
     @Test
     public void testGetAccountForWrongAccount() {
-        CloudStorage testStorage = new Microsoft(context, "testID", "testSecret") ; // Microsoft is unsupported
-        dataUtils.addAccount(testStorage) ;
+        CloudStorage testStorage = new Microsoft(context, "testID", "testSecret"); // Microsoft is unsupported
+        dataUtils.addAccount(testStorage);
 
         assertNull(dataUtils.getAccount(OpenMode.BOX));
         assertNull(dataUtils.getAccount(OpenMode.DROPBOX));
@@ -307,7 +300,7 @@ public class DataUtilsTest {
 
     @Test
     public void testGetAccountForInvalidServiceType() {
-        CloudStorage testStorage = new OneDrive(context, "testID", "testSecret") ;
+        CloudStorage testStorage = new OneDrive(context, "testID", "testSecret");
         dataUtils.addAccount(testStorage);
 
         assertNull(dataUtils.getAccount(OpenMode.UNKNOWN));
@@ -326,44 +319,44 @@ public class DataUtilsTest {
      * */
     @Test
     public void testRemoveAccountForGoogleDrive() {
-        CloudStorage testStorage = new GoogleDrive(context, "testID", "testSecret") ;
-        dataUtils.addAccount(testStorage) ;
+        CloudStorage testStorage = new GoogleDrive(context, "testID", "testSecret");
+        dataUtils.addAccount(testStorage);
         dataUtils.removeAccount(OpenMode.GDRIVE);
 
-        assertFalse(dataUtils.getAccounts().contains(testStorage)); ;
+        assertFalse(dataUtils.getAccounts().contains(testStorage));
     }
 
     @Test
     public void testRemoveAccountForDropBox() {
-        CloudStorage testStorage = new Dropbox(context, "testID", "testSecret") ;
-        dataUtils.addAccount(testStorage) ;
+        CloudStorage testStorage = new Dropbox(context, "testID", "testSecret");
+        dataUtils.addAccount(testStorage);
         dataUtils.removeAccount(OpenMode.DROPBOX);
 
-        assertFalse(dataUtils.getAccounts().contains(testStorage)); ;
+        assertFalse(dataUtils.getAccounts().contains(testStorage));
     }
 
     @Test
     public void testRemoveAccountForBox() {
-        CloudStorage testStorage = new Box(context, "testID", "testSecret") ;
-        dataUtils.addAccount(testStorage) ;
+        CloudStorage testStorage = new Box(context, "testID", "testSecret");
+        dataUtils.addAccount(testStorage);
         dataUtils.removeAccount(OpenMode.BOX);
 
-        assertFalse(dataUtils.getAccounts().contains(testStorage)); ;
+        assertFalse(dataUtils.getAccounts().contains(testStorage));
     }
 
     @Test
     public void testRemoveAccountForOneDrive() {
-        CloudStorage testStorage = new OneDrive(context, "testID", "testSecret") ;
-        dataUtils.addAccount(testStorage) ;
+        CloudStorage testStorage = new OneDrive(context, "testID", "testSecret");
+        dataUtils.addAccount(testStorage);
         dataUtils.removeAccount(OpenMode.ONEDRIVE);
 
-        assertFalse(dataUtils.getAccounts().contains(testStorage)); ;
+        assertFalse(dataUtils.getAccounts().contains(testStorage));
     }
 
     @Test
     public void testRemoveAccountForWrongAccount() {
-        CloudStorage testStorage = new GoogleDrive(context, "testID", "testSecret") ;
-        dataUtils.addAccount(testStorage) ; // Add google drive account
+        CloudStorage testStorage = new GoogleDrive(context, "testID", "testSecret");
+        dataUtils.addAccount(testStorage); // Add google drive account
         dataUtils.removeAccount(OpenMode.DROPBOX); //remove dropbox account
 
         assertTrue(dataUtils.getAccounts().contains(testStorage)); // must be remained original account
@@ -371,8 +364,8 @@ public class DataUtilsTest {
 
     @Test
     public void testRemoveAccountForInvalidServiceType() {
-        CloudStorage testStorage = new GoogleDrive(context, "testID", "testSecret") ;
-        dataUtils.addAccount(testStorage) ; // Add google drive account
+        CloudStorage testStorage = new GoogleDrive(context, "testID", "testSecret");
+        dataUtils.addAccount(testStorage); // Add google drive account
         dataUtils.removeAccount(OpenMode.UNKNOWN); // remove invalid account
 
         assertTrue(dataUtils.getAccounts().contains(testStorage)); // must be remained original account
@@ -380,13 +373,13 @@ public class DataUtilsTest {
 
     @Test
     public void testContainsAccountsForOpenModeParameter() {
-        CloudStorage dropBoxStorage = new Dropbox(context, "testID", "testSecret") ;
+        CloudStorage dropBoxStorage = new Dropbox(context, "testID", "testSecret");
         dataUtils.addAccount(dropBoxStorage); // index = 0 ;
-        CloudStorage googleDriveStorage = new GoogleDrive(context, "testID", "testSecret") ;
+        CloudStorage googleDriveStorage = new GoogleDrive(context, "testID", "testSecret");
         dataUtils.addAccount(googleDriveStorage); // index = 1
-        CloudStorage boxStorage = new Box(context, "testID", "testSecret") ;
+        CloudStorage boxStorage = new Box(context, "testID", "testSecret");
         dataUtils.addAccount(boxStorage); // index = 2
-        CloudStorage oneDriveStorage = new OneDrive(context, "testID", "testSecret") ;
+        CloudStorage oneDriveStorage = new OneDrive(context, "testID", "testSecret");
         dataUtils.addAccount(oneDriveStorage); // index = 3
 
         assertEquals(0, dataUtils.containsAccounts(OpenMode.DROPBOX));
@@ -397,7 +390,7 @@ public class DataUtilsTest {
 
     @Test
     public void testContainsAccountsForWrongAccount() {
-        CloudStorage testStorage = new GoogleDrive(context, "testID", "testSecret") ;
+        CloudStorage testStorage = new GoogleDrive(context, "testID", "testSecret");
         dataUtils.addAccount(testStorage); // Microsoft account is not supported
 
         assertEquals(-1, dataUtils.containsAccounts(OpenMode.DROPBOX)); // Wrong Account
@@ -409,18 +402,18 @@ public class DataUtilsTest {
     /* Test add hidden files */
     @Test
     public void testAddHiddenFile() {
-        int currentSize = dataUtils.getHiddenFiles().size() ;
-        String randomKey = "i_test1234" ;
+        int currentSize = dataUtils.getHiddenFiles().size();
+        String randomKey = "i_test1234";
         dataUtils.addHiddenFile(randomKey);
 
-        assertEquals(currentSize + 1, dataUtils.getHiddenFiles().size()) ;
+        assertEquals(currentSize + 1, dataUtils.getHiddenFiles().size());
         assertNotNull(dataUtils.getHiddenFiles().getValueForExactKey(randomKey));
     }
 
     @Test
     public void testRemoveHiddenFile() {
-        String randomKey = "i_testR223344" ;
-        dataUtils.addHiddenFile(randomKey) ;
+        String randomKey = "i_testR223344";
+        dataUtils.addHiddenFile(randomKey);
         dataUtils.removeHiddenFile(randomKey);
 
         assertNull(dataUtils.getHiddenFiles().getValueForExactKey(randomKey));
@@ -428,7 +421,7 @@ public class DataUtilsTest {
 
     @Test
     public void testIsFileHiddenForHidden() {
-        String path = "testPath" ;
+        String path = "testPath";
         dataUtils.addHiddenFile(path);
 
         assertTrue(dataUtils.isFileHidden(path));
@@ -436,8 +429,8 @@ public class DataUtilsTest {
 
     @Test
     public void testIsFileHiddenForNotHidden() {
-        String path = "testPath" ;
-        String fakePath = "fakePath" ;
+        String path = "testPath";
+        String fakePath = "fakePath";
         dataUtils.addHiddenFile(path);
 
         assertFalse(dataUtils.isFileHidden(fakePath));
@@ -448,25 +441,25 @@ public class DataUtilsTest {
     /* Test add history files */
     @Test
     public void testAddHistoryFiles() {
-        String testHistory ="test_history" ;
+        String testHistory = "test_history";
         dataUtils.addHistoryFile(testHistory);
 
-        assertTrue(dataUtils.getHistory().contains(testHistory)) ;
+        assertTrue(dataUtils.getHistory().contains(testHistory));
     }
 
     @Test
     public void testClearHistory() {
-        String testHistory ="test_history" ;
+        String testHistory = "test_history";
         dataUtils.addHistoryFile(testHistory);
         dataUtils.clearHistory();
 
-        assertTrue(dataUtils.getHistory().isEmpty()) ;
+        assertTrue(dataUtils.getHistory().isEmpty());
     }
 
     /* Menu Metadata */
     @Test
     public void testPutDrawerMetadata() {
-        MenuItem menuItem = new ActionMenuItem(context,0,123,1,1,"testMenu") ;
+        MenuItem menuItem = new ActionMenuItem(context, 0, 123, 1, 1, "testMenu");
 
         MenuMetadata menuMetadata = new MenuMetadata("testPath");
         dataUtils.putDrawerMetadata(menuItem, menuMetadata);
@@ -476,9 +469,9 @@ public class DataUtilsTest {
 
     @Test
     public void testFindLongestContainingDrawerItem() {
-        int menuItem1_id = 167981 ;
-        MenuItem menuItem1 = new ActionMenuItem(context,0, menuItem1_id,1,1,"menuItem1") ;
-        String metaDataPath = "testPath" ;
+        int menuItem1_id = 167981;
+        MenuItem menuItem1 = new ActionMenuItem(context, 0, menuItem1_id, 1, 1, "menuItem1");
+        String metaDataPath = "testPath";
         MenuMetadata menuMetadata = new MenuMetadata(metaDataPath);
         dataUtils.putDrawerMetadata(menuItem1, menuMetadata);
 
@@ -494,9 +487,9 @@ public class DataUtilsTest {
 
     @Test
     public void testFindLongestContainingDrawerItemForFakePath() {
-        MenuItem menuItem = new RoboMenuItem() ;
-        String metaDataPath = "testPath" ;
-        String fakePath = "fakePath" ;
+        MenuItem menuItem = new RoboMenuItem();
+        String metaDataPath = "testPath";
+        String fakePath = "fakePath";
         MenuMetadata menuMetadata = new MenuMetadata(metaDataPath);
         dataUtils.putDrawerMetadata(menuItem, menuMetadata);
 
@@ -507,39 +500,39 @@ public class DataUtilsTest {
     /* Test Contains method which param is String */
     @Test // Not Used..
     public void testContainsForString() {
-        String a = "first" ; // String 'a' will exists in the element of ArrayList.
-        ArrayList<String[]> b = new ArrayList<>() ;
-        String[] strings = {"zero", "first", "second"} ; // String 'a' must be the second element of strings.
-        b.add(strings) ;
+        String a = "first"; // String 'a' will exists in the element of ArrayList.
+        ArrayList<String[]> b = new ArrayList<>();
+        String[] strings = {"zero", "first", "second"}; // String 'a' must be the second element of strings.
+        b.add(strings);
         assertEquals(0, dataUtils.contains(a, b));
     }
 
     /* Test Contains method if it doesn't Operates */
     @Test // Not Used..
     public void testContainsForStringNoOperate() {
-        String a = null ;
-        ArrayList<String[]> b = new ArrayList<>() ;
-        String[] strings = {"zero", "first"} ;
-        b.add(strings) ;
-        assertEquals(-1, dataUtils.contains(a, b) );
+        String a = null;
+        ArrayList<String[]> b = new ArrayList<>();
+        String[] strings = {"zero", "first"};
+        b.add(strings);
+        assertEquals(-1, dataUtils.contains(a, b));
     }
 
     /* Test Contains method which param is String Array */
     @Test
     public void testContainsForStringArr() {
-        String a[] = {"zero", "first"} ;
-        ArrayList<String[]> b = new ArrayList<>() ;
-        String[] strings = {"zero", "first"} ;
-        b.add(strings) ;
+        String a[] = {"zero", "first"};
+        ArrayList<String[]> b = new ArrayList<>();
+        String[] strings = {"zero", "first"};
+        b.add(strings);
         assertEquals(0, dataUtils.contains(a, b));
         b.clear();
 
-        String[] biasStrings = {"aa", "bb"} ;
-        int biasSize = 10 ;
-        for (int i = 0 ; i < biasSize ; i ++) {
-            b.add(biasStrings) ;
+        String[] biasStrings = {"aa", "bb"};
+        int biasSize = 10;
+        for (int i = 0; i < biasSize; i++) {
+            b.add(biasStrings);
         }
-        b.add(strings) ;
+        b.add(strings);
         assertEquals(biasSize, dataUtils.contains(a, b));
     }
 
@@ -547,18 +540,19 @@ public class DataUtilsTest {
     @Test
     public void testContainsForStringArrNoOperate() {
         // case : b == null
-        String[] a = {"zero", "first"} ;
-        ArrayList<String[]> b = null ;
+        String[] a = {"zero", "first"};
+        ArrayList<String[]> b = null;
         assertEquals(-1, dataUtils.contains(a, b));
 
         // case : b has 3 elements.
-        b = new ArrayList<>() ;
-        String[] strings1 = {"zero", "zero"} ;
-        String[] strings2 = {"first", "first"} ;
-        String[] strings3 = {"first", "zero"} ;
+        b = new ArrayList<>();
+        String[] strings1 = {"zero", "zero"};
+        String[] strings2 = {"first", "first"};
+        String[] strings3 = {"first", "zero"};
         b.add(strings1);
         b.add(strings2);
         b.add(strings3);
         assertEquals(-1, dataUtils.contains(a, b));
     }
+
 }
