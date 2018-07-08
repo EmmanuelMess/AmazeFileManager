@@ -38,6 +38,7 @@ import android.widget.RemoteViews;
 
 import com.amaze.filemanager.R;
 import com.amaze.filemanager.activities.MainActivity;
+import com.amaze.filemanager.asynchronous.services.managment.ProgressiveState;
 import com.amaze.filemanager.filesystem.compressed.CompressedHelper;
 import com.amaze.filemanager.filesystem.compressed.extractcontents.Extractor;
 import com.amaze.filemanager.ui.notifications.NotificationConstants;
@@ -136,6 +137,11 @@ public class ExtractService extends AbstractProgressiveService {
         new DoWork(this, progressHandler, file, extractPath, entries).execute();
 
         return START_STICKY;
+    }
+
+    @Override
+    public ProgressiveState getState() {
+        return new ProgressiveState(position, isHalted, hasFinished, false);
     }
 
     @Override

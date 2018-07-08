@@ -11,6 +11,7 @@ import android.widget.RemoteViews;
 
 import com.amaze.filemanager.R;
 import com.amaze.filemanager.activities.MainActivity;
+import com.amaze.filemanager.asynchronous.services.managment.ProgressiveState;
 import com.amaze.filemanager.filesystem.HybridFile;
 import com.amaze.filemanager.fragments.ProcessViewerFragment;
 import com.amaze.filemanager.ui.notifications.NotificationConstants;
@@ -28,14 +29,19 @@ import java.util.ArrayList;
 
 public abstract class AbstractProgressiveService extends Service implements ServiceWatcherUtil.ServiceWatcherInteractionInterface {
 
-    private Context context;
+    public long position;
+    public boolean isHalted;
+    public boolean hasFinished;
 
+    private Context context;
     private boolean isNotificationTitleSet = false;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         return super.onStartCommand(intent, flags, startId);
     }
+
+    public abstract ProgressiveState getState();
 
     protected abstract NotificationManager getNotificationManager();
 

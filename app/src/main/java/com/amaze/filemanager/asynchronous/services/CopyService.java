@@ -39,6 +39,7 @@ import android.widget.Toast;
 import com.amaze.filemanager.R;
 import com.amaze.filemanager.activities.MainActivity;
 import com.amaze.filemanager.asynchronous.asynctasks.DeleteTask;
+import com.amaze.filemanager.asynchronous.services.managment.ProgressiveState;
 import com.amaze.filemanager.database.CryptHandler;
 import com.amaze.filemanager.database.models.EncryptedEntry;
 import com.amaze.filemanager.exceptions.ShellNotRunningException;
@@ -161,6 +162,11 @@ public class CopyService extends AbstractProgressiveService {
 
         // If we get killed, after returning from here, restart
         return START_STICKY;
+    }
+
+    @Override
+    public ProgressiveState getState() {
+        return new ProgressiveState(position, isHalted, hasFinished, false);
     }
 
     @Override

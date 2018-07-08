@@ -37,6 +37,7 @@ import android.widget.RemoteViews;
 
 import com.amaze.filemanager.R;
 import com.amaze.filemanager.activities.MainActivity;
+import com.amaze.filemanager.asynchronous.services.managment.ProgressiveState;
 import com.amaze.filemanager.filesystem.FileUtil;
 import com.amaze.filemanager.filesystem.HybridFileParcelable;
 import com.amaze.filemanager.ui.notifications.NotificationConstants;
@@ -142,6 +143,11 @@ public class ZipService extends AbstractProgressiveService {
         asyncTask.execute();
         // If we get killed, after returning from here, restart
         return START_STICKY;
+    }
+
+    @Override
+    public ProgressiveState getState() {
+        return new ProgressiveState(position, isHalted, hasFinished, false);
     }
 
     @Override

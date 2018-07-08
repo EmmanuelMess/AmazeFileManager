@@ -15,6 +15,7 @@ import android.widget.RemoteViews;
 
 import com.amaze.filemanager.R;
 import com.amaze.filemanager.activities.MainActivity;
+import com.amaze.filemanager.asynchronous.services.managment.ProgressiveState;
 import com.amaze.filemanager.filesystem.FileUtil;
 import com.amaze.filemanager.filesystem.HybridFile;
 import com.amaze.filemanager.filesystem.HybridFileParcelable;
@@ -171,6 +172,11 @@ public class DecryptService extends AbstractProgressiveService {
             sendBroadcast(intent);
             stopSelf();
         }
+    }
+
+    @Override
+    public ProgressiveState getState() {
+        return new ProgressiveState(position, isHalted, hasFinished, true);
     }
 
     @Override
