@@ -38,8 +38,4 @@ public abstract class AbstractProgressiveServiceNotifier {
 
     protected abstract void finish();
 
-    public static class Helper {
-
-    }
-
 }
