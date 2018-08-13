@@ -1901,6 +1901,8 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
         }
     }
 
+    private final Object lock = new Object();
+
     @Override
     public void onLoadFinished(Loader<Cursor> loader, final Cursor data) {
 
@@ -1916,215 +1918,217 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
             public Boolean doInBackground() {
                 boolean hasUpdatedDrawer = false;
 
-                if (data.getCount() > 0 && data.moveToFirst()) {
-                    do {
+                synchronized (lock) {
+                    if (data.getCount() > 0 && data.moveToFirst()) {
+                        do {
 
-                        switch (data.getInt(0)) {
-                            case 1:
-                                try {
-                                    CloudRail.setAppKey(data.getString(1));
-                                } catch (Exception e) {
-                                    // any other exception due to network conditions or other error
-                                    e.printStackTrace();
-                                    AppConfig.toast(MainActivity.this, getResources().getString(R.string.failed_cloud_api_key));
-                                    return false;
-                                }
-                                break;
-                            case 2:
-                                // DRIVE
-                                try {
-                                    CloudEntry cloudEntryGdrive = null;
-                                    CloudEntry savedCloudEntryGdrive;
+                            switch (data.getInt(0)) {
+                                case 1:
+                                    try {
+                                        CloudRail.setAppKey(data.getString(1));
+                                    } catch (Exception e) {
+                                        // any other exception due to network conditions or other error
+                                        e.printStackTrace();
+                                        AppConfig.toast(MainActivity.this, getResources().getString(R.string.failed_cloud_api_key));
+                                        return false;
+                                    }
+                                    break;
+                                case 2:
+                                    // DRIVE
+                                    try {
+                                        CloudEntry cloudEntryGdrive = null;
+                                        CloudEntry savedCloudEntryGdrive;
 
-                                    GoogleDrive cloudStorageDrive = new GoogleDrive(getApplicationContext(),
-                                            data.getString(1), "", CLOUD_AUTHENTICATOR_REDIRECT_URI, data.getString(2));
-                                    cloudStorageDrive.useAdvancedAuthentication();
+                                        GoogleDrive cloudStorageDrive = new GoogleDrive(getApplicationContext(),
+                                                data.getString(1), "", CLOUD_AUTHENTICATOR_REDIRECT_URI, data.getString(2));
+                                        cloudStorageDrive.useAdvancedAuthentication();
 
-                                    if ((savedCloudEntryGdrive = cloudHandler.findEntry(OpenMode.GDRIVE)) != null) {
-                                        // we already have the entry and saved state, get it
+                                        if ((savedCloudEntryGdrive = cloudHandler.findEntry(OpenMode.GDRIVE)) != null) {
+                                            // we already have the entry and saved state, get it
 
-                                        try {
-                                            cloudStorageDrive.loadAsString(savedCloudEntryGdrive.getPersistData());
-                                        } catch (ParseException e) {
-                                            e.printStackTrace();
-                                            // we need to update the persist string as existing one is been compromised
+                                            try {
+                                                cloudStorageDrive.loadAsString(savedCloudEntryGdrive.getPersistData());
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                                // we need to update the persist string as existing one is been compromised
 
+                                                cloudStorageDrive.login();
+                                                cloudEntryGdrive = new CloudEntry(OpenMode.GDRIVE, cloudStorageDrive.saveAsString());
+                                                cloudHandler.updateEntry(OpenMode.GDRIVE, cloudEntryGdrive);
+                                            }
+                                        } else {
                                             cloudStorageDrive.login();
                                             cloudEntryGdrive = new CloudEntry(OpenMode.GDRIVE, cloudStorageDrive.saveAsString());
-                                            cloudHandler.updateEntry(OpenMode.GDRIVE, cloudEntryGdrive);
+                                            cloudHandler.addEntry(cloudEntryGdrive);
                                         }
-                                    } else {
-                                        cloudStorageDrive.login();
-                                        cloudEntryGdrive = new CloudEntry(OpenMode.GDRIVE, cloudStorageDrive.saveAsString());
-                                        cloudHandler.addEntry(cloudEntryGdrive);
+
+                                        dataUtils.addAccount(cloudStorageDrive);
+                                        hasUpdatedDrawer = true;
+                                    } catch (CloudPluginException e) {
+                                        e.printStackTrace();
+                                        AppConfig.toast(MainActivity.this, getResources().getString(R.string.cloud_error_plugin));
+                                        deleteConnection(OpenMode.GDRIVE);
+                                        return false;
+                                    } catch (AuthenticationException e) {
+                                        e.printStackTrace();
+                                        AppConfig.toast(MainActivity.this, getResources().getString(R.string.cloud_fail_authenticate));
+                                        deleteConnection(OpenMode.GDRIVE);
+                                        return false;
+                                    } catch (Exception e) {
+                                        // any other exception due to network conditions or other error
+                                        e.printStackTrace();
+                                        AppConfig.toast(MainActivity.this, getResources().getString(R.string.failed_cloud_new_connection));
+                                        deleteConnection(OpenMode.GDRIVE);
+                                        return false;
                                     }
+                                    break;
+                                case 3:
+                                    // DROPBOX
+                                    try {
+                                        CloudEntry cloudEntryDropbox = null;
+                                        CloudEntry savedCloudEntryDropbox;
 
-                                    dataUtils.addAccount(cloudStorageDrive);
-                                    hasUpdatedDrawer = true;
-                                } catch (CloudPluginException e) {
-                                    e.printStackTrace();
-                                    AppConfig.toast(MainActivity.this, getResources().getString(R.string.cloud_error_plugin));
-                                    deleteConnection(OpenMode.GDRIVE);
-                                    return false;
-                                } catch (AuthenticationException e) {
-                                    e.printStackTrace();
-                                    AppConfig.toast(MainActivity.this, getResources().getString(R.string.cloud_fail_authenticate));
-                                    deleteConnection(OpenMode.GDRIVE);
-                                    return false;
-                                } catch (Exception e) {
-                                    // any other exception due to network conditions or other error
-                                    e.printStackTrace();
-                                    AppConfig.toast(MainActivity.this, getResources().getString(R.string.failed_cloud_new_connection));
-                                    deleteConnection(OpenMode.GDRIVE);
-                                    return false;
-                                }
-                                break;
-                            case 3:
-                                // DROPBOX
-                                try {
-                                    CloudEntry cloudEntryDropbox = null;
-                                    CloudEntry savedCloudEntryDropbox;
+                                        CloudStorage cloudStorageDropbox = new Dropbox(getApplicationContext(),
+                                                data.getString(1), data.getString(2));
 
-                                    CloudStorage cloudStorageDropbox = new Dropbox(getApplicationContext(),
-                                            data.getString(1), data.getString(2));
+                                        if ((savedCloudEntryDropbox = cloudHandler.findEntry(OpenMode.DROPBOX)) != null) {
+                                            // we already have the entry and saved state, get it
+                                            try {
+                                                cloudStorageDropbox.loadAsString(savedCloudEntryDropbox.getPersistData());
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                                // we need to persist data again
 
-                                    if ((savedCloudEntryDropbox = cloudHandler.findEntry(OpenMode.DROPBOX)) != null) {
-                                        // we already have the entry and saved state, get it
-                                        try {
-                                            cloudStorageDropbox.loadAsString(savedCloudEntryDropbox.getPersistData());
-                                        } catch (ParseException e) {
-                                            e.printStackTrace();
-                                            // we need to persist data again
-
+                                                cloudStorageDropbox.login();
+                                                cloudEntryDropbox = new CloudEntry(OpenMode.DROPBOX, cloudStorageDropbox.saveAsString());
+                                                cloudHandler.updateEntry(OpenMode.DROPBOX, cloudEntryDropbox);
+                                            }
+                                        } else {
                                             cloudStorageDropbox.login();
                                             cloudEntryDropbox = new CloudEntry(OpenMode.DROPBOX, cloudStorageDropbox.saveAsString());
-                                            cloudHandler.updateEntry(OpenMode.DROPBOX, cloudEntryDropbox);
+                                            cloudHandler.addEntry(cloudEntryDropbox);
                                         }
-                                    } else {
-                                        cloudStorageDropbox.login();
-                                        cloudEntryDropbox = new CloudEntry(OpenMode.DROPBOX, cloudStorageDropbox.saveAsString());
-                                        cloudHandler.addEntry(cloudEntryDropbox);
+
+                                        dataUtils.addAccount(cloudStorageDropbox);
+                                        hasUpdatedDrawer = true;
+                                    } catch (CloudPluginException e) {
+                                        e.printStackTrace();
+                                        AppConfig.toast(MainActivity.this, getResources().getString(R.string.cloud_error_plugin));
+                                        deleteConnection(OpenMode.DROPBOX);
+                                        return false;
+                                    } catch (AuthenticationException e) {
+                                        e.printStackTrace();
+                                        AppConfig.toast(MainActivity.this, getResources().getString(R.string.cloud_fail_authenticate));
+                                        deleteConnection(OpenMode.DROPBOX);
+                                        return false;
+                                    } catch (Exception e) {
+                                        // any other exception due to network conditions or other error
+                                        e.printStackTrace();
+                                        AppConfig.toast(MainActivity.this, getResources().getString(R.string.failed_cloud_new_connection));
+                                        deleteConnection(OpenMode.DROPBOX);
+                                        return false;
                                     }
+                                    break;
+                                case 4:
+                                    // BOX
+                                    try {
+                                        CloudEntry cloudEntryBox = null;
+                                        CloudEntry savedCloudEntryBox;
 
-                                    dataUtils.addAccount(cloudStorageDropbox);
-                                    hasUpdatedDrawer = true;
-                                } catch (CloudPluginException e) {
-                                    e.printStackTrace();
-                                    AppConfig.toast(MainActivity.this, getResources().getString(R.string.cloud_error_plugin));
-                                    deleteConnection(OpenMode.DROPBOX);
-                                    return false;
-                                } catch (AuthenticationException e) {
-                                    e.printStackTrace();
-                                    AppConfig.toast(MainActivity.this, getResources().getString(R.string.cloud_fail_authenticate));
-                                    deleteConnection(OpenMode.DROPBOX);
-                                    return false;
-                                } catch (Exception e) {
-                                    // any other exception due to network conditions or other error
-                                    e.printStackTrace();
-                                    AppConfig.toast(MainActivity.this, getResources().getString(R.string.failed_cloud_new_connection));
-                                    deleteConnection(OpenMode.DROPBOX);
-                                    return false;
-                                }
-                                break;
-                            case 4:
-                                // BOX
-                                try {
-                                    CloudEntry cloudEntryBox = null;
-                                    CloudEntry savedCloudEntryBox;
+                                        CloudStorage cloudStorageBox = new Box(getApplicationContext(),
+                                                data.getString(1), data.getString(2));
 
-                                    CloudStorage cloudStorageBox = new Box(getApplicationContext(),
-                                            data.getString(1), data.getString(2));
-
-                                    if ((savedCloudEntryBox = cloudHandler.findEntry(OpenMode.BOX)) != null) {
-                                        // we already have the entry and saved state, get it
-                                        try {
-                                            cloudStorageBox.loadAsString(savedCloudEntryBox.getPersistData());
-                                        } catch (ParseException e) {
-                                            e.printStackTrace();
-                                            // we need to persist data again
+                                        if ((savedCloudEntryBox = cloudHandler.findEntry(OpenMode.BOX)) != null) {
+                                            // we already have the entry and saved state, get it
+                                            try {
+                                                cloudStorageBox.loadAsString(savedCloudEntryBox.getPersistData());
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                                // we need to persist data again
+                                                cloudStorageBox.login();
+                                                cloudEntryBox = new CloudEntry(OpenMode.BOX, cloudStorageBox.saveAsString());
+                                                cloudHandler.updateEntry(OpenMode.BOX, cloudEntryBox);
+                                            }
+                                        } else {
                                             cloudStorageBox.login();
                                             cloudEntryBox = new CloudEntry(OpenMode.BOX, cloudStorageBox.saveAsString());
-                                            cloudHandler.updateEntry(OpenMode.BOX, cloudEntryBox);
+                                            cloudHandler.addEntry(cloudEntryBox);
                                         }
-                                    } else {
-                                        cloudStorageBox.login();
-                                        cloudEntryBox = new CloudEntry(OpenMode.BOX, cloudStorageBox.saveAsString());
-                                        cloudHandler.addEntry(cloudEntryBox);
+
+                                        dataUtils.addAccount(cloudStorageBox);
+                                        hasUpdatedDrawer = true;
+                                    } catch (CloudPluginException e) {
+                                        e.printStackTrace();
+                                        AppConfig.toast(MainActivity.this, getResources().getString(R.string.cloud_error_plugin));
+                                        deleteConnection(OpenMode.BOX);
+                                        return false;
+                                    } catch (AuthenticationException e) {
+                                        e.printStackTrace();
+                                        AppConfig.toast(MainActivity.this, getResources().getString(R.string.cloud_fail_authenticate));
+                                        deleteConnection(OpenMode.BOX);
+                                        return false;
+                                    } catch (Exception e) {
+                                        // any other exception due to network conditions or other error
+                                        e.printStackTrace();
+                                        AppConfig.toast(MainActivity.this, getResources().getString(R.string.failed_cloud_new_connection));
+                                        deleteConnection(OpenMode.BOX);
+                                        return false;
                                     }
+                                    break;
+                                case 5:
+                                    // ONEDRIVE
+                                    try {
+                                        CloudEntry cloudEntryOnedrive = null;
+                                        CloudEntry savedCloudEntryOnedrive;
 
-                                    dataUtils.addAccount(cloudStorageBox);
-                                    hasUpdatedDrawer = true;
-                                } catch (CloudPluginException e) {
-                                    e.printStackTrace();
-                                    AppConfig.toast(MainActivity.this, getResources().getString(R.string.cloud_error_plugin));
-                                    deleteConnection(OpenMode.BOX);
-                                    return false;
-                                } catch (AuthenticationException e) {
-                                    e.printStackTrace();
-                                    AppConfig.toast(MainActivity.this, getResources().getString(R.string.cloud_fail_authenticate));
-                                    deleteConnection(OpenMode.BOX);
-                                    return false;
-                                } catch (Exception e) {
-                                    // any other exception due to network conditions or other error
-                                    e.printStackTrace();
-                                    AppConfig.toast(MainActivity.this, getResources().getString(R.string.failed_cloud_new_connection));
-                                    deleteConnection(OpenMode.BOX);
-                                    return false;
-                                }
-                                break;
-                            case 5:
-                                // ONEDRIVE
-                                try {
-                                    CloudEntry cloudEntryOnedrive = null;
-                                    CloudEntry savedCloudEntryOnedrive;
+                                        CloudStorage cloudStorageOnedrive = new OneDrive(getApplicationContext(),
+                                                data.getString(1), data.getString(2));
 
-                                    CloudStorage cloudStorageOnedrive = new OneDrive(getApplicationContext(),
-                                            data.getString(1), data.getString(2));
+                                        if ((savedCloudEntryOnedrive = cloudHandler.findEntry(OpenMode.ONEDRIVE)) != null) {
+                                            // we already have the entry and saved state, get it
+                                            try {
+                                                cloudStorageOnedrive.loadAsString(savedCloudEntryOnedrive.getPersistData());
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                                // we need to persist data again
 
-                                    if ((savedCloudEntryOnedrive = cloudHandler.findEntry(OpenMode.ONEDRIVE)) != null) {
-                                        // we already have the entry and saved state, get it
-                                        try {
-                                            cloudStorageOnedrive.loadAsString(savedCloudEntryOnedrive.getPersistData());
-                                        } catch (ParseException e) {
-                                            e.printStackTrace();
-                                            // we need to persist data again
-
+                                                cloudStorageOnedrive.login();
+                                                cloudEntryOnedrive = new CloudEntry(OpenMode.ONEDRIVE, cloudStorageOnedrive.saveAsString());
+                                                cloudHandler.updateEntry(OpenMode.ONEDRIVE, cloudEntryOnedrive);
+                                            }
+                                        } else {
                                             cloudStorageOnedrive.login();
                                             cloudEntryOnedrive = new CloudEntry(OpenMode.ONEDRIVE, cloudStorageOnedrive.saveAsString());
-                                            cloudHandler.updateEntry(OpenMode.ONEDRIVE, cloudEntryOnedrive);
+                                            cloudHandler.addEntry(cloudEntryOnedrive);
                                         }
-                                    } else {
-                                        cloudStorageOnedrive.login();
-                                        cloudEntryOnedrive = new CloudEntry(OpenMode.ONEDRIVE, cloudStorageOnedrive.saveAsString());
-                                        cloudHandler.addEntry(cloudEntryOnedrive);
-                                    }
 
-                                    dataUtils.addAccount(cloudStorageOnedrive);
-                                    hasUpdatedDrawer = true;
-                                } catch (CloudPluginException e) {
-                                    e.printStackTrace();
-                                    AppConfig.toast(MainActivity.this, getResources().getString(R.string.cloud_error_plugin));
-                                    deleteConnection(OpenMode.ONEDRIVE);
+                                        dataUtils.addAccount(cloudStorageOnedrive);
+                                        hasUpdatedDrawer = true;
+                                    } catch (CloudPluginException e) {
+                                        e.printStackTrace();
+                                        AppConfig.toast(MainActivity.this, getResources().getString(R.string.cloud_error_plugin));
+                                        deleteConnection(OpenMode.ONEDRIVE);
+                                        return false;
+                                    } catch (AuthenticationException e) {
+                                        e.printStackTrace();
+                                        AppConfig.toast(MainActivity.this, getResources().getString(R.string.cloud_fail_authenticate));
+                                        deleteConnection(OpenMode.ONEDRIVE);
+                                        return false;
+                                    } catch (Exception e) {
+                                        // any other exception due to network conditions or other error
+                                        e.printStackTrace();
+                                        AppConfig.toast(MainActivity.this, getResources().getString(R.string.failed_cloud_new_connection));
+                                        deleteConnection(OpenMode.ONEDRIVE);
+                                        return false;
+                                    }
+                                    break;
+                                default:
+                                    Toast.makeText(MainActivity.this, getResources().getString(R.string.cloud_error_failed_restart),
+                                            Toast.LENGTH_LONG).show();
                                     return false;
-                                } catch (AuthenticationException e) {
-                                    e.printStackTrace();
-                                    AppConfig.toast(MainActivity.this, getResources().getString(R.string.cloud_fail_authenticate));
-                                    deleteConnection(OpenMode.ONEDRIVE);
-                                    return false;
-                                } catch (Exception e) {
-                                    // any other exception due to network conditions or other error
-                                    e.printStackTrace();
-                                    AppConfig.toast(MainActivity.this, getResources().getString(R.string.failed_cloud_new_connection));
-                                    deleteConnection(OpenMode.ONEDRIVE);
-                                    return false;
-                                }
-                                break;
-                            default:
-                                Toast.makeText(MainActivity.this, getResources().getString(R.string.cloud_error_failed_restart),
-                                        Toast.LENGTH_LONG).show();
-                                return false;
-                        }
-                    } while (data.moveToNext());
+                            }
+                        } while (data.moveToNext());
+                    }
                 }
                 return hasUpdatedDrawer;
             }
