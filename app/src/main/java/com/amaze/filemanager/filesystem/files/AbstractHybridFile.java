@@ -73,11 +73,7 @@ public abstract class AbstractHybridFile {
     }
 
     public AbstractHybridFile(String path, String name, boolean isDirectory) {
-        if (path.startsWith("smb://") || isSmb()) {
-            if (!isDirectory) this.path = path + name;
-            else if (!name.endsWith("/")) this.path = path + name + "/";
-            else this.path = path + name;
-        } else this.path = path + "/" + name;
+        this.path = path + "/" + name;
     }
 
     public void generateMode(Context context) {
@@ -182,11 +178,6 @@ public abstract class AbstractHybridFile {
 
     public long lastModified() throws SmbException {
         switch (mode) {
-            case SMB:
-                SmbFile smbFile = getSmbFile();
-                if (smbFile != null)
-                    return smbFile.lastModified();
-                break;
             case FILE:
                 new File(path).lastModified();
                 break;
@@ -204,14 +195,6 @@ public abstract class AbstractHybridFile {
     public long length() {
         long s = 0L;
         switch (mode) {
-            case SMB:
-                SmbFile smbFile = getSmbFile();
-                if (smbFile != null)
-                    try {
-                        s = smbFile.length();
-                    } catch (SmbException e) {
-                    }
-                return s;
             case FILE:
                 s = new File(path).length();
                 return s;
@@ -230,14 +213,6 @@ public abstract class AbstractHybridFile {
 
         long s = 0l;
         switch (mode){
-            case SMB:
-                SmbFile smbFile=getSmbFile();
-                if(smbFile!=null)
-                    try {
-                        s = smbFile.length();
-                    } catch (SmbException e) {
-                    }
-                return s;
             case FILE:
                 s = new File(path).length();
                 return s;
@@ -280,11 +255,6 @@ public abstract class AbstractHybridFile {
     public String getName() {
         String name = null;
         switch (mode) {
-            case SMB:
-                SmbFile smbFile = getSmbFile();
-                if (smbFile != null)
-                    return smbFile.getName();
-                break;
             case FILE:
                 return new File(path).getName();
             case ROOT:
@@ -299,11 +269,6 @@ public abstract class AbstractHybridFile {
     public String getName(Context context) {
         String name = null;
         switch (mode){
-            case SMB:
-                SmbFile smbFile=getSmbFile();
-                if(smbFile!=null)
-                    return smbFile.getName();
-                break;
             case FILE:
                 return new File(path).getName();
             case ROOT:
@@ -315,23 +280,6 @@ public abstract class AbstractHybridFile {
                 name = builder.substring(builder.lastIndexOf("/")+1, builder.length());
         }
         return name;
-    }
-
-    public SmbFile getSmbFile(int timeout) {
-        try {
-            SmbFile smbFile = new SmbFile(path);
-            smbFile.setConnectTimeout(timeout);
-            return smbFile;
-        } catch (MalformedURLException e) {
-            return null;
-        }
-    }
-    public SmbFile getSmbFile() {
-        try {
-            return new SmbFile(path);
-        } catch (MalformedURLException e) {
-            return null;
-        }
     }
 
     public boolean isCustomPath() {
@@ -351,14 +299,6 @@ public abstract class AbstractHybridFile {
     public String getParent() {
         String parentPath = "";
         switch (mode) {
-            case SMB:
-                try {
-                    parentPath = new SmbFile(path).getParent();
-                } catch (MalformedURLException e) {
-                    parentPath = "";
-                    e.printStackTrace();
-                }
-                break;
             case FILE:
             case ROOT:
                 parentPath = new File(path).getParent();
@@ -377,14 +317,6 @@ public abstract class AbstractHybridFile {
 
         String parentPath = "";
         switch (mode) {
-            case SMB:
-                try {
-                    parentPath = new SmbFile(path).getParent();
-                } catch (MalformedURLException e) {
-                    parentPath = "";
-                    e.printStackTrace();
-                }
-                break;
             case FILE:
             case ROOT:
                 parentPath = new File(path).getParent();
@@ -415,17 +347,6 @@ public abstract class AbstractHybridFile {
     public boolean isDirectory() {
         boolean isDirectory;
         switch (mode) {
-            case SMB:
-                try {
-                    isDirectory = new SmbFile(path).isDirectory();
-                } catch (SmbException e) {
-                    isDirectory = false;
-                    e.printStackTrace();
-                } catch (MalformedURLException e) {
-                    isDirectory = false;
-                    e.printStackTrace();
-                }
-                break;
             case FILE:
                 isDirectory = new File(path).isDirectory();
                 break;
@@ -454,17 +375,6 @@ public abstract class AbstractHybridFile {
 
         boolean isDirectory;
         switch (mode) {
-            case SMB:
-                try {
-                    isDirectory = new SmbFile(path).isDirectory();
-                } catch (SmbException e) {
-                    isDirectory = false;
-                    e.printStackTrace();
-                } catch (MalformedURLException e) {
-                    isDirectory = false;
-                    e.printStackTrace();
-                }
-                break;
             case FILE:
                 isDirectory = new File(path).isDirectory();
                 break;
@@ -510,14 +420,6 @@ public abstract class AbstractHybridFile {
         long size = 0L;
 
         switch (mode) {
-            case SMB:
-                try {
-                    size = FileUtils.folderSize(new SmbFile(path));
-                } catch (MalformedURLException e) {
-                    size = 0L;
-                    e.printStackTrace();
-                }
-                break;
             case FILE:
                 size = FileUtils.folderSize(new File(path), null);
                 break;
@@ -539,14 +441,6 @@ public abstract class AbstractHybridFile {
         long size = 0l;
 
         switch (mode){
-            case SMB:
-                try {
-                    size = FileUtils.folderSize(new SmbFile(path));
-                } catch (MalformedURLException e) {
-                    size = 0l;
-                    e.printStackTrace();
-                }
-                break;
             case FILE:
                 size = FileUtils.folderSize(new File(path), null);
                 break;
@@ -577,17 +471,6 @@ public abstract class AbstractHybridFile {
     public long getUsableSpace() {
         long size = 0L;
         switch (mode) {
-            case SMB:
-                try {
-                    size = (new SmbFile(path).getDiskFreeSpace());
-                } catch (MalformedURLException e) {
-                    size = 0L;
-                    e.printStackTrace();
-                } catch (SmbException e) {
-                    size = 0L;
-                    e.printStackTrace();
-                }
-                break;
             case FILE:
             case ROOT:
                 size = new File(path).getUsableSpace();
@@ -613,16 +496,6 @@ public abstract class AbstractHybridFile {
     public long getTotal(Context context) {
         long size = 0l;
         switch (mode) {
-            case SMB:
-                // TODO: Find total storage space of SMB when JCIFS adds support
-                try {
-                    size = new SmbFile(path).getDiskFreeSpace();
-                } catch (SmbException e) {
-                    e.printStackTrace();
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
-                break;
             case FILE:
             case ROOT:
                 size = new File(path).getTotalSpace();
@@ -648,22 +521,6 @@ public abstract class AbstractHybridFile {
      */
     public void forEachChildrenFile(Context context, boolean isRoot, OnFileFound onFileFound) {
         switch (mode) {
-            case SMB:
-                try {
-                    SmbFile smbFile = new SmbFile(path);
-                    for (SmbFile smbFile1 : smbFile.listFiles()) {
-                        HybridFileParcelable baseFile=new HybridFileParcelable(smbFile1.getPath());
-                        baseFile.setName(smbFile1.getName());
-                        baseFile.setMode(OpenMode.SMB);
-                        baseFile.setDirectory(smbFile1.isDirectory());
-                        baseFile.setDate(smbFile1.lastModified());
-                        baseFile.setSize(baseFile.isDirectory()?0:smbFile1.length());
-                        onFileFound.onFileFound(baseFile);
-                    }
-                } catch (MalformedURLException | SmbException e) {
-                    e.printStackTrace();
-                }
-                break;
             case OTG:
                 OTGUtil.getDocumentFiles(path, context, onFileFound);
                 break;
@@ -690,26 +547,6 @@ public abstract class AbstractHybridFile {
     public ArrayList<HybridFileParcelable> listFiles(Context context, boolean isRoot) {
         ArrayList<HybridFileParcelable> arrayList = new ArrayList<>();
         switch (mode) {
-            case SMB:
-                try {
-                    SmbFile smbFile = new SmbFile(path);
-                    for (SmbFile smbFile1 : smbFile.listFiles()) {
-                        HybridFileParcelable baseFile=new HybridFileParcelable(smbFile1.getPath());
-                        baseFile.setName(smbFile1.getName());
-                        baseFile.setMode(OpenMode.SMB);
-                        baseFile.setDirectory(smbFile1.isDirectory());
-                        baseFile.setDate(smbFile1.lastModified());
-                        baseFile.setSize(baseFile.isDirectory()?0:smbFile1.length());
-                        arrayList.add(baseFile);
-                    }
-                } catch (MalformedURLException e) {
-                    if (arrayList != null) arrayList.clear();
-                    e.printStackTrace();
-                } catch (SmbException e) {
-                    if (arrayList != null) arrayList.clear();
-                    e.printStackTrace();
-                }
-                break;
             case OTG:
                 arrayList = OTGUtil.getDocumentFilesList(path, context);
                 break;
@@ -733,15 +570,7 @@ public abstract class AbstractHybridFile {
     }
 
     public String getReadablePath(String path) {
-        if (isSmb())
-            return parseSmbPath(path);
         return path;
-    }
-
-    String parseSmbPath(String a) {
-        if (a.contains("@"))
-            return "smb://" + a.substring(a.indexOf("@") + 1, a.length());
-        else return a;
     }
 
     /**
@@ -750,21 +579,12 @@ public abstract class AbstractHybridFile {
      */
     public InputStream getInputStream() {
         InputStream inputStream;
-        if (isSmb()) {
-            try {
-                inputStream = new SmbFile(path).getInputStream();
-            } catch (IOException e) {
-                inputStream = null;
-                e.printStackTrace();
-            }
-        } else {
             try {
                 inputStream = new FileInputStream(path);
             } catch (FileNotFoundException e) {
                 inputStream = null;
                 e.printStackTrace();
             }
-        }
         return inputStream;
     }
 
@@ -772,14 +592,6 @@ public abstract class AbstractHybridFile {
         InputStream inputStream;
 
         switch (mode) {
-            case SMB:
-                try {
-                    inputStream = new SmbFile(path).getInputStream();
-                } catch (IOException e) {
-                    inputStream = null;
-                    e.printStackTrace();
-                }
-                break;
             case OTG:
                 ContentResolver contentResolver = context.getContentResolver();
                 DocumentFile documentSourceFile = OTGUtil.getDocumentFile(path,
@@ -823,14 +635,6 @@ public abstract class AbstractHybridFile {
     public OutputStream getOutputStream(Context context) {
         OutputStream outputStream;
         switch (mode) {
-            case SMB:
-                try {
-                    outputStream = new SmbFile(path).getOutputStream();
-                } catch (IOException e) {
-                    outputStream = null;
-                    e.printStackTrace();
-                }
-                break;
             case OTG:
                 ContentResolver contentResolver = context.getContentResolver();
                 DocumentFile documentSourceFile = OTGUtil.getDocumentFile(path,
@@ -856,14 +660,7 @@ public abstract class AbstractHybridFile {
 
     public boolean exists() {
         boolean exists = false;
-        if (isSmb()) {
-            try {
-                SmbFile smbFile = getSmbFile(2000);
-                exists = smbFile != null && smbFile.exists();
-            } catch (SmbException e) {
-                exists = false;
-            }
-        } else if (isDropBoxFile()) {
+        if (isDropBoxFile()) {
             CloudStorage cloudStorageDropbox = dataUtils.getAccount(OpenMode.DROPBOX);
             exists = cloudStorageDropbox.exists(CloudUtil.stripPath(OpenMode.DROPBOX, path));
         } else if (isBoxFile()) {
@@ -907,29 +704,12 @@ public abstract class AbstractHybridFile {
     }
 
     public boolean setLastModified(final long date) {
-        if (isSmb()) {
-            try {
-                new SmbFile(path).setLastModified(date);
-                return true;
-            } catch (SmbException e) {
-                return false;
-            } catch (MalformedURLException e) {
-                return false;
-            }
-        }
         File f = new File(path);
         return f.setLastModified(date);
-
     }
 
     public void mkdir(Context context) {
-        if (isSmb()) {
-            try {
-                new SmbFile(path).mkdirs();
-            } catch (SmbException | MalformedURLException e) {
-                e.printStackTrace();
-            }
-        } else if (isOtgFile()) {
+        if (isOtgFile()) {
             if (!exists(context)) {
                 DocumentFile parentDirectory = OTGUtil.getDocumentFile(getParent(context), context, false);
                 if (parentDirectory.isDirectory()) {
@@ -969,19 +749,11 @@ public abstract class AbstractHybridFile {
     }
 
     public boolean delete(Context context, boolean rootmode) throws ShellNotRunningException {
-        if (isSmb()) {
-            try {
-                new SmbFile(path).delete();
-            } catch (SmbException | MalformedURLException e) {
-                e.printStackTrace();
-            }
+        if (isRoot() && rootmode) {
+            setMode(OpenMode.ROOT);
+            RootUtils.delete(getPath());
         } else {
-            if (isRoot() && rootmode) {
-                setMode(OpenMode.ROOT);
-                RootUtils.delete(getPath());
-            } else {
-                FileUtil.deleteFile(new File(path), context);
-            }
+            FileUtil.deleteFile(new File(path), context);
         }
         return !exists();
     }

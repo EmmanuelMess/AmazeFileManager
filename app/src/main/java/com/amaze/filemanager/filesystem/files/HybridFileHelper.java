@@ -5,9 +5,9 @@ import android.content.Context;
 public final class HybridFileHelper {
 
     public static AbstractHybridFile getHybridFile(Context context, String path) {
-        /*if (path.startsWith("smb://")) {
-            mode = OpenMode.SMB;
-        } else*/ if (path.startsWith("ssh://")) {
+        if (path.startsWith("smb://")) {
+            return new SmbHybridFile(path);
+        } else if (path.startsWith("ssh://")) {
             return new SftpHybridFile(path);
         } /*else if (path.startsWith(OTGUtil.PREFIX_OTG)) {
             mode = OpenMode.OTG;
