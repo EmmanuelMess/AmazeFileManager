@@ -17,12 +17,12 @@ public class HybridFileParcelable extends HybridFile implements Parcelable {
     private String link = "";
 
     public HybridFileParcelable(String path) {
-        super(OpenMode.FILE, path);
+        super(path);
         this.path = path;
     }
 
     public HybridFileParcelable(String path, String permission, long date, long size, boolean isDirectory) {
-        super(OpenMode.FILE, path);
+        super(path);
         this.date = date;
         this.size = size;
         this.isDirectory = isDirectory;
@@ -91,7 +91,7 @@ public class HybridFileParcelable extends HybridFile implements Parcelable {
     }
 
     protected HybridFileParcelable(Parcel in) {
-        super(OpenMode.getOpenMode(in.readInt()), in.readString());
+        super(in.readString());
         permission = in.readString();
         name = in.readString();
         date = in.readLong();
@@ -119,7 +119,6 @@ public class HybridFileParcelable extends HybridFile implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(mode.ordinal());
         dest.writeString(path);
         dest.writeString(permission);
         dest.writeString(name);
