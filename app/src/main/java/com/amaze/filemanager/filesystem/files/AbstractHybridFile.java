@@ -178,9 +178,6 @@ public abstract class AbstractHybridFile {
 
     public long lastModified() throws SmbException {
         switch (mode) {
-            case FILE:
-                new File(path).lastModified();
-                break;
             case ROOT:
                 HybridFileParcelable baseFile = generateBaseFileFromParent();
                 if (baseFile != null)
@@ -195,9 +192,6 @@ public abstract class AbstractHybridFile {
     public long length() {
         long s = 0L;
         switch (mode) {
-            case FILE:
-                s = new File(path).length();
-                return s;
             case ROOT:
                 HybridFileParcelable baseFile = generateBaseFileFromParent();
                 if (baseFile != null) return baseFile.getSize();
@@ -213,9 +207,6 @@ public abstract class AbstractHybridFile {
 
         long s = 0l;
         switch (mode){
-            case FILE:
-                s = new File(path).length();
-                return s;
             case ROOT:
                 HybridFileParcelable baseFile=generateBaseFileFromParent();
                 if(baseFile!=null) return baseFile.getSize();
@@ -236,8 +227,6 @@ public abstract class AbstractHybridFile {
     public String getName() {
         String name = null;
         switch (mode) {
-            case FILE:
-                return new File(path).getName();
             case ROOT:
                 return new File(path).getName();
             default:
@@ -250,8 +239,6 @@ public abstract class AbstractHybridFile {
     public String getName(Context context) {
         String name = null;
         switch (mode){
-            case FILE:
-                return new File(path).getName();
             case ROOT:
                 return new File(path).getName();
             default:
@@ -272,7 +259,6 @@ public abstract class AbstractHybridFile {
     public String getParent() {
         String parentPath = "";
         switch (mode) {
-            case FILE:
             case ROOT:
                 parentPath = new File(path).getParent();
                 break;
@@ -290,7 +276,6 @@ public abstract class AbstractHybridFile {
 
         String parentPath = "";
         switch (mode) {
-            case FILE:
             case ROOT:
                 parentPath = new File(path).getParent();
                 break;
@@ -319,9 +304,6 @@ public abstract class AbstractHybridFile {
     public boolean isDirectory() {
         boolean isDirectory;
         switch (mode) {
-            case FILE:
-                isDirectory = new File(path).isDirectory();
-                break;
             case ROOT:
                 try {
                     isDirectory = RootHelper.isDirectory(path, true, 5);
@@ -342,9 +324,6 @@ public abstract class AbstractHybridFile {
 
         boolean isDirectory;
         switch (mode) {
-            case FILE:
-                isDirectory = new File(path).isDirectory();
-                break;
             case ROOT:
                 try {
                     isDirectory = RootHelper.isDirectory(path,true,5);
@@ -368,9 +347,6 @@ public abstract class AbstractHybridFile {
         long size = 0L;
 
         switch (mode) {
-            case FILE:
-                size = FileUtils.folderSize(new File(path), null);
-                break;
             case ROOT:
                 HybridFileParcelable baseFile = generateBaseFileFromParent();
                 if (baseFile != null) size = baseFile.getSize();
@@ -389,9 +365,6 @@ public abstract class AbstractHybridFile {
         long size = 0l;
 
         switch (mode){
-            case FILE:
-                size = FileUtils.folderSize(new File(path), null);
-                break;
             case ROOT:
                 HybridFileParcelable baseFile=generateBaseFileFromParent();
                 if(baseFile!=null) size = baseFile.getSize();
@@ -409,7 +382,6 @@ public abstract class AbstractHybridFile {
     public long getUsableSpace() {
         long size = 0L;
         switch (mode) {
-            case FILE:
             case ROOT:
                 size = new File(path).getUsableSpace();
                 break;
@@ -424,7 +396,6 @@ public abstract class AbstractHybridFile {
     public long getTotal(Context context) {
         long size = 0l;
         switch (mode) {
-            case FILE:
             case ROOT:
                 size = new File(path).getTotalSpace();
                 break;
@@ -574,7 +545,6 @@ public abstract class AbstractHybridFile {
      */
     public LayoutElementParcelable generateLayoutElement(boolean showThumbs) {
         switch (mode) {
-            case FILE:
             case ROOT:
                 File file = new File(path);
                 LayoutElementParcelable layoutElement;

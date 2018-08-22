@@ -1,12 +1,18 @@
 package com.amaze.filemanager.filesystem.files;
 
 import android.content.Context;
+import android.os.Build;
+import android.preference.PreferenceManager;
 import com.amaze.filemanager.database.CloudHandler;
 import com.amaze.filemanager.filesystem.files.cloud.BoxHybridFile;
 import com.amaze.filemanager.filesystem.files.cloud.DropboxHybridFile;
 import com.amaze.filemanager.filesystem.files.cloud.GdriveHybridFile;
 import com.amaze.filemanager.filesystem.files.cloud.OnedriveHybridFile;
+import com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants;
 import com.amaze.filemanager.utils.OTGUtil;
+import com.amaze.filemanager.utils.OpenMode;
+
+import java.io.File;
 
 public final class HybridFileHelper {
 
@@ -27,28 +33,26 @@ public final class HybridFileHelper {
             return new GdriveHybridFile(path);
         } else if (path.startsWith(CloudHandler.CLOUD_PREFIX_DROPBOX)) {
             return new DropboxHybridFile(path);
-        } /*else if(context == null) {
-            mode = OpenMode.FILE;
+        } else if(context == null) {
+            return new FileHybridFile(path);
         } else {
             boolean rootmode = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PreferencesConstants.PREFERENCE_ROOTMODE, false);
+            File file = new File(path);
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-                mode = OpenMode.FILE;
-                if (rootmode && !getFile().canRead()) {
-                    mode = OpenMode.ROOT;
+                if (rootmode && !file.canRead()) {
+                   // mode = OpenMode.ROOT;
                 }
+                return new FileHybridFile(path);
             } else {
-                if (FileUtil.isOnExtSdCard(getFile(), context)) {
-                    mode = OpenMode.FILE;
-                } else if (rootmode && !getFile().canRead()) {
-                    mode = OpenMode.ROOT;
+                if (FileUtil.isOnExtSdCard(file, context)) {
+                    return new FileHybridFile(path);
+                } else if (rootmode && !file.canRead()) {
+                   // mode = OpenMode.ROOT;
                 }
 
-                if (mode == OpenMode.UNKNOWN) {
-                    mode = OpenMode.FILE;
-                }
+                return new FileHybridFile(path);
             }
-        }*/
-        throw new IllegalStateException();
+        }
     }
 
     private static boolean isCustomPath(String path) {
