@@ -83,6 +83,11 @@ public class FileHybridFile extends AbstractHybridFile {
         return new File(path).getTotalSpace();
     }
 
+    @Override
+    public boolean isSimpleFile() {
+        return !android.util.Patterns.EMAIL_ADDRESS.matcher(path).matches() && !new File(path).isDirectory();
+    }
+
     /**
      * Generates a {@link LayoutElementParcelable} adapted compatible element.
      * Currently supports only local filesystem

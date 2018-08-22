@@ -10,7 +10,6 @@ import com.amaze.filemanager.filesystem.files.cloud.GdriveHybridFile;
 import com.amaze.filemanager.filesystem.files.cloud.OnedriveHybridFile;
 import com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants;
 import com.amaze.filemanager.utils.OTGUtil;
-import com.amaze.filemanager.utils.OpenMode;
 
 import java.io.File;
 
@@ -40,14 +39,14 @@ public final class HybridFileHelper {
             File file = new File(path);
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
                 if (rootmode && !file.canRead()) {
-                   // mode = OpenMode.ROOT;
+                    return new RootHybridFile(path);
                 }
                 return new FileHybridFile(path);
             } else {
                 if (FileUtil.isOnExtSdCard(file, context)) {
                     return new FileHybridFile(path);
                 } else if (rootmode && !file.canRead()) {
-                   // mode = OpenMode.ROOT;
+                    return new RootHybridFile(path);
                 }
 
                 return new FileHybridFile(path);

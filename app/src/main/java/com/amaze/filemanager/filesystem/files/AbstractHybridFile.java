@@ -177,12 +177,6 @@ public abstract class AbstractHybridFile {
     }
 
     public long lastModified() throws SmbException {
-        switch (mode) {
-            case ROOT:
-                HybridFileParcelable baseFile = generateBaseFileFromParent();
-                if (baseFile != null)
-                    return baseFile.getDate();
-        }
         return new File("/").lastModified();
     }
 
@@ -190,31 +184,14 @@ public abstract class AbstractHybridFile {
      * @deprecated use {@link #length(Context)} to handle content resolvers
      */
     public long length() {
-        long s = 0L;
-        switch (mode) {
-            case ROOT:
-                HybridFileParcelable baseFile = generateBaseFileFromParent();
-                if (baseFile != null) return baseFile.getSize();
-                break;
-        }
-        return s;
+        return 0L;
     }
 
     /**
      * Helper method to find length
      */
     public long length(Context context) {
-
-        long s = 0l;
-        switch (mode){
-            case ROOT:
-                HybridFileParcelable baseFile=generateBaseFileFromParent();
-                if(baseFile!=null) return baseFile.getSize();
-                break;
-            default:
-                break;
-        }
-        return s;
+        return 0L;
     }
 
     public String getPath() {
@@ -225,27 +202,13 @@ public abstract class AbstractHybridFile {
      * @deprecated use {@link #getName(Context)}
      */
     public String getName() {
-        String name = null;
-        switch (mode) {
-            case ROOT:
-                return new File(path).getName();
-            default:
-                StringBuilder builder = new StringBuilder(path);
-                name = builder.substring(builder.lastIndexOf("/") + 1, builder.length());
-        }
-        return name;
+        StringBuilder builder = new StringBuilder(path);
+        return builder.substring(builder.lastIndexOf("/") + 1, builder.length());
     }
 
     public String getName(Context context) {
-        String name = null;
-        switch (mode){
-            case ROOT:
-                return new File(path).getName();
-            default:
-                StringBuilder builder = new StringBuilder(path);
-                name = builder.substring(builder.lastIndexOf("/")+1, builder.length());
-        }
-        return name;
+        StringBuilder builder = new StringBuilder(path);
+        return builder.substring(builder.lastIndexOf("/") + 1, builder.length());
     }
 
     public boolean isCustomPath() {
@@ -257,35 +220,18 @@ public abstract class AbstractHybridFile {
      * @deprecated use {@link #getParent(Context)} to handle content resolvers
      */
     public String getParent() {
-        String parentPath = "";
-        switch (mode) {
-            case ROOT:
-                parentPath = new File(path).getParent();
-                break;
-            default:
-                StringBuilder builder = new StringBuilder(path);
-                return builder.substring(0, builder.length() - (getName().length() + 1));
-        }
-        return parentPath;
+        StringBuilder builder = new StringBuilder(path);
+        return builder.substring(0, builder.length() - (getName().length() + 1));
     }
 
     /**
      * Helper method to get parent path
      */
     public String getParent(Context context) {
-
-        String parentPath = "";
-        switch (mode) {
-            case ROOT:
-                parentPath = new File(path).getParent();
-                break;
-            default:
-                StringBuilder builder = new StringBuilder(path);
-                StringBuilder parentPathBuilder = new StringBuilder(builder.substring(0,
-                        builder.length()-(getName(context).length()+1)));
-                return parentPathBuilder.toString();
-        }
-        return parentPath;
+        StringBuilder builder = new StringBuilder(path);
+        StringBuilder parentPathBuilder = new StringBuilder(builder.substring(0,
+                builder.length() - (getName(context).length() + 1)));
+        return parentPathBuilder.toString();
     }
 
     public String getParentName() {
@@ -302,77 +248,25 @@ public abstract class AbstractHybridFile {
      * @deprecated use {@link #isDirectory(Context)} to handle content resolvers
      */
     public boolean isDirectory() {
-        boolean isDirectory;
-        switch (mode) {
-            case ROOT:
-                try {
-                    isDirectory = RootHelper.isDirectory(path, true, 5);
-                } catch (ShellNotRunningException e) {
-                    e.printStackTrace();
-                    isDirectory = false;
-                }
-                break;
-            default:
-                isDirectory = new File(path).isDirectory();
-                break;
-
-        }
-        return isDirectory;
+        return new File(path).isDirectory();
     }
 
     public boolean isDirectory(Context context) {
-
-        boolean isDirectory;
-        switch (mode) {
-            case ROOT:
-                try {
-                    isDirectory = RootHelper.isDirectory(path,true,5);
-                } catch (ShellNotRunningException e) {
-                    e.printStackTrace();
-                    isDirectory = false;
-                }
-                break;
-            default:
-                isDirectory = new File(path).isDirectory();
-                break;
-
-        }
-        return isDirectory;
+        return new File(path).isDirectory();
     }
 
     /**
      * @deprecated use {@link #folderSize(Context)}
      */
     public long folderSize() {
-        long size = 0L;
-
-        switch (mode) {
-            case ROOT:
-                HybridFileParcelable baseFile = generateBaseFileFromParent();
-                if (baseFile != null) size = baseFile.getSize();
-                break;
-            default:
-                return 0L;
-        }
-        return size;
+        return 0L;
     }
 
     /**
      * Helper method to get length of folder in an otg
      */
     public long folderSize(Context context) {
-
-        long size = 0l;
-
-        switch (mode){
-            case ROOT:
-                HybridFileParcelable baseFile=generateBaseFileFromParent();
-                if(baseFile!=null) size = baseFile.getSize();
-                break;
-            default:
-                return 0l;
-        }
-        return size;
+        return 0L;
     }
 
 
@@ -380,38 +274,21 @@ public abstract class AbstractHybridFile {
      * Gets usable i.e. free space of a device
      */
     public long getUsableSpace() {
-        long size = 0L;
-        switch (mode) {
-            case ROOT:
-                size = new File(path).getUsableSpace();
-                break;
-
-        }
-        return size;
+        return 0L;
     }
 
     /**
      * Gets total size of the disk
      */
     public long getTotal(Context context) {
-        long size = 0l;
-        switch (mode) {
-            case ROOT:
-                size = new File(path).getTotalSpace();
-                break;
-        }
-        return size;
+        return 0l;
     }
 
     /**
      * Helper method to list children of this file
      */
     public void forEachChildrenFile(Context context, boolean isRoot, OnFileFound onFileFound) {
-        switch (mode) {
-            default:
-                RootHelper.getFiles(path, isRoot, true, null, onFileFound);
-
-        }
+        RootHelper.getFiles(path, isRoot, true, null, onFileFound);
     }
 
     /**
@@ -419,14 +296,7 @@ public abstract class AbstractHybridFile {
      * @deprecated use forEachChildrenFile()
      */
     public ArrayList<HybridFileParcelable> listFiles(Context context, boolean isRoot) {
-        ArrayList<HybridFileParcelable> arrayList = new ArrayList<>();
-        switch (mode) {
-            default:
-                arrayList = RootHelper.getFilesList(path, isRoot, true, null);
-
-        }
-
-        return arrayList;
+        return RootHelper.getFilesList(path, isRoot, true, null);
     }
 
     public String getReadablePath(String path) {
@@ -438,53 +308,36 @@ public abstract class AbstractHybridFile {
      * @deprecated use {@link #getInputStream(Context)} which allows handling content resolver
      */
     public InputStream getInputStream() {
-        InputStream inputStream;
-            try {
-                inputStream = new FileInputStream(path);
-            } catch (FileNotFoundException e) {
-                inputStream = null;
-                e.printStackTrace();
-            }
-        return inputStream;
+        try {
+            return new FileInputStream(path);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public InputStream getInputStream(Context context) {
-        InputStream inputStream;
-
-        switch (mode) {
-            default:
-                try {
-                    inputStream = new FileInputStream(path);
-                } catch (FileNotFoundException e) {
-                    inputStream = null;
-                    e.printStackTrace();
-                }
-                break;
+        try {
+            return new FileInputStream(path);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
         }
-        return inputStream;
     }
 
     public OutputStream getOutputStream(Context context) {
-        OutputStream outputStream;
-        switch (mode) {
-            default:
-                try {
-                    outputStream = FileUtil.getOutputStream(new File(path), context);
-                } catch (Exception e) {
-                    outputStream=null;
-                    e.printStackTrace();
-                }
-
+        try {
+            return FileUtil.getOutputStream(new File(path), context);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
-        return outputStream;
     }
 
     public boolean exists() {
         boolean exists = false;
         if (isLocal()) {
             exists = new File(path).exists();
-        } else if (isRoot()) {
-            return RootHelper.fileExists(path);
         }
 
         return exists;
@@ -503,10 +356,7 @@ public abstract class AbstractHybridFile {
      * @return true if file; other wise false
      */
     public boolean isSimpleFile() {
-        return !isSmb() && !isOtgFile() && !isCustomPath()
-                && !android.util.Patterns.EMAIL_ADDRESS.matcher(path).matches() &&
-                !new File(path).isDirectory() && !isOneDriveFile() && !isGoogleDriveFile()
-                && !isDropBoxFile() && !isBoxFile() && !isSftp();
+        return false;
     }
 
     public boolean setLastModified(final long date) {
@@ -519,12 +369,7 @@ public abstract class AbstractHybridFile {
     }
 
     public boolean delete(Context context, boolean rootmode) throws ShellNotRunningException {
-        if (isRoot() && rootmode) {
-            setMode(OpenMode.ROOT);
-            RootUtils.delete(getPath());
-        } else {
-            FileUtil.deleteFile(new File(path), context);
-        }
+        FileUtil.deleteFile(new File(path), context);
         return !exists();
     }
 
@@ -544,24 +389,6 @@ public abstract class AbstractHybridFile {
      * Currently supports only local filesystem
      */
     public LayoutElementParcelable generateLayoutElement(boolean showThumbs) {
-        switch (mode) {
-            case ROOT:
-                File file = new File(path);
-                LayoutElementParcelable layoutElement;
-                if (isDirectory()) {
-
-                    layoutElement = new LayoutElementParcelable(path, RootHelper.parseFilePermission(file),
-                            "", folderSize() + "", 0, true, file.lastModified() + "",
-                            false, showThumbs, mode);
-                } else {
-                    layoutElement = new LayoutElementParcelable(
-                            file.getPath(), RootHelper.parseFilePermission(file),
-                            file.getPath(), file.length() + "", file.length(), false, file.lastModified() + "",
-                            false, showThumbs, mode);
-                }
-                return layoutElement;
-            default:
-                return null;
-        }
+        return null;
     }
 }
