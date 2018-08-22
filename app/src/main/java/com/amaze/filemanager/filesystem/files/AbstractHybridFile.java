@@ -66,7 +66,7 @@ public abstract class AbstractHybridFile {
     //public static final int ROOT_MODE=3,LOCAL_MODE=0,SMB_MODE=1,UNKNOWN=-1;
     OpenMode mode = OpenMode.FILE;
 
-    private DataUtils dataUtils = DataUtils.getInstance();
+    protected final DataUtils dataUtils = DataUtils.getInstance();
 
     public AbstractHybridFile(String path) {
         this.path = path;
@@ -224,10 +224,6 @@ public abstract class AbstractHybridFile {
                 s = dataUtils.getAccount(OpenMode.DROPBOX)
                         .getMetadata(CloudUtil.stripPath(OpenMode.DROPBOX, path)).getSize();
                 break;
-            case BOX:
-                s = dataUtils.getAccount(OpenMode.BOX)
-                        .getMetadata(CloudUtil.stripPath(OpenMode.BOX, path)).getSize();
-                break;
             case ONEDRIVE:
                 s = dataUtils.getAccount(OpenMode.ONEDRIVE)
                         .getMetadata(CloudUtil.stripPath(OpenMode.ONEDRIVE, path)).getSize();
@@ -373,10 +369,6 @@ public abstract class AbstractHybridFile {
                 isDirectory = dataUtils.getAccount(OpenMode.DROPBOX)
                         .getMetadata(CloudUtil.stripPath(OpenMode.DROPBOX, path)).getFolder();
                 break;
-            case BOX:
-                isDirectory = dataUtils.getAccount(OpenMode.BOX)
-                        .getMetadata(CloudUtil.stripPath(OpenMode.BOX, path)).getFolder();
-                break;
             case GDRIVE:
                 isDirectory = dataUtils.getAccount(OpenMode.GDRIVE)
                         .getMetadata(CloudUtil.stripPath(OpenMode.GDRIVE, path)).getFolder();
@@ -429,7 +421,6 @@ public abstract class AbstractHybridFile {
                 if(baseFile!=null) size = baseFile.getSize();
                 break;
             case DROPBOX:
-            case BOX:
             case GDRIVE:
             case ONEDRIVE:
                 size = FileUtils.folderSizeCloud(mode,
@@ -453,7 +444,6 @@ public abstract class AbstractHybridFile {
                 size = new File(path).getUsableSpace();
                 break;
             case DROPBOX:
-            case BOX:
             case GDRIVE:
             case ONEDRIVE:
                 SpaceAllocation spaceAllocation = dataUtils.getAccount(mode).getAllocation();
@@ -475,7 +465,6 @@ public abstract class AbstractHybridFile {
                 size = new File(path).getTotalSpace();
                 break;
             case DROPBOX:
-            case BOX:
             case ONEDRIVE:
             case GDRIVE:
                 SpaceAllocation spaceAllocation = dataUtils.getAccount(mode).getAllocation();
@@ -491,7 +480,6 @@ public abstract class AbstractHybridFile {
     public void forEachChildrenFile(Context context, boolean isRoot, OnFileFound onFileFound) {
         switch (mode) {
             case DROPBOX:
-            case BOX:
             case GDRIVE:
             case ONEDRIVE:
                 try {
@@ -514,7 +502,6 @@ public abstract class AbstractHybridFile {
         ArrayList<HybridFileParcelable> arrayList = new ArrayList<>();
         switch (mode) {
             case DROPBOX:
-            case BOX:
             case GDRIVE:
             case ONEDRIVE:
                 try {
@@ -560,10 +547,6 @@ public abstract class AbstractHybridFile {
                 Log.d(getClass().getSimpleName(), CloudUtil.stripPath(OpenMode.DROPBOX, path));
                 inputStream = cloudStorageDropbox.download(CloudUtil.stripPath(OpenMode.DROPBOX, path));
                 break;
-            case BOX:
-                CloudStorage cloudStorageBox = dataUtils.getAccount(OpenMode.BOX);
-                inputStream = cloudStorageBox.download(CloudUtil.stripPath(OpenMode.BOX, path));
-                break;
             case GDRIVE:
                 CloudStorage cloudStorageGDrive = dataUtils.getAccount(OpenMode.GDRIVE);
                 inputStream = cloudStorageGDrive.download(CloudUtil.stripPath(OpenMode.GDRIVE, path));
@@ -604,9 +587,6 @@ public abstract class AbstractHybridFile {
         if (isDropBoxFile()) {
             CloudStorage cloudStorageDropbox = dataUtils.getAccount(OpenMode.DROPBOX);
             exists = cloudStorageDropbox.exists(CloudUtil.stripPath(OpenMode.DROPBOX, path));
-        } else if (isBoxFile()) {
-            CloudStorage cloudStorageBox = dataUtils.getAccount(OpenMode.BOX);
-            exists = cloudStorageBox.exists(CloudUtil.stripPath(OpenMode.BOX, path));
         } else if (isGoogleDriveFile()) {
             CloudStorage cloudStorageGoogleDrive = dataUtils.getAccount(OpenMode.GDRIVE);
             exists = cloudStorageGoogleDrive.exists(CloudUtil.stripPath(OpenMode.GDRIVE, path));
@@ -651,13 +631,6 @@ public abstract class AbstractHybridFile {
             CloudStorage cloudStorageDropbox = dataUtils.getAccount(OpenMode.DROPBOX);
             try {
                 cloudStorageDropbox.createFolder(CloudUtil.stripPath(OpenMode.DROPBOX, path));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else if (isBoxFile()) {
-            CloudStorage cloudStorageBox = dataUtils.getAccount(OpenMode.BOX);
-            try {
-                cloudStorageBox.createFolder(CloudUtil.stripPath(OpenMode.BOX, path));
             } catch (Exception e) {
                 e.printStackTrace();
             }
