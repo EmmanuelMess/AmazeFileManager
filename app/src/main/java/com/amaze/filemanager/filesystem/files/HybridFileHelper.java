@@ -3,6 +3,7 @@ package com.amaze.filemanager.filesystem.files;
 import android.content.Context;
 import com.amaze.filemanager.database.CloudHandler;
 import com.amaze.filemanager.filesystem.files.cloud.BoxHybridFile;
+import com.amaze.filemanager.filesystem.files.cloud.DropboxHybridFile;
 import com.amaze.filemanager.filesystem.files.cloud.GdriveHybridFile;
 import com.amaze.filemanager.filesystem.files.cloud.OnedriveHybridFile;
 import com.amaze.filemanager.utils.OTGUtil;
@@ -24,9 +25,9 @@ public final class HybridFileHelper {
             return new OnedriveHybridFile(path);
         } else if (path.startsWith(CloudHandler.CLOUD_PREFIX_GOOGLE_DRIVE)) {
             return new GdriveHybridFile(path);
-        } /*else if (path.startsWith(CloudHandler.CLOUD_PREFIX_DROPBOX)) {
-            mode = OpenMode.DROPBOX;
-        } else if(context == null) {
+        } else if (path.startsWith(CloudHandler.CLOUD_PREFIX_DROPBOX)) {
+            return new DropboxHybridFile(path);
+        } /*else if(context == null) {
             mode = OpenMode.FILE;
         } else {
             boolean rootmode = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PreferencesConstants.PREFERENCE_ROOTMODE, false);

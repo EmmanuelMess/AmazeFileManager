@@ -220,10 +220,6 @@ public abstract class AbstractHybridFile {
                 HybridFileParcelable baseFile=generateBaseFileFromParent();
                 if(baseFile!=null) return baseFile.getSize();
                 break;
-            case DROPBOX:
-                s = dataUtils.getAccount(OpenMode.DROPBOX)
-                        .getMetadata(CloudUtil.stripPath(OpenMode.DROPBOX, path)).getSize();
-                break;
             default:
                 break;
         }
@@ -357,10 +353,6 @@ public abstract class AbstractHybridFile {
                     isDirectory = false;
                 }
                 break;
-            case DROPBOX:
-                isDirectory = dataUtils.getAccount(OpenMode.DROPBOX)
-                        .getMetadata(CloudUtil.stripPath(OpenMode.DROPBOX, path)).getFolder();
-                break;
             default:
                 isDirectory = new File(path).isDirectory();
                 break;
@@ -404,10 +396,6 @@ public abstract class AbstractHybridFile {
                 HybridFileParcelable baseFile=generateBaseFileFromParent();
                 if(baseFile!=null) size = baseFile.getSize();
                 break;
-            case DROPBOX:
-                size = FileUtils.folderSizeCloud(mode,
-                        dataUtils.getAccount(mode).getMetadata(CloudUtil.stripPath(mode, path)));
-                break;
             default:
                 return 0l;
         }
@@ -425,10 +413,6 @@ public abstract class AbstractHybridFile {
             case ROOT:
                 size = new File(path).getUsableSpace();
                 break;
-            case DROPBOX:
-                SpaceAllocation spaceAllocation = dataUtils.getAccount(mode).getAllocation();
-                size = spaceAllocation.getTotal() - spaceAllocation.getUsed();
-                break;
 
         }
         return size;
@@ -444,10 +428,6 @@ public abstract class AbstractHybridFile {
             case ROOT:
                 size = new File(path).getTotalSpace();
                 break;
-            case DROPBOX:
-                SpaceAllocation spaceAllocation = dataUtils.getAccount(mode).getAllocation();
-                size = spaceAllocation.getTotal();
-                break;
         }
         return size;
     }
@@ -457,13 +437,6 @@ public abstract class AbstractHybridFile {
      */
     public void forEachChildrenFile(Context context, boolean isRoot, OnFileFound onFileFound) {
         switch (mode) {
-            case DROPBOX:
-                try {
-                    CloudUtil.getCloudFiles(path, dataUtils.getAccount(mode), mode, onFileFound);
-                } catch (CloudPluginException e) {
-                    e.printStackTrace();
-                }
-                break;
             default:
                 RootHelper.getFiles(path, isRoot, true, null, onFileFound);
 
@@ -477,14 +450,6 @@ public abstract class AbstractHybridFile {
     public ArrayList<HybridFileParcelable> listFiles(Context context, boolean isRoot) {
         ArrayList<HybridFileParcelable> arrayList = new ArrayList<>();
         switch (mode) {
-            case DROPBOX:
-                try {
-                    arrayList = CloudUtil.listFiles(path, dataUtils.getAccount(mode), mode);
-                } catch (CloudPluginException e) {
-                    e.printStackTrace();
-                    arrayList = new ArrayList<>();
-                }
-                break;
             default:
                 arrayList = RootHelper.getFilesList(path, isRoot, true, null);
 
@@ -516,11 +481,6 @@ public abstract class AbstractHybridFile {
         InputStream inputStream;
 
         switch (mode) {
-            case DROPBOX:
-                CloudStorage cloudStorageDropbox = dataUtils.getAccount(OpenMode.DROPBOX);
-                Log.d(getClass().getSimpleName(), CloudUtil.stripPath(OpenMode.DROPBOX, path));
-                inputStream = cloudStorageDropbox.download(CloudUtil.stripPath(OpenMode.DROPBOX, path));
-                break;
             default:
                 try {
                     inputStream = new FileInputStream(path);
@@ -550,10 +510,7 @@ public abstract class AbstractHybridFile {
 
     public boolean exists() {
         boolean exists = false;
-        if (isDropBoxFile()) {
-            CloudStorage cloudStorageDropbox = dataUtils.getAccount(OpenMode.DROPBOX);
-            exists = cloudStorageDropbox.exists(CloudUtil.stripPath(OpenMode.DROPBOX, path));
-        } else if (isLocal()) {
+        if (isLocal()) {
             exists = new File(path).exists();
         } else if (isRoot()) {
             return RootHelper.fileExists(path);
@@ -587,15 +544,7 @@ public abstract class AbstractHybridFile {
     }
 
     public void mkdir(Context context) {
-        if (isDropBoxFile()) {
-            CloudStorage cloudStorageDropbox = dataUtils.getAccount(OpenMode.DROPBOX);
-            try {
-                cloudStorageDropbox.createFolder(CloudUtil.stripPath(OpenMode.DROPBOX, path));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else
-            FileUtil.mkdir(new File(path), context);
+        FileUtil.mkdir(new File(path), context);
     }
 
     public boolean delete(Context context, boolean rootmode) throws ShellNotRunningException {
