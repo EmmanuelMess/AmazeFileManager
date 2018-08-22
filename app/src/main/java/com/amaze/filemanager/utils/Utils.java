@@ -13,13 +13,12 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.util.DisplayMetrics;
 import android.view.View;
-import android.view.Window;
 import android.widget.CheckBox;
 import android.widget.Toast;
 
 import com.amaze.filemanager.R;
 import com.amaze.filemanager.activities.MainActivity;
-import com.amaze.filemanager.filesystem.HybridFileParcelable;
+import com.amaze.filemanager.filesystem.files.HybridFileParcelable;
 
 import java.io.File;
 import java.text.SimpleDateFormat;

@@ -26,12 +26,11 @@ import android.widget.Toast;
 
 import com.amaze.filemanager.R;
 import com.amaze.filemanager.activities.MainActivity;
-import com.amaze.filemanager.activities.superclasses.ThemedActivity;
 import com.amaze.filemanager.database.CryptHandler;
 import com.amaze.filemanager.database.models.EncryptedEntry;
 import com.amaze.filemanager.exceptions.ShellNotRunningException;
-import com.amaze.filemanager.filesystem.HybridFile;
-import com.amaze.filemanager.filesystem.HybridFileParcelable;
+import com.amaze.filemanager.filesystem.files.HybridFile;
+import com.amaze.filemanager.filesystem.files.HybridFileParcelable;
 import com.amaze.filemanager.fragments.MainFragment;
 import com.amaze.filemanager.utils.application.AppConfig;
 import com.amaze.filemanager.asynchronous.services.CopyService;
@@ -43,13 +42,11 @@ import com.amaze.filemanager.utils.OpenMode;
 import com.amaze.filemanager.utils.RootUtils;
 import com.amaze.filemanager.utils.ServiceWatcherUtil;
 import com.cloudrail.si.interfaces.CloudStorage;
-import com.cloudrail.si.interfaces.SMS;
 
 import java.io.File;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 
 import jcifs.smb.SmbException;
 import jcifs.smb.SmbFile;

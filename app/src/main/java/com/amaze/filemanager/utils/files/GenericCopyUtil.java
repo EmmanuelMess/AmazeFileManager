@@ -24,16 +24,15 @@ package com.amaze.filemanager.utils.files;
 
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.Intent;
 import android.support.v4.provider.DocumentFile;
 import android.util.Log;
 
 import com.amaze.filemanager.R;
-import com.amaze.filemanager.filesystem.HybridFileParcelable;
-import com.amaze.filemanager.filesystem.FileUtil;
+import com.amaze.filemanager.filesystem.files.HybridFileParcelable;
+import com.amaze.filemanager.filesystem.files.FileUtil;
 import com.amaze.filemanager.utils.ProgressHandler;
 import com.amaze.filemanager.utils.application.AppConfig;
-import com.amaze.filemanager.filesystem.HybridFile;
+import com.amaze.filemanager.filesystem.files.HybridFile;
 import com.amaze.filemanager.utils.DataUtils;
 import com.amaze.filemanager.utils.OTGUtil;
 import com.amaze.filemanager.utils.OpenMode;

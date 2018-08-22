@@ -1,6 +1,6 @@
 package com.amaze.filemanager.utils;
 
-import com.amaze.filemanager.filesystem.HybridFileParcelable;
+import com.amaze.filemanager.filesystem.files.HybridFileParcelable;
 
 /**
  * This allows the caller of a function to know when a file has ben found and deal with it ASAP

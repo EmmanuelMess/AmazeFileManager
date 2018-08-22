@@ -3,7 +3,6 @@ package com.amaze.filemanager.asynchronous.services;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.text.format.Formatter;
@@ -11,7 +10,7 @@ import android.widget.RemoteViews;
 
 import com.amaze.filemanager.R;
 import com.amaze.filemanager.activities.MainActivity;
-import com.amaze.filemanager.filesystem.HybridFile;
+import com.amaze.filemanager.filesystem.files.HybridFile;
 import com.amaze.filemanager.fragments.ProcessViewerFragment;
 import com.amaze.filemanager.ui.notifications.NotificationConstants;
 import com.amaze.filemanager.utils.DatapointParcelable;

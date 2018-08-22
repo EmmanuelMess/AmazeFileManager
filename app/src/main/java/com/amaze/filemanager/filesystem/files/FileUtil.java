@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.amaze.filemanager.filesystem;
+package com.amaze.filemanager.filesystem.files;
 
 import android.annotation.TargetApi;
 import android.content.ContentResolver;
@@ -41,6 +41,7 @@ import com.amaze.filemanager.R;
 import com.amaze.filemanager.activities.MainActivity;
 import com.amaze.filemanager.database.CloudHandler;
 import com.amaze.filemanager.exceptions.ShellNotRunningException;
+import com.amaze.filemanager.filesystem.MediaStoreHack;
 import com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants;
 import com.amaze.filemanager.ui.icons.MimeTypes;
 import com.amaze.filemanager.utils.DataUtils;
@@ -71,8 +72,6 @@ import java.util.regex.Pattern;
 
 import jcifs.smb.SmbException;
 import jcifs.smb.SmbFile;
-
-import static android.os.Build.VERSION.SDK_INT;
 
 /**
  * Utility class for helping parsing file systems.

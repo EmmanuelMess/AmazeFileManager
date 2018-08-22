@@ -23,6 +23,7 @@ import android.support.v4.provider.DocumentFile;
 
 import com.amaze.filemanager.activities.MainActivity;
 import com.amaze.filemanager.exceptions.ShellNotRunningException;
+import com.amaze.filemanager.filesystem.files.HybridFileParcelable;
 import com.amaze.filemanager.utils.OnFileFound;
 import com.amaze.filemanager.utils.OpenMode;
 import com.amaze.filemanager.utils.files.FileUtils;

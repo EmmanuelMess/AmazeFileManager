@@ -2,7 +2,7 @@ package com.amaze.filemanager.filesystem.ssh;
 
 import android.os.Environment;
 
-import com.amaze.filemanager.filesystem.HybridFile;
+import com.amaze.filemanager.filesystem.files.HybridFile;
 import com.amaze.filemanager.utils.OpenMode;
 
 import org.junit.Test;

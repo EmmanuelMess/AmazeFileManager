@@ -2,6 +2,7 @@ package com.amaze.filemanager.filesystem;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import com.amaze.filemanager.filesystem.files.HybridFileParcelable;
 
 /**
  * Special immutable class for handling cut/copy operations.

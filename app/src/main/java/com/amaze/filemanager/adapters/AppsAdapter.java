@@ -44,7 +44,7 @@ import com.amaze.filemanager.adapters.glide.AppsAdapterPreloadModel;
 import com.amaze.filemanager.adapters.holders.AppHolder;
 import com.amaze.filemanager.asynchronous.asynctasks.DeleteTask;
 import com.amaze.filemanager.asynchronous.services.CopyService;
-import com.amaze.filemanager.filesystem.HybridFileParcelable;
+import com.amaze.filemanager.filesystem.files.HybridFileParcelable;
 import com.amaze.filemanager.filesystem.RootHelper;
 import com.amaze.filemanager.fragments.AppsListFragment;
 import com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants;

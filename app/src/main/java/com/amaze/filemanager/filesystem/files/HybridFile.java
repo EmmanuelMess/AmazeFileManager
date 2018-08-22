@@ -1,8 +1,7 @@
-package com.amaze.filemanager.filesystem;
+package com.amaze.filemanager.filesystem.files;
 
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -13,6 +12,7 @@ import com.amaze.filemanager.adapters.data.LayoutElementParcelable;
 import com.amaze.filemanager.database.CloudHandler;
 import com.amaze.filemanager.exceptions.CloudPluginException;
 import com.amaze.filemanager.exceptions.ShellNotRunningException;
+import com.amaze.filemanager.filesystem.RootHelper;
 import com.amaze.filemanager.filesystem.ssh.Statvfs;
 import com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants;
 

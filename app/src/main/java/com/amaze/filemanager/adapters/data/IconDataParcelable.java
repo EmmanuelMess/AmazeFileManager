@@ -4,10 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.DrawableRes;
 
-import com.amaze.filemanager.filesystem.HybridFileParcelable;
-
-import java.io.InputStream;
-
 /**
  * Saves data on what should be loaded as an icon for LayoutElementParcelable
  *

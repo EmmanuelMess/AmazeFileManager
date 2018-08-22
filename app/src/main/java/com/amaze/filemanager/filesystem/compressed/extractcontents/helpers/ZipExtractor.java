@@ -25,7 +25,7 @@ package com.amaze.filemanager.filesystem.compressed.extractcontents.helpers;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.amaze.filemanager.filesystem.FileUtil;
+import com.amaze.filemanager.filesystem.files.FileUtil;
 import com.amaze.filemanager.filesystem.compressed.CompressedHelper;
 import com.amaze.filemanager.filesystem.compressed.extractcontents.Extractor;
 import com.amaze.filemanager.utils.ServiceWatcherUtil;

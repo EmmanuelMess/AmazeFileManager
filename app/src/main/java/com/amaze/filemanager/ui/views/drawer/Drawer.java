@@ -54,7 +54,7 @@ import com.amaze.filemanager.R;
 import com.amaze.filemanager.activities.MainActivity;
 import com.amaze.filemanager.activities.PreferencesActivity;
 import com.amaze.filemanager.database.CloudHandler;
-import com.amaze.filemanager.filesystem.HybridFile;
+import com.amaze.filemanager.filesystem.files.HybridFile;
 import com.amaze.filemanager.filesystem.RootHelper;
 import com.amaze.filemanager.filesystem.SingletonUsbOtg;
 import com.amaze.filemanager.fragments.AppsListFragment;

@@ -4,12 +4,11 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import com.amaze.filemanager.activities.superclasses.ThemedActivity;
 import com.amaze.filemanager.exceptions.ShellNotRunningException;
 import com.amaze.filemanager.exceptions.StreamNotFoundException;
 import com.amaze.filemanager.filesystem.EditableFileAbstraction;
-import com.amaze.filemanager.filesystem.FileUtil;
-import com.amaze.filemanager.filesystem.HybridFileParcelable;
+import com.amaze.filemanager.filesystem.files.FileUtil;
+import com.amaze.filemanager.filesystem.files.HybridFileParcelable;
 import com.amaze.filemanager.utils.OnAsyncTaskFinished;
 import com.amaze.filemanager.utils.RootUtils;
 

@@ -5,9 +5,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.OpenableColumns;
 
+import com.amaze.filemanager.filesystem.files.HybridFileParcelable;
 import com.amaze.filemanager.utils.Utils;
-
-import java.io.FileNotFoundException;
 
 /**
  * This is a special representation of a file that is to be used so that uris can be loaded as

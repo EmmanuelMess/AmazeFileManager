@@ -7,6 +7,9 @@ import android.support.annotation.NonNull;
 import android.support.v4.provider.DocumentFile;
 
 import com.amaze.filemanager.exceptions.ShellNotRunningException;
+import com.amaze.filemanager.filesystem.files.FileUtil;
+import com.amaze.filemanager.filesystem.files.HybridFile;
+import com.amaze.filemanager.filesystem.files.HybridFileParcelable;
 import com.amaze.filemanager.filesystem.ssh.SFtpClientTemplate;
 import com.amaze.filemanager.filesystem.ssh.SshClientUtils;
 import com.amaze.filemanager.utils.DataUtils;
