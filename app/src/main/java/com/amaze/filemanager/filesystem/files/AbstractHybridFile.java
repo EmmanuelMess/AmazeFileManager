@@ -310,7 +310,6 @@ public abstract class AbstractHybridFile {
             case ROOT:
                 parentPath = new File(path).getParent();
                 break;
-            case OTG:
             default:
                 StringBuilder builder = new StringBuilder(path);
                 StringBuilder parentPathBuilder = new StringBuilder(builder.substring(0,
