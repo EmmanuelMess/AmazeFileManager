@@ -77,8 +77,6 @@ public abstract class AbstractHybridFile {
             if (!isDirectory) this.path = path + name;
             else if (!name.endsWith("/")) this.path = path + name + "/";
             else this.path = path + name;
-        } else if(path.startsWith("ssh://") || isSftp()) {
-            this.path = path + "/" + name;
         } else this.path = path + "/" + name;
     }
 
