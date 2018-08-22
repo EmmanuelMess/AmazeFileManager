@@ -51,7 +51,7 @@ import com.amaze.filemanager.R;
 import com.amaze.filemanager.activities.DatabaseViewerActivity;
 import com.amaze.filemanager.activities.MainActivity;
 import com.amaze.filemanager.activities.superclasses.PermissionsActivity;
-import com.amaze.filemanager.filesystem.files.HybridFile;
+import com.amaze.filemanager.filesystem.files.AbstractHybridFile;
 import com.amaze.filemanager.filesystem.files.HybridFileParcelable;
 import com.amaze.filemanager.filesystem.Operations;
 import com.amaze.filemanager.filesystem.RootHelper;
@@ -111,7 +111,7 @@ public class FileUtils {
         return length;
     }
 
-    public static long folderSize(HybridFile directory, OnProgressUpdate<Long> updateState) {
+    public static long folderSize(AbstractHybridFile directory, OnProgressUpdate<Long> updateState) {
         if(directory.isSimpleFile())
             return folderSize(new File(directory.getPath()), updateState);
         else
@@ -140,7 +140,7 @@ public class FileUtils {
      * It is slow, it is stupid, and may be inaccurate (because of permission problems).
      * Only for fallback use when <code>du</code> is not available.
      *
-     * @see HybridFile#folderSize(Context)
+     * @see AbstractHybridFile#folderSize(Context)
      * @return Folder size in bytes
      */
     public static Long folderSizeSftp(SFTPClient client, String remotePath) {
@@ -641,7 +641,7 @@ public class FileUtils {
     /**
      * Method determines if there is something to go back to
      */
-    public static boolean canGoBack(Context context, HybridFile currentFile) {
+    public static boolean canGoBack(Context context, AbstractHybridFile currentFile) {
         switch (currentFile.getMode()) {
 
             // we're on main thread and can't list the cloud files
@@ -657,7 +657,7 @@ public class FileUtils {
         }
     }
 
-    public static long[] getSpaces(HybridFile hFile, Context context, final OnProgressUpdate<Long[]> updateState) {
+    public static long[] getSpaces(AbstractHybridFile hFile, Context context, final OnProgressUpdate<Long[]> updateState) {
         long totalSpace = hFile.getTotal(context);
         long freeSpace = hFile.getUsableSpace();
         long fileSize = 0l;
@@ -840,20 +840,20 @@ public class FileUtils {
         }*/
     }
 
-    public static ArrayList<HybridFile> toHybridFileConcurrentRadixTree(ConcurrentRadixTree<VoidValue> a) {
-        ArrayList<HybridFile> b = new ArrayList<>();
+    public static ArrayList<AbstractHybridFile> toHybridFileConcurrentRadixTree(ConcurrentRadixTree<VoidValue> a) {
+        ArrayList<AbstractHybridFile> b = new ArrayList<>();
         for (CharSequence o : a.getKeysStartingWith("")) {
-            HybridFile hFile = new HybridFile(OpenMode.UNKNOWN, o.toString());
+            AbstractHybridFile hFile = new AbstractHybridFile(OpenMode.UNKNOWN, o.toString());
             hFile.generateMode(null);
             b.add(hFile);
         }
         return b;
     }
 
-    public static ArrayList<HybridFile> toHybridFileArrayList(LinkedList<String> a) {
-        ArrayList<HybridFile> b = new ArrayList<>();
+    public static ArrayList<AbstractHybridFile> toHybridFileArrayList(LinkedList<String> a) {
+        ArrayList<AbstractHybridFile> b = new ArrayList<>();
         for (String s : a) {
-            HybridFile hFile = new HybridFile(OpenMode.UNKNOWN, s);
+            AbstractHybridFile hFile = new AbstractHybridFile(OpenMode.UNKNOWN, s);
             hFile.generateMode(null);
             b.add(hFile);
         }
@@ -991,27 +991,27 @@ public class FileUtils {
                     isRootExplorer, new Operations.ErrorCallBack() {
                         //TODO empty
                         @Override
-                        public void exists(HybridFile file) {
+                        public void exists(AbstractHybridFile file) {
 
                         }
 
                         @Override
-                        public void launchSAF(HybridFile file) {
+                        public void launchSAF(AbstractHybridFile file) {
 
                         }
 
                         @Override
-                        public void launchSAF(HybridFile file, HybridFile file1) {
+                        public void launchSAF(AbstractHybridFile file, AbstractHybridFile file1) {
 
                         }
 
                         @Override
-                        public void done(HybridFile hFile, boolean b) {
+                        public void done(AbstractHybridFile hFile, boolean b) {
 
                         }
 
                         @Override
-                        public void invalidName(HybridFile file) {
+                        public void invalidName(AbstractHybridFile file) {
 
                         }
                     });

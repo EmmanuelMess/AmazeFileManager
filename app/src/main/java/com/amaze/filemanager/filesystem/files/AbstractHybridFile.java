@@ -58,7 +58,7 @@ import jcifs.smb.SmbFile;
  * Created by Arpit on 07-07-2015.
  */
 //Hybrid file for handeling all types of files
-public abstract class HybridFile {
+public abstract class AbstractHybridFile {
 
     private static final String TAG = "HFile";
 
@@ -68,11 +68,11 @@ public abstract class HybridFile {
 
     private DataUtils dataUtils = DataUtils.getInstance();
 
-    public HybridFile(String path) {
+    public AbstractHybridFile(String path) {
         this.path = path;
     }
 
-    public HybridFile(String path, String name, boolean isDirectory) {
+    public AbstractHybridFile(String path, String name, boolean isDirectory) {
         if (path.startsWith("smb://") || isSmb()) {
             if (!isDirectory) this.path = path + name;
             else if (!name.endsWith("/")) this.path = path + name + "/";

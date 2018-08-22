@@ -8,7 +8,7 @@ import com.amaze.filemanager.utils.OpenMode;
 /**
  * Created by arpitkh996 on 11-01-2016.
  */
-public class HybridFileParcelable extends HybridFile implements Parcelable {
+public class HybridFileParcelable extends AbstractHybridFile implements Parcelable {
 
     private long date, size;
     private boolean isDirectory;

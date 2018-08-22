@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.amaze.filemanager.filesystem.files.HybridFile;
+import com.amaze.filemanager.filesystem.files.AbstractHybridFile;
 import com.amaze.filemanager.filesystem.files.HybridFileParcelable;
 import com.amaze.filemanager.fragments.SearchWorkerFragment;
 import com.amaze.filemanager.utils.OpenMode;
@@ -57,7 +57,7 @@ public class SearchAsyncTask extends AsyncTask<String, HybridFileParcelable, Voi
     protected Void doInBackground(String... params) {
 
         String path = params[0];
-        HybridFile file = new HybridFile(mOpenMode, path);
+        AbstractHybridFile file = new AbstractHybridFile(mOpenMode, path);
         file.generateMode(activity.get());
         if (file.isSmb()) return null;
 
@@ -99,7 +99,7 @@ public class SearchAsyncTask extends AsyncTask<String, HybridFileParcelable, Voi
      *
      * @param directory the current path
      */
-    private void search(HybridFile directory, final SearchFilter filter) {
+    private void search(AbstractHybridFile directory, final SearchFilter filter) {
         if (directory.isDirectory(activity.get())) {// do you have permission to read this directory?
             directory.forEachChildrenFile(activity.get(), mRootMode, file -> {
                 if (!isCancelled()) {
@@ -123,7 +123,7 @@ public class SearchAsyncTask extends AsyncTask<String, HybridFileParcelable, Voi
      * @param file  the current path
      * @param query the searched text
      */
-    private void search(HybridFile file, final String query) {
+    private void search(AbstractHybridFile file, final String query) {
         search(file, fileName -> fileName.toLowerCase().contains(query.toLowerCase()));
     }
 
@@ -133,7 +133,7 @@ public class SearchAsyncTask extends AsyncTask<String, HybridFileParcelable, Voi
      * @param file    the current file
      * @param pattern the compiled java regex
      */
-    private void searchRegExFind(HybridFile file, final Pattern pattern) {
+    private void searchRegExFind(AbstractHybridFile file, final Pattern pattern) {
         search(file, fileName -> pattern.matcher(fileName).find());
     }
 
@@ -143,7 +143,7 @@ public class SearchAsyncTask extends AsyncTask<String, HybridFileParcelable, Voi
      * @param file    the current file
      * @param pattern the compiled java regex
      */
-    private void searchRegExMatch(HybridFile file, final Pattern pattern) {
+    private void searchRegExMatch(AbstractHybridFile file, final Pattern pattern) {
         search(file, fileName -> pattern.matcher(fileName).matches());
     }
 

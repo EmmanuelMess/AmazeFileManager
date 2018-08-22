@@ -66,8 +66,8 @@ import com.amaze.filemanager.asynchronous.services.EncryptService;
 import com.amaze.filemanager.database.SortHandler;
 import com.amaze.filemanager.database.models.Sort;
 import com.amaze.filemanager.exceptions.ShellNotRunningException;
+import com.amaze.filemanager.filesystem.files.AbstractHybridFile;
 import com.amaze.filemanager.filesystem.files.FileUtil;
-import com.amaze.filemanager.filesystem.files.HybridFile;
 import com.amaze.filemanager.filesystem.files.HybridFileParcelable;
 import com.amaze.filemanager.filesystem.RootHelper;
 import com.amaze.filemanager.filesystem.compressed.CompressedHelper;
@@ -1050,7 +1050,7 @@ public class GeneralDialogCreation {
 
     }
 
-    public static void setPermissionsDialog(final View v, View but, final HybridFile file,
+    public static void setPermissionsDialog(final View v, View but, final AbstractHybridFile file,
                                      final String f, final Context context, final MainFragment mainFrag) {
         final CheckBox readown = v.findViewById(R.id.creadown);
         final CheckBox readgroup = v.findViewById(R.id.creadgroup);

@@ -10,7 +10,7 @@ import android.widget.RemoteViews;
 
 import com.amaze.filemanager.R;
 import com.amaze.filemanager.activities.MainActivity;
-import com.amaze.filemanager.filesystem.files.HybridFile;
+import com.amaze.filemanager.filesystem.files.AbstractHybridFile;
 import com.amaze.filemanager.fragments.ProcessViewerFragment;
 import com.amaze.filemanager.ui.notifications.NotificationConstants;
 import com.amaze.filemanager.utils.DatapointParcelable;
@@ -256,7 +256,7 @@ public abstract class AbstractProgressiveService extends Service implements Serv
     /**
      * Displays a notification, sends intent and cancels progress if there were some failures
      */
-    void finalizeNotification(ArrayList<HybridFile> failedOps, boolean move) {
+    void finalizeNotification(ArrayList<AbstractHybridFile> failedOps, boolean move) {
         if (!move) getNotificationManager().cancelAll();
 
         if(failedOps.size()==0)return;

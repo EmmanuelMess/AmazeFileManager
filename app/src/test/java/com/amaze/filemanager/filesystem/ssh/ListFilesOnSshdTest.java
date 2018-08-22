@@ -2,7 +2,7 @@ package com.amaze.filemanager.filesystem.ssh;
 
 import android.os.Environment;
 
-import com.amaze.filemanager.filesystem.files.HybridFile;
+import com.amaze.filemanager.filesystem.files.AbstractHybridFile;
 import com.amaze.filemanager.utils.OpenMode;
 
 import org.junit.Test;
@@ -49,7 +49,7 @@ public class ListFilesOnSshdTest extends AbstractSftpServerTest {
 
     private void performVerify() throws InterruptedException{
         List<String> result = new ArrayList<>();
-        HybridFile file = new HybridFile(OpenMode.SFTP, "ssh://testuser:testpassword@127.0.0.1:22222");
+        AbstractHybridFile file = new AbstractHybridFile(OpenMode.SFTP, "ssh://testuser:testpassword@127.0.0.1:22222");
         CountDownLatch waiter = new CountDownLatch(7);
         file.forEachChildrenFile(RuntimeEnvironment.application, false, (fileFound)->{
             assertTrue(fileFound.getPath() + " not seen as directory", fileFound.isDirectory());
@@ -81,7 +81,7 @@ public class ListFilesOnSshdTest extends AbstractSftpServerTest {
             Files.createSymbolicLink(Paths.get(new File(Environment.getExternalStorageDirectory(), "symlink"+i+".txt").getAbsolutePath()), Paths.get(f.getAbsolutePath()));
         }
         List<String> dirs = new ArrayList<>(), files = new ArrayList<>();
-        HybridFile file = new HybridFile(OpenMode.SFTP, "ssh://testuser:testpassword@127.0.0.1:22222");
+        AbstractHybridFile file = new AbstractHybridFile(OpenMode.SFTP, "ssh://testuser:testpassword@127.0.0.1:22222");
         CountDownLatch waiter = new CountDownLatch(15);
         file.forEachChildrenFile(RuntimeEnvironment.application, false, (fileFound)->{
             if(!fileFound.getName().endsWith(".txt")) {

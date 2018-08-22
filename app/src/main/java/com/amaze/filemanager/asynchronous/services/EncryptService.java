@@ -16,7 +16,7 @@ import android.widget.RemoteViews;
 import com.amaze.filemanager.R;
 import com.amaze.filemanager.activities.MainActivity;
 import com.amaze.filemanager.filesystem.files.FileUtil;
-import com.amaze.filemanager.filesystem.files.HybridFile;
+import com.amaze.filemanager.filesystem.files.AbstractHybridFile;
 import com.amaze.filemanager.filesystem.files.HybridFileParcelable;
 import com.amaze.filemanager.ui.notifications.NotificationConstants;
 import com.amaze.filemanager.utils.application.AppConfig;
@@ -55,7 +55,7 @@ public class EncryptService extends AbstractProgressiveService {
     private long totalSize = 0l;
     private OpenMode openMode;
     private HybridFileParcelable baseFile;
-    private ArrayList<HybridFile> failedOps = new ArrayList<>();
+    private ArrayList<AbstractHybridFile> failedOps = new ArrayList<>();
     private String targetFilename;
     private int accentColor;
     private SharedPreferences sharedPreferences;

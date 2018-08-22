@@ -32,7 +32,7 @@ import com.amaze.filemanager.filesystem.files.HybridFileParcelable;
 import com.amaze.filemanager.filesystem.files.FileUtil;
 import com.amaze.filemanager.utils.ProgressHandler;
 import com.amaze.filemanager.utils.application.AppConfig;
-import com.amaze.filemanager.filesystem.files.HybridFile;
+import com.amaze.filemanager.filesystem.files.AbstractHybridFile;
 import com.amaze.filemanager.utils.DataUtils;
 import com.amaze.filemanager.utils.OTGUtil;
 import com.amaze.filemanager.utils.OpenMode;
@@ -61,7 +61,7 @@ import java.nio.channels.ReadableByteChannel;
 public class GenericCopyUtil {
 
     private HybridFileParcelable mSourceFile;
-    private HybridFile mTargetFile;
+    private AbstractHybridFile mTargetFile;
     private Context mContext;   // context needed to find the DocumentFile in otg/sd card
     private DataUtils dataUtils = DataUtils.getInstance();
     private ProgressHandler progressHandler;
@@ -311,7 +311,7 @@ public class GenericCopyUtil {
      * @param sourceFile the source file, which is to be copied
      * @param targetFile the target file
      */
-    public void copy(HybridFileParcelable sourceFile, HybridFile targetFile) throws IOException {
+    public void copy(HybridFileParcelable sourceFile, AbstractHybridFile targetFile) throws IOException {
 
         this.mSourceFile = sourceFile;
         this.mTargetFile = targetFile;

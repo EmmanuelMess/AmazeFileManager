@@ -49,8 +49,8 @@ import com.amaze.filemanager.asynchronous.services.ZipService;
 import com.amaze.filemanager.database.CloudHandler;
 import com.amaze.filemanager.database.CryptHandler;
 import com.amaze.filemanager.database.models.EncryptedEntry;
+import com.amaze.filemanager.filesystem.files.AbstractHybridFile;
 import com.amaze.filemanager.filesystem.files.FileUtil;
-import com.amaze.filemanager.filesystem.files.HybridFile;
 import com.amaze.filemanager.filesystem.files.HybridFileParcelable;
 import com.amaze.filemanager.filesystem.Operations;
 import com.amaze.filemanager.filesystem.compressed.CompressedHelper;
@@ -137,7 +137,7 @@ public class MainActivityHelper {
     void mkdir(final OpenMode openMode, final String path, final MainFragment ma) {
         mk(R.string.newfolder, "", (dialog, which) -> {
             EditText textfield = dialog.getCustomView().findViewById(R.id.singleedittext_input);
-            mkDir(new HybridFile(openMode, path + "/" + textfield.getText().toString()), ma);
+            mkDir(new AbstractHybridFile(openMode, path + "/" + textfield.getText().toString()), ma);
             dialog.dismiss();
         }, (text) -> {
             boolean isValidFilename = FileUtil.isValidFilename(text);
@@ -163,7 +163,7 @@ public class MainActivityHelper {
     void mkfile(final OpenMode openMode, final String path, final MainFragment ma) {
         mk(R.string.newfile,  NEW_FILE_TXT_EXTENSION, (dialog, which) -> {
             EditText textfield = dialog.getCustomView().findViewById(R.id.singleedittext_input);
-            mkFile(new HybridFile(openMode, path + "/" + textfield.getText().toString()), ma);
+            mkFile(new AbstractHybridFile(openMode, path + "/" + textfield.getText().toString()), ma);
             dialog.dismiss();
         }, (text) -> {
             boolean isValidFilename = FileUtil.isValidFilename(text);
@@ -282,9 +282,9 @@ public class MainActivityHelper {
         final Toast toast=Toast.makeText(context, context.getString(R.string.renaming),
                 Toast.LENGTH_SHORT);
         toast.show();
-        Operations.rename(new HybridFile(mode, oldPath), new HybridFile(mode, newPath), rootmode, context, new Operations.ErrorCallBack() {
+        Operations.rename(new AbstractHybridFile(mode, oldPath), new AbstractHybridFile(mode, newPath), rootmode, context, new Operations.ErrorCallBack() {
             @Override
-            public void exists(HybridFile file) {
+            public void exists(AbstractHybridFile file) {
                 context.runOnUiThread(() -> {
                     if (toast != null) toast.cancel();
                     Toast.makeText(mainActivity, context.getString(R.string.fileexist),
@@ -293,12 +293,12 @@ public class MainActivityHelper {
             }
 
             @Override
-            public void launchSAF(HybridFile file) {
+            public void launchSAF(AbstractHybridFile file) {
 
             }
 
             @Override
-            public void launchSAF(final HybridFile file, final HybridFile file1) {
+            public void launchSAF(final AbstractHybridFile file, final AbstractHybridFile file1) {
                 context.runOnUiThread(() -> {
                     if (toast != null) toast.cancel();
                     mainActivity.oppathe = file.getPath();
@@ -309,7 +309,7 @@ public class MainActivityHelper {
             }
 
             @Override
-            public void done(final HybridFile hFile, final boolean b) {
+            public void done(final AbstractHybridFile hFile, final boolean b) {
                 context.runOnUiThread(() -> {
                     if (b) {
                         Intent intent = new Intent(MainActivity.KEY_INTENT_LOAD_LIST);
@@ -340,7 +340,7 @@ public class MainActivityHelper {
             }
 
             @Override
-            public void invalidName(final HybridFile file) {
+            public void invalidName(final AbstractHybridFile file) {
                 context.runOnUiThread(() -> {
                     if (toast != null) toast.cancel();
                     Toast.makeText(context, context.getString(R.string.invalid_name) + ": "
@@ -407,13 +407,13 @@ public class MainActivityHelper {
     }
 
 
-    public void mkFile(final HybridFile path, final MainFragment ma) {
+    public void mkFile(final AbstractHybridFile path, final MainFragment ma) {
         final Toast toast = Toast.makeText(ma.getActivity(), ma.getString(R.string.creatingfile),
                 Toast.LENGTH_SHORT);
         toast.show();
         Operations.mkfile(path, ma.getActivity(), mainActivity.isRootExplorer(), new Operations.ErrorCallBack() {
             @Override
-            public void exists(final HybridFile file) {
+            public void exists(final AbstractHybridFile file) {
                 ma.getActivity().runOnUiThread(() -> {
                     if (toast != null) toast.cancel();
                     Toast.makeText(mainActivity, mainActivity.getString(R.string.fileexist),
@@ -427,7 +427,7 @@ public class MainActivityHelper {
             }
 
             @Override
-            public void launchSAF(HybridFile file) {
+            public void launchSAF(AbstractHybridFile file) {
 
                 ma.getActivity().runOnUiThread(() -> {
                     if (toast != null) toast.cancel();
@@ -439,12 +439,12 @@ public class MainActivityHelper {
             }
 
             @Override
-            public void launchSAF(HybridFile file, HybridFile file1) {
+            public void launchSAF(AbstractHybridFile file, AbstractHybridFile file1) {
 
             }
 
             @Override
-            public void done(HybridFile hFile, final boolean b) {
+            public void done(AbstractHybridFile hFile, final boolean b) {
                 ma.getActivity().runOnUiThread(() -> {
                     if (b) {
                         ma.updateList();
@@ -456,7 +456,7 @@ public class MainActivityHelper {
             }
 
             @Override
-            public void invalidName(final HybridFile file) {
+            public void invalidName(final AbstractHybridFile file) {
                 ma.getActivity().runOnUiThread(() -> {
                     if (toast != null) toast.cancel();
                     Toast.makeText(ma.getActivity(), ma.getString(R.string.invalid_name)
@@ -466,13 +466,13 @@ public class MainActivityHelper {
         });
     }
 
-    public void mkDir(final HybridFile path, final MainFragment ma) {
+    public void mkDir(final AbstractHybridFile path, final MainFragment ma) {
         final Toast toast = Toast.makeText(ma.getActivity(), ma.getString(R.string.creatingfolder),
                 Toast.LENGTH_SHORT);
         toast.show();
         Operations.mkdir(path, ma.getActivity(), mainActivity.isRootExplorer(), new Operations.ErrorCallBack() {
             @Override
-            public void exists(final HybridFile file) {
+            public void exists(final AbstractHybridFile file) {
                 ma.getActivity().runOnUiThread(() -> {
                     if (toast != null) toast.cancel();
                     Toast.makeText(mainActivity, mainActivity.getString(R.string.fileexist),
@@ -485,7 +485,7 @@ public class MainActivityHelper {
             }
 
             @Override
-            public void launchSAF(HybridFile file) {
+            public void launchSAF(AbstractHybridFile file) {
                 if (toast != null) toast.cancel();
                 ma.getActivity().runOnUiThread(() -> {
                     mainActivity.oppathe = path.getPath();
@@ -496,12 +496,12 @@ public class MainActivityHelper {
             }
 
             @Override
-            public void launchSAF(HybridFile file, HybridFile file1) {
+            public void launchSAF(AbstractHybridFile file, AbstractHybridFile file1) {
 
             }
 
             @Override
-            public void done(HybridFile hFile, final boolean b) {
+            public void done(AbstractHybridFile hFile, final boolean b) {
                 ma.getActivity().runOnUiThread(() -> {
                     if (b) {
                         ma.updateList();
@@ -513,7 +513,7 @@ public class MainActivityHelper {
             }
 
             @Override
-            public void invalidName(final HybridFile file) {
+            public void invalidName(final AbstractHybridFile file) {
                 ma.getActivity().runOnUiThread(() -> {
 
                     if (toast != null) toast.cancel();
@@ -661,7 +661,7 @@ public class MainActivityHelper {
      * Directory inside the same directory with similar filename shall not be allowed
      * Doesn't work at an OTG path
      */
-    public static boolean isNewDirectoryRecursive(HybridFile file) {
+    public static boolean isNewDirectoryRecursive(AbstractHybridFile file) {
         return file.getName().equals(file.getParentName());
     }
 

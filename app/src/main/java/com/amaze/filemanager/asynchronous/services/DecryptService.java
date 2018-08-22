@@ -16,7 +16,7 @@ import android.widget.RemoteViews;
 import com.amaze.filemanager.R;
 import com.amaze.filemanager.activities.MainActivity;
 import com.amaze.filemanager.filesystem.files.FileUtil;
-import com.amaze.filemanager.filesystem.files.HybridFile;
+import com.amaze.filemanager.filesystem.files.AbstractHybridFile;
 import com.amaze.filemanager.filesystem.files.HybridFileParcelable;
 import com.amaze.filemanager.ui.notifications.NotificationConstants;
 import com.amaze.filemanager.utils.DatapointParcelable;
@@ -57,7 +57,7 @@ public class DecryptService extends AbstractProgressiveService {
     private OpenMode openMode;
     private String decryptPath;
     private HybridFileParcelable baseFile;
-    private ArrayList<HybridFile> failedOps = new ArrayList<>();
+    private ArrayList<AbstractHybridFile> failedOps = new ArrayList<>();
     private int accentColor;
     private SharedPreferences sharedPreferences;
     private RemoteViews customSmallContentViews, customBigContentViews;

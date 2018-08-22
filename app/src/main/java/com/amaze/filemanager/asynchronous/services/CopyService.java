@@ -42,8 +42,8 @@ import com.amaze.filemanager.asynchronous.asynctasks.DeleteTask;
 import com.amaze.filemanager.database.CryptHandler;
 import com.amaze.filemanager.database.models.EncryptedEntry;
 import com.amaze.filemanager.exceptions.ShellNotRunningException;
+import com.amaze.filemanager.filesystem.files.AbstractHybridFile;
 import com.amaze.filemanager.filesystem.files.FileUtil;
-import com.amaze.filemanager.filesystem.files.HybridFile;
 import com.amaze.filemanager.filesystem.files.HybridFileParcelable;
 import com.amaze.filemanager.filesystem.Operations;
 import com.amaze.filemanager.filesystem.RootHelper;
@@ -333,7 +333,7 @@ public class CopyService extends AbstractProgressiveService {
 
         class Copy {
 
-            ArrayList<HybridFile> failedFOps;
+            ArrayList<AbstractHybridFile> failedFOps;
             ArrayList<HybridFileParcelable> toDelete;
 
             Copy() {
@@ -359,16 +359,16 @@ public class CopyService extends AbstractProgressiveService {
 
                         try {
 
-                            HybridFile hFile;
+                            AbstractHybridFile hFile;
                             if (targetPath.contains(getExternalCacheDir().getPath())) {
                                 // the target open mode is not the one we're currently in!
                                 // we're processing the file for cache
-                                hFile = new HybridFile(OpenMode.FILE, targetPath, sourceFiles.get(i).getName(),
+                                hFile = new AbstractHybridFile(OpenMode.FILE, targetPath, sourceFiles.get(i).getName(),
                                         f1.isDirectory());
                             } else {
 
                                 // the target open mode is where we're currently at
-                                hFile = new HybridFile(mode, targetPath, sourceFiles.get(i).getName(),
+                                hFile = new AbstractHybridFile(mode, targetPath, sourceFiles.get(i).getName(),
                                         f1.isDirectory());
                             }
 
@@ -402,13 +402,13 @@ public class CopyService extends AbstractProgressiveService {
                     for (int i = 0; i < sourceFiles.size(); i++) {
                         if (!progressHandler.getCancelled()) {
 
-                            HybridFile hFile = new HybridFile(mode, targetPath, sourceFiles.get(i).getName(),
+                            AbstractHybridFile hFile = new AbstractHybridFile(mode, targetPath, sourceFiles.get(i).getName(),
                                     sourceFiles.get(i).isDirectory());
                             progressHandler.setSourceFilesProcessed(++sourceProgress);
                             progressHandler.setFileName(sourceFiles.get(i).getName());
                             copyRoot(sourceFiles.get(i), hFile, move);
-                            /*if(checkFiles(new HybridFile(sourceFiles.get(i).getMode(),path),
-                            new HybridFile(OpenMode.ROOT,targetPath+"/"+name))){
+                            /*if(checkFiles(new AbstractHybridFile(sourceFiles.get(i).getMode(),path),
+                            new AbstractHybridFile(OpenMode.ROOT,targetPath+"/"+name))){
                                 failedFOps.add(sourceFiles.get(i));
                             }*/
                         }
@@ -432,7 +432,7 @@ public class CopyService extends AbstractProgressiveService {
                 }
             }
 
-            void copyRoot(HybridFileParcelable sourceFile, HybridFile targetFile, boolean move) {
+            void copyRoot(HybridFileParcelable sourceFile, AbstractHybridFile targetFile, boolean move) {
 
                 try {
                     if (!move) RootUtils.copy(sourceFile.getPath(), targetFile.getPath());
@@ -445,7 +445,7 @@ public class CopyService extends AbstractProgressiveService {
                 FileUtils.scanFile(targetFile.getFile(), c);
             }
 
-            private void copyFiles(final HybridFileParcelable sourceFile, final HybridFile targetFile,
+            private void copyFiles(final HybridFileParcelable sourceFile, final AbstractHybridFile targetFile,
                                    final ProgressHandler progressHandler) throws IOException {
 
                 if (progressHandler.getCancelled()) return;
@@ -465,7 +465,7 @@ public class CopyService extends AbstractProgressiveService {
 
                     if(progressHandler.getCancelled()) return;
                     sourceFile.forEachChildrenFile(c, false, file -> {
-                        HybridFile destFile = new HybridFile(targetFile.getMode(), targetFile.getPath(),
+                        AbstractHybridFile destFile = new AbstractHybridFile(targetFile.getMode(), targetFile.getPath(),
                                 file.getName(), file.isDirectory());
                         try {
                             copyFiles(file, destFile, progressHandler);
@@ -491,15 +491,15 @@ public class CopyService extends AbstractProgressiveService {
     //check if copy is successful
     // avoid using the method as there is no way to know when we would be returning from command callbacks
     // rather confirm from the command result itself, inside it's callback
-    boolean checkFiles(HybridFile hFile1, HybridFile hFile2) throws ShellNotRunningException {
+    boolean checkFiles(AbstractHybridFile hFile1, AbstractHybridFile hFile2) throws ShellNotRunningException {
         if (RootHelper.isDirectory(hFile1.getPath(), isRootExplorer, 5)) {
             if (RootHelper.fileExists(hFile2.getPath())) return false;
             ArrayList<HybridFileParcelable> baseFiles = RootHelper.getFilesList(hFile1.getPath(), true, true, null);
             if (baseFiles.size() > 0) {
                 boolean b = true;
                 for (HybridFileParcelable baseFile : baseFiles) {
-                    if (!checkFiles(new HybridFile(baseFile.getMode(), baseFile.getPath()),
-                            new HybridFile(hFile2.getMode(), hFile2.getPath() + "/" + (baseFile.getName()))))
+                    if (!checkFiles(new AbstractHybridFile(baseFile.getMode(), baseFile.getPath()),
+                            new AbstractHybridFile(hFile2.getMode(), hFile2.getPath() + "/" + (baseFile.getName()))))
                         b = false;
                 }
                 return b;

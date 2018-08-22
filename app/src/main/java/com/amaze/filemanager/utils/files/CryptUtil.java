@@ -31,8 +31,8 @@ import android.security.keystore.KeyProperties;
 import android.support.annotation.RequiresApi;
 import android.util.Base64;
 
+import com.amaze.filemanager.filesystem.files.AbstractHybridFile;
 import com.amaze.filemanager.filesystem.files.FileUtil;
-import com.amaze.filemanager.filesystem.files.HybridFile;
 import com.amaze.filemanager.filesystem.files.HybridFileParcelable;
 import com.amaze.filemanager.fragments.preference_fragments.PrefFrag;
 import com.amaze.filemanager.utils.OpenMode;
@@ -101,7 +101,7 @@ public class CryptUtil {
     public static final String CRYPT_EXTENSION = ".aze";
 
     private ProgressHandler progressHandler;
-    private ArrayList<HybridFile> failedOps;
+    private ArrayList<AbstractHybridFile> failedOps;
 
     /**
      * Constructor will start encryption process serially. Make sure to call with background thread.
@@ -115,13 +115,13 @@ public class CryptUtil {
      * @param sourceFile the file to encrypt
      */
     public CryptUtil(Context context, HybridFileParcelable sourceFile, ProgressHandler progressHandler,
-                     ArrayList<HybridFile> failedOps, String targetFilename) throws GeneralSecurityException, IOException {
+                     ArrayList<AbstractHybridFile> failedOps, String targetFilename) throws GeneralSecurityException, IOException {
 
         this.progressHandler = progressHandler;
         this.failedOps = failedOps;
 
         // target encrypted file
-        HybridFile hFile = new HybridFile(sourceFile.getMode(), sourceFile.getParent(context));
+        AbstractHybridFile hFile = new AbstractHybridFile(sourceFile.getMode(), sourceFile.getParent(context));
         encrypt(context, sourceFile, hFile, targetFilename);
     }
 
@@ -138,12 +138,12 @@ public class CryptUtil {
      *                   the source's parent in normal case
      */
     public CryptUtil(Context context, HybridFileParcelable baseFile, String targetPath,
-                     ProgressHandler progressHandler, ArrayList<HybridFile> failedOps) throws GeneralSecurityException, IOException {
+                     ProgressHandler progressHandler, ArrayList<AbstractHybridFile> failedOps) throws GeneralSecurityException, IOException {
 
         this.progressHandler = progressHandler;
         this.failedOps = failedOps;
 
-        HybridFile targetDirectory = new HybridFile(OpenMode.FILE, targetPath);
+        AbstractHybridFile targetDirectory = new AbstractHybridFile(OpenMode.FILE, targetPath);
         if (!targetPath.equals(context.getExternalCacheDir())) {
 
             // same file system as of base file
@@ -159,12 +159,12 @@ public class CryptUtil {
      * @param sourceFile        the source file to decrypt
      * @param targetDirectory   the target directory inside which we're going to decrypt
      */
-    private void decrypt(final Context context, HybridFileParcelable sourceFile, HybridFile targetDirectory)
+    private void decrypt(final Context context, HybridFileParcelable sourceFile, AbstractHybridFile targetDirectory)
             throws GeneralSecurityException, IOException {
         if (progressHandler.getCancelled()) return;
         if (sourceFile.isDirectory()) {
 
-            final HybridFile hFile = new HybridFile(targetDirectory.getMode(), targetDirectory.getPath(),
+            final AbstractHybridFile hFile = new AbstractHybridFile(targetDirectory.getMode(), targetDirectory.getPath(),
                     sourceFile.getName().replace(CRYPT_EXTENSION, ""), sourceFile.isDirectory());
             FileUtil.mkdirs(context, hFile);
 
@@ -185,7 +185,7 @@ public class CryptUtil {
             BufferedInputStream inputStream = new BufferedInputStream(sourceFile.getInputStream(context),
                     GenericCopyUtil.DEFAULT_BUFFER_SIZE);
 
-            HybridFile targetFile = new HybridFile(targetDirectory.getMode(),
+            AbstractHybridFile targetFile = new AbstractHybridFile(targetDirectory.getMode(),
                     targetDirectory.getPath(), sourceFile.getName().replace(CRYPT_EXTENSION, ""),
                     sourceFile.isDirectory());
 
@@ -208,14 +208,14 @@ public class CryptUtil {
      * @param sourceFile        the source file to encrypt
      * @param targetDirectory   the target directory in which we're going to encrypt
      */
-    private void encrypt(final Context context, HybridFileParcelable sourceFile, HybridFile targetDirectory, String targetFilename)
+    private void encrypt(final Context context, HybridFileParcelable sourceFile, AbstractHybridFile targetDirectory, String targetFilename)
             throws GeneralSecurityException, IOException {
 
         if (progressHandler.getCancelled()) return;
         if (sourceFile.isDirectory()) {
 
             // succeed #CRYPT_EXTENSION at end of directory/file name
-            final HybridFile hFile = new HybridFile(targetDirectory.getMode(),
+            final AbstractHybridFile hFile = new AbstractHybridFile(targetDirectory.getMode(),
                     targetDirectory.getPath(), targetFilename,
                     sourceFile.isDirectory());
             FileUtil.mkdirs(context, hFile);
@@ -238,7 +238,7 @@ public class CryptUtil {
                     GenericCopyUtil.DEFAULT_BUFFER_SIZE);
 
             // succeed #CRYPT_EXTENSION at end of directory/file name
-            HybridFile targetFile = new HybridFile(targetDirectory.getMode(),
+            AbstractHybridFile targetFile = new AbstractHybridFile(targetDirectory.getMode(),
                     targetDirectory.getPath(), targetFilename,
                     sourceFile.isDirectory());
 

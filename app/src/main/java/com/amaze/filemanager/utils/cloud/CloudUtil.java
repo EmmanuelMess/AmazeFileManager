@@ -17,7 +17,7 @@ import com.amaze.filemanager.activities.MainActivity;
 import com.amaze.filemanager.adapters.data.IconDataParcelable;
 import com.amaze.filemanager.database.CloudHandler;
 import com.amaze.filemanager.exceptions.CloudPluginException;
-import com.amaze.filemanager.filesystem.files.HybridFile;
+import com.amaze.filemanager.filesystem.files.AbstractHybridFile;
 import com.amaze.filemanager.filesystem.files.HybridFileParcelable;
 import com.amaze.filemanager.filesystem.ssh.SFtpClientTemplate;
 import com.amaze.filemanager.filesystem.ssh.SshClientUtils;
@@ -256,7 +256,7 @@ public class CloudUtil {
      */
     public static InputStream getThumbnailInputStreamForCloud(Context context, String path) {
         InputStream inputStream;
-        HybridFile hybridFile = new HybridFile(OpenMode.UNKNOWN, path);
+        AbstractHybridFile hybridFile = new AbstractHybridFile(OpenMode.UNKNOWN, path);
         hybridFile.generateMode(context);
         DataUtils dataUtils = DataUtils.getInstance();
 

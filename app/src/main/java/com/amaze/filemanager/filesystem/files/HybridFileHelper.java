@@ -1,17 +1,10 @@
 package com.amaze.filemanager.filesystem.files;
 
 import android.content.Context;
-import android.os.Build;
-import android.preference.PreferenceManager;
-import android.text.NoCopySpan;
-import com.amaze.filemanager.database.CloudHandler;
-import com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants;
-import com.amaze.filemanager.utils.OTGUtil;
-import com.amaze.filemanager.utils.OpenMode;
 
 public final class HybridFileHelper {
 
-    public static HybridFile getHybridFile(Context context, String path) {
+    public static AbstractHybridFile getHybridFile(Context context, String path) {
         /*if (path.startsWith("smb://")) {
             mode = OpenMode.SMB;
         } else*/ if (path.startsWith("ssh://")) {

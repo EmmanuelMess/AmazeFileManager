@@ -32,7 +32,7 @@ import com.amaze.filemanager.adapters.data.LayoutElementParcelable;
 import com.amaze.filemanager.database.SortHandler;
 import com.amaze.filemanager.database.UtilsHandler;
 import com.amaze.filemanager.exceptions.CloudPluginException;
-import com.amaze.filemanager.filesystem.files.HybridFile;
+import com.amaze.filemanager.filesystem.files.AbstractHybridFile;
 import com.amaze.filemanager.filesystem.files.HybridFileParcelable;
 import com.amaze.filemanager.filesystem.RootHelper;
 import com.amaze.filemanager.fragments.CloudSheetFragment;
@@ -83,10 +83,10 @@ public class LoadFilesListTask extends AsyncTask<Void, Void, Pair<OpenMode, Arra
 
     @Override
     protected Pair<OpenMode, ArrayList<LayoutElementParcelable>> doInBackground(Void... p) {
-        HybridFile hFile = null;
+        AbstractHybridFile hFile = null;
 
         if (openmode == OpenMode.UNKNOWN) {
-            hFile = new HybridFile(OpenMode.UNKNOWN, path);
+            hFile = new AbstractHybridFile(OpenMode.UNKNOWN, path);
             hFile.generateMode(ma.getActivity());
             openmode = hFile.getMode();
 
@@ -106,7 +106,7 @@ public class LoadFilesListTask extends AsyncTask<Void, Void, Pair<OpenMode, Arra
         switch (openmode) {
             case SMB:
                 if (hFile == null) {
-                    hFile = new HybridFile(OpenMode.SMB, path);
+                    hFile = new AbstractHybridFile(OpenMode.SMB, path);
                 }
 
                 try {
@@ -124,7 +124,7 @@ public class LoadFilesListTask extends AsyncTask<Void, Void, Pair<OpenMode, Arra
                 }
                 break;
             case SFTP:
-                HybridFile sftpHFile = new HybridFile(OpenMode.SFTP, path);
+                AbstractHybridFile sftpHFile = new AbstractHybridFile(OpenMode.SFTP, path);
 
                 list = new ArrayList<LayoutElementParcelable>();
 

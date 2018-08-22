@@ -29,7 +29,7 @@ import com.amaze.filemanager.activities.MainActivity;
 import com.amaze.filemanager.database.CryptHandler;
 import com.amaze.filemanager.database.models.EncryptedEntry;
 import com.amaze.filemanager.exceptions.ShellNotRunningException;
-import com.amaze.filemanager.filesystem.files.HybridFile;
+import com.amaze.filemanager.filesystem.files.AbstractHybridFile;
 import com.amaze.filemanager.filesystem.files.HybridFileParcelable;
 import com.amaze.filemanager.fragments.MainFragment;
 import com.amaze.filemanager.utils.application.AppConfig;
@@ -82,7 +82,7 @@ public class MoveFiles extends AsyncTask<ArrayList<String>, String, Boolean> {
         for (ArrayList<HybridFileParcelable> filesCurrent : files) {
             totalBytes += FileUtils.getTotalBytes(filesCurrent, context);
         }
-        HybridFile destination = new HybridFile(mode, paths.get(0));
+        AbstractHybridFile destination = new AbstractHybridFile(mode, paths.get(0));
         destinationSize = destination.getUsableSpace();
 
         switch (mode) {

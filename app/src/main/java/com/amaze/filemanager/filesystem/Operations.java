@@ -7,8 +7,8 @@ import android.support.annotation.NonNull;
 import android.support.v4.provider.DocumentFile;
 
 import com.amaze.filemanager.exceptions.ShellNotRunningException;
+import com.amaze.filemanager.filesystem.files.AbstractHybridFile;
 import com.amaze.filemanager.filesystem.files.FileUtil;
-import com.amaze.filemanager.filesystem.files.HybridFile;
 import com.amaze.filemanager.filesystem.files.HybridFileParcelable;
 import com.amaze.filemanager.filesystem.ssh.SFtpClientTemplate;
 import com.amaze.filemanager.filesystem.ssh.SshClientUtils;
@@ -53,34 +53,34 @@ public class Operations {
         /**
          * Callback fired when file being created in process already exists
          */
-        void exists(HybridFile file);
+        void exists(AbstractHybridFile file);
 
         /**
          * Callback fired when creating new file/directory and required storage access framework permission
          * to access SD Card is not available
          */
-        void launchSAF(HybridFile file);
+        void launchSAF(AbstractHybridFile file);
 
         /**
          * Callback fired when renaming file and required storage access framework permission to access
          * SD Card is not available
          */
-        void launchSAF(HybridFile file, HybridFile file1);
+        void launchSAF(AbstractHybridFile file, AbstractHybridFile file1);
 
         /**
          * Callback fired when we're done processing the operation
          *
          * @param b defines whether operation was successful
          */
-        void done(HybridFile hFile, boolean b);
+        void done(AbstractHybridFile hFile, boolean b);
 
         /**
          * Callback fired when an invalid file name is found.
          */
-        void invalidName(HybridFile file);
+        void invalidName(AbstractHybridFile file);
     }
 
-    public static void mkdir(@NonNull final HybridFile file, final Context context, final boolean rootMode,
+    public static void mkdir(@NonNull final AbstractHybridFile file, final Context context, final boolean rootMode,
                              @NonNull final ErrorCallBack errorCallBack) {
 
         new AsyncTask<Void, Void, Void>() {
@@ -195,7 +195,7 @@ public class Operations {
 
     }
 
-    public static void mkfile(@NonNull final HybridFile file, final Context context, final boolean rootMode,
+    public static void mkfile(@NonNull final AbstractHybridFile file, final Context context, final boolean rootMode,
                               @NonNull final ErrorCallBack errorCallBack) {
 
         new AsyncTask<Void, Void, Void>() {
@@ -333,7 +333,7 @@ public class Operations {
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    public static void rename(final HybridFile oldFile, final HybridFile newFile, final boolean rootMode,
+    public static void rename(final AbstractHybridFile oldFile, final AbstractHybridFile newFile, final boolean rootMode,
                               final Context context, final ErrorCallBack errorCallBack) {
 
         new AsyncTask<Void, Void, Void>() {
@@ -521,7 +521,7 @@ public class Operations {
      *
      * @return true when copy loop is possible
      */
-    public static boolean isCopyLoopPossible(HybridFileParcelable sourceFile, HybridFile targetFile) {
+    public static boolean isCopyLoopPossible(HybridFileParcelable sourceFile, AbstractHybridFile targetFile) {
         return targetFile.getPath().contains(sourceFile.getPath());
     }
 

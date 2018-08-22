@@ -85,8 +85,8 @@ import com.amaze.filemanager.database.models.CloudEntry;
 import com.amaze.filemanager.database.models.OperationData;
 import com.amaze.filemanager.database.models.Tab;
 import com.amaze.filemanager.exceptions.CloudPluginException;
+import com.amaze.filemanager.filesystem.files.AbstractHybridFile;
 import com.amaze.filemanager.filesystem.files.FileUtil;
-import com.amaze.filemanager.filesystem.files.HybridFile;
 import com.amaze.filemanager.filesystem.files.HybridFileParcelable;
 import com.amaze.filemanager.filesystem.PasteHelper;
 import com.amaze.filemanager.filesystem.RootHelper;
@@ -402,7 +402,7 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
                         transaction2.commit();
                     } else {
                         if (path != null && path.length() > 0) {
-                            HybridFile file = new HybridFile(OpenMode.UNKNOWN, path);
+                            AbstractHybridFile file = new AbstractHybridFile(OpenMode.UNKNOWN, path);
                             file.generateMode(MainActivity.this);
                             if (file.isDirectory(MainActivity.this))
                                 goToMain(path);
@@ -758,7 +758,7 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
         } else if (fragment instanceof FtpServerFragment) {
             //returning back from FTP server
             if (path != null && path.length() > 0) {
-                HybridFile file = new HybridFile(OpenMode.UNKNOWN, path);
+                AbstractHybridFile file = new AbstractHybridFile(OpenMode.UNKNOWN, path);
                 file.generateMode(this);
                 if (file.isDirectory(this))
                     goToMain(path);
@@ -1361,7 +1361,7 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
                     ma.updateList();
                     break;
                 case DataUtils.NEW_FILE:
-                    mainActivityHelper.mkFile(new HybridFile(OpenMode.FILE, oppathe), getCurrentMainFragment());
+                    mainActivityHelper.mkFile(new AbstractHybridFile(OpenMode.FILE, oppathe), getCurrentMainFragment());
                     break;
                 case DataUtils.EXTRACT:
                     mainActivityHelper.extractFile(new File(oppathe));

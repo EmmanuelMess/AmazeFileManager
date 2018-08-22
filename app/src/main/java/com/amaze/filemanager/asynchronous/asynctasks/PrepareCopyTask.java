@@ -15,7 +15,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.amaze.filemanager.R;
 import com.amaze.filemanager.activities.MainActivity;
 import com.amaze.filemanager.asynchronous.services.CopyService;
-import com.amaze.filemanager.filesystem.files.HybridFile;
+import com.amaze.filemanager.filesystem.files.AbstractHybridFile;
 import com.amaze.filemanager.filesystem.files.HybridFileParcelable;
 import com.amaze.filemanager.fragments.MainFragment;
 import com.amaze.filemanager.utils.DataUtils;
@@ -104,7 +104,7 @@ public class PrepareCopyTask extends AsyncTask<ArrayList<HybridFileParcelable>, 
             return null;
         }
 
-        HybridFile destination = new HybridFile(openMode, path);
+        AbstractHybridFile destination = new AbstractHybridFile(openMode, path);
         destination.generateMode(context);
 
         if (move && destination.getMode() == openMode
@@ -125,7 +125,7 @@ public class PrepareCopyTask extends AsyncTask<ArrayList<HybridFileParcelable>, 
         return copyFolder;
     }
 
-    private ArrayList<HybridFileParcelable> checkConflicts(final ArrayList<HybridFileParcelable> filesToCopy, HybridFile destination) {
+    private ArrayList<HybridFileParcelable> checkConflicts(final ArrayList<HybridFileParcelable> filesToCopy, AbstractHybridFile destination) {
         final ArrayList<HybridFileParcelable> conflictingFiles = new ArrayList<>();
         destination.forEachChildrenFile(context, rootMode, file -> {
             for (HybridFileParcelable j : filesToCopy) {
@@ -314,7 +314,7 @@ public class PrepareCopyTask extends AsyncTask<ArrayList<HybridFileParcelable>, 
             path = p;
             this.filesToCopy = filesToCopy;
 
-            HybridFile destination = new HybridFile(openMode, path);
+            AbstractHybridFile destination = new AbstractHybridFile(openMode, path);
             conflictingFiles = checkConflicts(filesToCopy, destination);
 
             for (int i = 0; i < conflictingFiles.size(); i++) {

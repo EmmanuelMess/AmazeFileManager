@@ -3,7 +3,6 @@ package com.amaze.filemanager.filesystem.files;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import com.amaze.filemanager.exceptions.ShellNotRunningException;
 import com.amaze.filemanager.filesystem.ssh.SFtpClientTemplate;
 import com.amaze.filemanager.filesystem.ssh.SshClientTemplate;
 import com.amaze.filemanager.filesystem.ssh.SshClientUtils;
@@ -11,7 +10,6 @@ import com.amaze.filemanager.filesystem.ssh.Statvfs;
 import com.amaze.filemanager.utils.OnFileFound;
 import com.amaze.filemanager.utils.OpenMode;
 import com.amaze.filemanager.utils.application.AppConfig;
-import jcifs.smb.SmbException;
 import net.schmizz.sshj.SSHClient;
 import net.schmizz.sshj.common.Buffer;
 import net.schmizz.sshj.sftp.*;
@@ -24,7 +22,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.EnumSet;
 
-public class SftpHybridFile extends HybridFile {
+public class SftpHybridFile extends AbstractHybridFile {
 
     private static final String TAG = "SftpHybridFile";
 

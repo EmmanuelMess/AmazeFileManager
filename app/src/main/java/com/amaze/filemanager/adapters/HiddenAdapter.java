@@ -13,7 +13,7 @@ import com.amaze.filemanager.R;
 import com.amaze.filemanager.activities.MainActivity;
 import com.amaze.filemanager.adapters.holders.HiddenViewHolder;
 import com.amaze.filemanager.asynchronous.asynctasks.DeleteTask;
-import com.amaze.filemanager.filesystem.files.HybridFile;
+import com.amaze.filemanager.filesystem.files.AbstractHybridFile;
 import com.amaze.filemanager.filesystem.files.HybridFileParcelable;
 import com.amaze.filemanager.fragments.MainFragment;
 import com.amaze.filemanager.utils.DataUtils;
@@ -32,13 +32,13 @@ public class HiddenAdapter extends RecyclerView.Adapter<HiddenViewHolder> {
     private SharedPreferences sharedPrefs;
     private MainFragment context;
     private Context c;
-    private ArrayList<HybridFile> items;
+    private ArrayList<AbstractHybridFile> items;
     private MaterialDialog materialDialog;
     private boolean hide;
     private DataUtils dataUtils = DataUtils.getInstance();
 
     public HiddenAdapter(Context context, MainFragment mainFrag, SharedPreferences sharedPreferences,
-                         ArrayList<HybridFile> items, MaterialDialog materialDialog, boolean hide) {
+                         ArrayList<AbstractHybridFile> items, MaterialDialog materialDialog, boolean hide) {
         this.c = context;
         this.context = mainFrag;
         sharedPrefs = sharedPreferences;
@@ -58,7 +58,7 @@ public class HiddenAdapter extends RecyclerView.Adapter<HiddenViewHolder> {
 
     @Override
     public void onBindViewHolder(HiddenViewHolder holder, int position) {
-        HybridFile file = items.get(position);
+        AbstractHybridFile file = items.get(position);
 
         holder.txtTitle.setText(file.getName());
         String a = file.getReadablePath(file.getPath());
