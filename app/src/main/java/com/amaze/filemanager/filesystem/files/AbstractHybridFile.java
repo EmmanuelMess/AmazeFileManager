@@ -220,9 +220,6 @@ public abstract class AbstractHybridFile {
                 HybridFileParcelable baseFile=generateBaseFileFromParent();
                 if(baseFile!=null) return baseFile.getSize();
                 break;
-            case OTG:
-                s = OTGUtil.getDocumentFile(path, context, false).length();
-                break;
             case DROPBOX:
                 s = dataUtils.getAccount(OpenMode.DROPBOX)
                         .getMetadata(CloudUtil.stripPath(OpenMode.DROPBOX, path)).getSize();
@@ -273,8 +270,6 @@ public abstract class AbstractHybridFile {
                 return new File(path).getName();
             case ROOT:
                 return new File(path).getName();
-            case OTG:
-                return OTGUtil.getDocumentFile(path, context, false).getName();
             default:
                 StringBuilder builder = new StringBuilder(path);
                 name = builder.substring(builder.lastIndexOf("/")+1, builder.length());
@@ -358,11 +353,6 @@ public abstract class AbstractHybridFile {
                     isDirectory = false;
                 }
                 break;
-            case OTG:
-                // TODO: support for this method in OTG on-the-fly
-                // you need to manually call {@link RootHelper#getDocumentFile() method
-                isDirectory = false;
-                break;
             default:
                 isDirectory = new File(path).isDirectory();
                 break;
@@ -385,9 +375,6 @@ public abstract class AbstractHybridFile {
                     e.printStackTrace();
                     isDirectory = false;
                 }
-                break;
-            case OTG:
-                isDirectory = OTGUtil.getDocumentFile(path, context, false).isDirectory();
                 break;
             case DROPBOX:
                 isDirectory = dataUtils.getAccount(OpenMode.DROPBOX)
@@ -448,9 +435,6 @@ public abstract class AbstractHybridFile {
                 HybridFileParcelable baseFile=generateBaseFileFromParent();
                 if(baseFile!=null) size = baseFile.getSize();
                 break;
-            case OTG:
-                size = FileUtils.otgFolderSize(path, context);
-                break;
             case DROPBOX:
             case BOX:
             case GDRIVE:
@@ -482,9 +466,6 @@ public abstract class AbstractHybridFile {
                 SpaceAllocation spaceAllocation = dataUtils.getAccount(mode).getAllocation();
                 size = spaceAllocation.getTotal() - spaceAllocation.getUsed();
                 break;
-            case OTG:
-                // TODO: Get free space from OTG when {@link DocumentFile} API adds support
-                break;
 
         }
         return size;
@@ -507,11 +488,6 @@ public abstract class AbstractHybridFile {
                 SpaceAllocation spaceAllocation = dataUtils.getAccount(mode).getAllocation();
                 size = spaceAllocation.getTotal();
                 break;
-            case OTG:
-                // TODO: Find total storage space of OTG when {@link DocumentFile} API adds support
-                DocumentFile documentFile = OTGUtil.getDocumentFile(path, context, false);
-                documentFile.length();
-                break;
         }
         return size;
     }
@@ -521,9 +497,6 @@ public abstract class AbstractHybridFile {
      */
     public void forEachChildrenFile(Context context, boolean isRoot, OnFileFound onFileFound) {
         switch (mode) {
-            case OTG:
-                OTGUtil.getDocumentFiles(path, context, onFileFound);
-                break;
             case DROPBOX:
             case BOX:
             case GDRIVE:
@@ -547,9 +520,6 @@ public abstract class AbstractHybridFile {
     public ArrayList<HybridFileParcelable> listFiles(Context context, boolean isRoot) {
         ArrayList<HybridFileParcelable> arrayList = new ArrayList<>();
         switch (mode) {
-            case OTG:
-                arrayList = OTGUtil.getDocumentFilesList(path, context);
-                break;
             case DROPBOX:
             case BOX:
             case GDRIVE:
@@ -592,17 +562,6 @@ public abstract class AbstractHybridFile {
         InputStream inputStream;
 
         switch (mode) {
-            case OTG:
-                ContentResolver contentResolver = context.getContentResolver();
-                DocumentFile documentSourceFile = OTGUtil.getDocumentFile(path,
-                        context, false);
-                try {
-                    inputStream = contentResolver.openInputStream(documentSourceFile.getUri());
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                    inputStream = null;
-                }
-                break;
             case DROPBOX:
                 CloudStorage cloudStorageDropbox = dataUtils.getAccount(OpenMode.DROPBOX);
                 Log.d(getClass().getSimpleName(), CloudUtil.stripPath(OpenMode.DROPBOX, path));
@@ -635,17 +594,6 @@ public abstract class AbstractHybridFile {
     public OutputStream getOutputStream(Context context) {
         OutputStream outputStream;
         switch (mode) {
-            case OTG:
-                ContentResolver contentResolver = context.getContentResolver();
-                DocumentFile documentSourceFile = OTGUtil.getDocumentFile(path,
-                        context, true);
-                try {
-                    outputStream = contentResolver.openOutputStream(documentSourceFile.getUri());
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                    outputStream = null;
-                }
-                break;
             default:
                 try {
                     outputStream = FileUtil.getOutputStream(new File(path), context);
@@ -685,10 +633,7 @@ public abstract class AbstractHybridFile {
      * Helper method to check file existence in otg
      */
     public boolean exists(Context context) {
-        if (isOtgFile()) {
-            DocumentFile fileToCheck = OTGUtil.getDocumentFile(path, context, false);
-            return fileToCheck != null;
-        } else return (exists());
+        return (exists());
     }
 
     /**
@@ -709,14 +654,7 @@ public abstract class AbstractHybridFile {
     }
 
     public void mkdir(Context context) {
-        if (isOtgFile()) {
-            if (!exists(context)) {
-                DocumentFile parentDirectory = OTGUtil.getDocumentFile(getParent(context), context, false);
-                if (parentDirectory.isDirectory()) {
-                    parentDirectory.createDirectory(getName(context));
-                }
-            }
-        } else if (isDropBoxFile()) {
+        if (isDropBoxFile()) {
             CloudStorage cloudStorageDropbox = dataUtils.getAccount(OpenMode.DROPBOX);
             try {
                 cloudStorageDropbox.createFolder(CloudUtil.stripPath(OpenMode.DROPBOX, path));
