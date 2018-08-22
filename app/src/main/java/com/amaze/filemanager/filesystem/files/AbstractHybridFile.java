@@ -335,12 +335,7 @@ public abstract class AbstractHybridFile {
     }
 
     public boolean exists() {
-        boolean exists = false;
-        if (isLocal()) {
-            exists = new File(path).exists();
-        }
-
-        return exists;
+        return false;
     }
 
     /**
