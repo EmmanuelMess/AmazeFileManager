@@ -3,6 +3,7 @@ package com.amaze.filemanager.filesystem.files;
 import android.content.Context;
 import com.amaze.filemanager.database.CloudHandler;
 import com.amaze.filemanager.filesystem.files.cloud.BoxHybridFile;
+import com.amaze.filemanager.filesystem.files.cloud.OnedriveHybridFile;
 import com.amaze.filemanager.utils.OTGUtil;
 
 public final class HybridFileHelper {
@@ -18,9 +19,9 @@ public final class HybridFileHelper {
             return new CustomHybridFile(path);
         } else if (path.startsWith(CloudHandler.CLOUD_PREFIX_BOX)) {
             return new BoxHybridFile(path);
-        } /*else if (path.startsWith(CloudHandler.CLOUD_PREFIX_ONE_DRIVE)) {
-            mode = OpenMode.ONEDRIVE;
-        } else if (path.startsWith(CloudHandler.CLOUD_PREFIX_GOOGLE_DRIVE)) {
+        } else if (path.startsWith(CloudHandler.CLOUD_PREFIX_ONE_DRIVE)) {
+            return new OnedriveHybridFile(path);
+        } /*else if (path.startsWith(CloudHandler.CLOUD_PREFIX_GOOGLE_DRIVE)) {
             mode = OpenMode.GDRIVE;
         } else if (path.startsWith(CloudHandler.CLOUD_PREFIX_DROPBOX)) {
             mode = OpenMode.DROPBOX;
