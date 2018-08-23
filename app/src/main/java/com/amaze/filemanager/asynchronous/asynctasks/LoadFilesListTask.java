@@ -33,8 +33,10 @@ import com.amaze.filemanager.database.SortHandler;
 import com.amaze.filemanager.database.UtilsHandler;
 import com.amaze.filemanager.exceptions.CloudPluginException;
 import com.amaze.filemanager.filesystem.files.AbstractHybridFile;
+import com.amaze.filemanager.filesystem.files.HybridFileHelper;
 import com.amaze.filemanager.filesystem.files.HybridFileParcelable;
 import com.amaze.filemanager.filesystem.RootHelper;
+import com.amaze.filemanager.filesystem.files.SmbHybridFile;
 import com.amaze.filemanager.fragments.CloudSheetFragment;
 import com.amaze.filemanager.fragments.MainFragment;
 import com.amaze.filemanager.utils.DataUtils;
@@ -86,8 +88,7 @@ public class LoadFilesListTask extends AsyncTask<Void, Void, Pair<OpenMode, Arra
         AbstractHybridFile hFile = null;
 
         if (openmode == OpenMode.UNKNOWN) {
-            hFile = new AbstractHybridFile(OpenMode.UNKNOWN, path);
-            hFile.generateMode(ma.getActivity());
+            hFile = HybridFileHelper.getHybridFile(ma.getActivity(), path);
             openmode = hFile.getMode();
 
             if (hFile.isSmb()) {
@@ -106,7 +107,7 @@ public class LoadFilesListTask extends AsyncTask<Void, Void, Pair<OpenMode, Arra
         switch (openmode) {
             case SMB:
                 if (hFile == null) {
-                    hFile = new AbstractHybridFile(OpenMode.SMB, path);
+                    hFile = new SmbHybridFile(path);
                 }
 
                 try {

@@ -10,6 +10,7 @@ import com.amaze.filemanager.filesystem.files.cloud.GdriveHybridFile;
 import com.amaze.filemanager.filesystem.files.cloud.OnedriveHybridFile;
 import com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants;
 import com.amaze.filemanager.utils.OTGUtil;
+import com.amaze.filemanager.utils.OpenMode;
 
 import java.io.File;
 
@@ -53,6 +54,34 @@ public final class HybridFileHelper {
             }
         }
     }
+
+    public static AbstractHybridFile getHybridFile(OpenMode openMode, String path) {
+        switch (openMode) {
+            case FILE:
+                return new FileHybridFile(path);
+            case SMB:
+                return new SmbHybridFile(path);
+            case SFTP:
+                return new SftpHybridFile(path);
+            case CUSTOM:
+                return new CustomHybridFile(path);
+            case ROOT:
+                return new RootHybridFile(path);
+            case OTG:
+                return new OtgHybridFile(path);
+            case GDRIVE:
+                return new GdriveHybridFile(path);
+            case DROPBOX:
+                return new DropboxHybridFile(path);
+            case BOX:
+                return new BoxHybridFile(path);
+            case ONEDRIVE:
+                return new OnedriveHybridFile(path);
+            default:
+                throw new IllegalStateException(openMode + " not supported!");
+        }
+    }
+
 
     private static boolean isCustomPath(String path) {
         return  path.equals("0") || path.equals("1") || path.equals("2") || path.equals("3") || path.equals("4") ||
