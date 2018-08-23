@@ -55,6 +55,45 @@ public final class HybridFileHelper {
         }
     }
 
+    public static AbstractHybridFile getHybridFile(Context context, String parentPath, String name, boolean isDirectory) {
+        if (parentPath.startsWith("smb://")) {
+            return new SmbHybridFile(parentPath, name, isDirectory);
+        } else if (parentPath.startsWith("ssh://")) {
+            return new SftpHybridFile(parentPath, name, isDirectory);
+        } else if (parentPath.startsWith(OTGUtil.PREFIX_OTG)) {
+            return new OtgHybridFile(parentPath, name, isDirectory);
+        } else if (isCustomPath(parentPath)) {
+            return new CustomHybridFile(parentPath, name, isDirectory);
+        } else if (parentPath.startsWith(CloudHandler.CLOUD_PREFIX_BOX)) {
+            return new BoxHybridFile(parentPath, name, isDirectory);
+        } else if (parentPath.startsWith(CloudHandler.CLOUD_PREFIX_ONE_DRIVE)) {
+            return new OnedriveHybridFile(parentPath, name, isDirectory);
+        } else if (parentPath.startsWith(CloudHandler.CLOUD_PREFIX_GOOGLE_DRIVE)) {
+            return new GdriveHybridFile(parentPath, name, isDirectory);
+        } else if (parentPath.startsWith(CloudHandler.CLOUD_PREFIX_DROPBOX)) {
+            return new DropboxHybridFile(parentPath, name, isDirectory);
+        } else if(context == null) {
+            return new FileHybridFile(parentPath, name, isDirectory);
+        } else {
+            boolean rootmode = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PreferencesConstants.PREFERENCE_ROOTMODE, false);
+            File file = new File(parentPath);
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+                if (rootmode && !file.canRead()) {
+                    return new RootHybridFile(parentPath, name, isDirectory);
+                }
+                return new FileHybridFile(parentPath, name, isDirectory);
+            } else {
+                if (FileUtil.isOnExtSdCard(file, context)) {
+                    return new FileHybridFile(parentPath, name, isDirectory);
+                } else if (rootmode && !file.canRead()) {
+                    return new RootHybridFile(parentPath, name, isDirectory);
+                }
+
+                return new FileHybridFile(parentPath, name, isDirectory);
+            }
+        }
+    }
+
     public static AbstractHybridFile getHybridFile(OpenMode openMode, String path) {
         switch (openMode) {
             case FILE:
