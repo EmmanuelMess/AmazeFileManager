@@ -83,6 +83,7 @@ import com.amaze.filemanager.database.models.Tab;
 import com.amaze.filemanager.filesystem.CustomFileObserver;
 import com.amaze.filemanager.filesystem.files.FileUtil;
 import com.amaze.filemanager.filesystem.files.AbstractHybridFile;
+import com.amaze.filemanager.filesystem.files.HybridFileHelper;
 import com.amaze.filemanager.filesystem.files.HybridFileParcelable;
 import com.amaze.filemanager.filesystem.MediaStoreHack;
 import com.amaze.filemanager.filesystem.PasteHelper;
@@ -267,8 +268,7 @@ public class MainFragment extends android.support.v4.app.Fragment implements Bot
         initNoFileLayout();
         getSortModes();
         this.setRetainInstance(false);
-        AbstractHybridFile f = new AbstractHybridFile(OpenMode.UNKNOWN, CURRENT_PATH);
-        f.generateMode(getActivity());
+        AbstractHybridFile f = HybridFileHelper.getHybridFile(getActivity(), CURRENT_PATH);
         getMainActivity().getAppbar().getBottomBar().setClickListener();
 
         if (utilsProvider.getAppTheme().equals(AppTheme.LIGHT) && !IS_LIST) {
@@ -1262,7 +1262,7 @@ public class MainFragment extends android.support.v4.app.Fragment implements Bot
             return;
         }
 
-        AbstractHybridFile currentFile = new AbstractHybridFile(openMode, CURRENT_PATH);
+        AbstractHybridFile currentFile = HybridFileHelper.getHybridFile(openMode, CURRENT_PATH);
         if (!results) {
             if (!mRetainSearchTask) {
                 // normal case
@@ -1308,7 +1308,7 @@ public class MainFragment extends android.support.v4.app.Fragment implements Bot
                     FragmentManager fm = getMainActivity().getSupportFragmentManager();
 
                     // getting parent path to resume search from there
-                    String parentPath = new AbstractHybridFile(openMode, CURRENT_PATH).getParent(getActivity());
+                    String parentPath = HybridFileHelper.getHybridFile(openMode, CURRENT_PATH).getParent(getActivity());
                     // don't fuckin' remove this line, we need to change
                     // the path back to parent on back press
                     CURRENT_PATH = parentPath;
@@ -1355,7 +1355,7 @@ public class MainFragment extends android.support.v4.app.Fragment implements Bot
             loadlist(home, false, OpenMode.FILE);
             return;
         }
-        AbstractHybridFile currentFile = new AbstractHybridFile(openMode, CURRENT_PATH);
+        AbstractHybridFile currentFile = HybridFileHelper.getHybridFile(openMode, CURRENT_PATH);
         if (!results) {
             if (selection) {
                 adapter.toggleChecked(false);
@@ -1550,7 +1550,7 @@ public class MainFragment extends android.support.v4.app.Fragment implements Bot
             File f1 = new File(path + "/" + ".nomedia");
             if (!f1.exists()) {
                 try {
-                    getMainActivity().mainActivityHelper.mkFile(new AbstractHybridFile(OpenMode.FILE, f1.getPath()), this);
+                    getMainActivity().mainActivityHelper.mkFile(HybridFileHelper.getHybridFile(OpenMode.FILE, f1.getPath()), this);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
