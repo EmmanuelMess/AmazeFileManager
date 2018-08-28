@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.amaze.filemanager.filesystem.files.AbstractHybridFile;
+import com.amaze.filemanager.filesystem.files.HybridFileHelper;
 import com.amaze.filemanager.filesystem.files.HybridFileParcelable;
 import com.amaze.filemanager.fragments.SearchWorkerFragment;
 import com.amaze.filemanager.utils.OpenMode;
@@ -57,8 +58,7 @@ public class SearchAsyncTask extends AsyncTask<String, HybridFileParcelable, Voi
     protected Void doInBackground(String... params) {
 
         String path = params[0];
-        AbstractHybridFile file = new AbstractHybridFile(mOpenMode, path);
-        file.generateMode(activity.get());
+        AbstractHybridFile file = HybridFileHelper.getHybridFile(activity.get(), path);
         if (file.isSmb()) return null;
 
         // level 1

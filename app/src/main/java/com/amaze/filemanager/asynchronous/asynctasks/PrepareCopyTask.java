@@ -16,6 +16,7 @@ import com.amaze.filemanager.R;
 import com.amaze.filemanager.activities.MainActivity;
 import com.amaze.filemanager.asynchronous.services.CopyService;
 import com.amaze.filemanager.filesystem.files.AbstractHybridFile;
+import com.amaze.filemanager.filesystem.files.HybridFileHelper;
 import com.amaze.filemanager.filesystem.files.HybridFileParcelable;
 import com.amaze.filemanager.fragments.MainFragment;
 import com.amaze.filemanager.utils.DataUtils;
@@ -104,7 +105,7 @@ public class PrepareCopyTask extends AsyncTask<ArrayList<HybridFileParcelable>, 
             return null;
         }
 
-        AbstractHybridFile destination = new AbstractHybridFile(openMode, path);
+        AbstractHybridFile destination = HybridFileHelper.getHybridFile(context, path);
         destination.generateMode(context);
 
         if (move && destination.getMode() == openMode

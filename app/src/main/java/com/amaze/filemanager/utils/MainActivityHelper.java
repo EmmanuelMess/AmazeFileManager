@@ -51,6 +51,7 @@ import com.amaze.filemanager.database.CryptHandler;
 import com.amaze.filemanager.database.models.EncryptedEntry;
 import com.amaze.filemanager.filesystem.files.AbstractHybridFile;
 import com.amaze.filemanager.filesystem.files.FileUtil;
+import com.amaze.filemanager.filesystem.files.HybridFileHelper;
 import com.amaze.filemanager.filesystem.files.HybridFileParcelable;
 import com.amaze.filemanager.filesystem.Operations;
 import com.amaze.filemanager.filesystem.compressed.CompressedHelper;
@@ -137,7 +138,7 @@ public class MainActivityHelper {
     void mkdir(final OpenMode openMode, final String path, final MainFragment ma) {
         mk(R.string.newfolder, "", (dialog, which) -> {
             EditText textfield = dialog.getCustomView().findViewById(R.id.singleedittext_input);
-            mkDir(new AbstractHybridFile(openMode, path + "/" + textfield.getText().toString()), ma);
+            mkDir(HybridFileHelper.getHybridFile(openMode, path + "/" + textfield.getText().toString()), ma);
             dialog.dismiss();
         }, (text) -> {
             boolean isValidFilename = FileUtil.isValidFilename(text);
@@ -282,7 +283,7 @@ public class MainActivityHelper {
         final Toast toast=Toast.makeText(context, context.getString(R.string.renaming),
                 Toast.LENGTH_SHORT);
         toast.show();
-        Operations.rename(new AbstractHybridFile(mode, oldPath), new AbstractHybridFile(mode, newPath), rootmode, context, new Operations.ErrorCallBack() {
+        Operations.rename(HybridFileHelper.getHybridFile(mode, oldPath), HybridFileHelper.getHybridFile(mode, newPath), rootmode, context, new Operations.ErrorCallBack() {
             @Override
             public void exists(AbstractHybridFile file) {
                 context.runOnUiThread(() -> {

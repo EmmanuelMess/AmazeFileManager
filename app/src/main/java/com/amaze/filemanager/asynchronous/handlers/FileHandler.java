@@ -9,6 +9,7 @@ import android.view.View;
 import com.amaze.filemanager.adapters.RecyclerAdapter;
 import com.amaze.filemanager.filesystem.CustomFileObserver;
 import com.amaze.filemanager.filesystem.files.AbstractHybridFile;
+import com.amaze.filemanager.filesystem.files.HybridFileHelper;
 import com.amaze.filemanager.fragments.MainFragment;
 
 import java.io.File;
@@ -46,7 +47,7 @@ public class FileHandler extends Handler {
                 main.goBack();
                 break;
             case CustomFileObserver.NEW_ITEM:
-                AbstractHybridFile fileCreated = new AbstractHybridFile(main.openMode,
+                AbstractHybridFile fileCreated = HybridFileHelper.getHybridFile(main.openMode,
                         main.getCurrentPath() + "/" + path);
                 main.getElementsList().add(fileCreated.generateLayoutElement(useThumbs));
                 break;

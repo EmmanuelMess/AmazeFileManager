@@ -57,6 +57,7 @@ import com.amaze.filemanager.database.CloudHandler;
 import com.amaze.filemanager.filesystem.files.AbstractHybridFile;
 import com.amaze.filemanager.filesystem.RootHelper;
 import com.amaze.filemanager.filesystem.SingletonUsbOtg;
+import com.amaze.filemanager.filesystem.files.HybridFileHelper;
 import com.amaze.filemanager.fragments.AppsListFragment;
 import com.amaze.filemanager.fragments.CloudSheetFragment;
 import com.amaze.filemanager.fragments.FtpServerFragment;
@@ -528,8 +529,7 @@ public class Drawer implements NavigationView.OnNavigationItemSelectedListener {
         }
 
         if (pendingPath != null) {
-            AbstractHybridFile hFile = new AbstractHybridFile(OpenMode.UNKNOWN, pendingPath);
-            hFile.generateMode(mainActivity);
+            AbstractHybridFile hFile = HybridFileHelper.getHybridFile(mainActivity, pendingPath);
             if (hFile.isSimpleFile()) {
                 FileUtils.openFile(new File(pendingPath), mainActivity, mainActivity.getPrefs());
                 pendingPath = null;

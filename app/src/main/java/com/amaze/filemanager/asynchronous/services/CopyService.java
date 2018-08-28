@@ -42,9 +42,7 @@ import com.amaze.filemanager.asynchronous.asynctasks.DeleteTask;
 import com.amaze.filemanager.database.CryptHandler;
 import com.amaze.filemanager.database.models.EncryptedEntry;
 import com.amaze.filemanager.exceptions.ShellNotRunningException;
-import com.amaze.filemanager.filesystem.files.AbstractHybridFile;
-import com.amaze.filemanager.filesystem.files.FileUtil;
-import com.amaze.filemanager.filesystem.files.HybridFileParcelable;
+import com.amaze.filemanager.filesystem.files.*;
 import com.amaze.filemanager.filesystem.Operations;
 import com.amaze.filemanager.filesystem.RootHelper;
 import com.amaze.filemanager.ui.notifications.NotificationConstants;
@@ -363,12 +361,11 @@ public class CopyService extends AbstractProgressiveService {
                             if (targetPath.contains(getExternalCacheDir().getPath())) {
                                 // the target open mode is not the one we're currently in!
                                 // we're processing the file for cache
-                                hFile = new AbstractHybridFile(OpenMode.FILE, targetPath, sourceFiles.get(i).getName(),
-                                        f1.isDirectory());
+                                hFile = new FileHybridFile(targetPath, sourceFiles.get(i).getName(), f1.isDirectory());
                             } else {
 
                                 // the target open mode is where we're currently at
-                                hFile = new AbstractHybridFile(mode, targetPath, sourceFiles.get(i).getName(),
+                                hFile = HybridFileHelper.getHybridFile(mode, targetPath, sourceFiles.get(i).getName(),
                                         f1.isDirectory());
                             }
 
