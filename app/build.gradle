@@ -166,6 +166,10 @@ dependencies {
 
     implementation 'com.android.support:multidex:1.0.2'//Multiple dex files
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+
+    //Complete list library
+    implementation 'eu.davidea:flexible-adapter:5.0.5'
+    implementation 'eu.davidea:flexible-adapter-ui:1.0.0-b5'
 }
 
 configurations.all {
