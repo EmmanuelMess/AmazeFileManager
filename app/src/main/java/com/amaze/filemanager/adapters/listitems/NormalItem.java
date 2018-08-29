@@ -14,6 +14,7 @@ import eu.davidea.flexibleadapter.items.ISectionable;
 import java.util.List;
 
 import static com.amaze.filemanager.adapters.RecyclerAdapter.TYPE_ITEM;
+import static com.amaze.filemanager.adapters.RecyclerAdapter.VIEW_GENERIC;
 
 public class NormalItem extends AbstractFlexibleItem<ItemViewHolder> implements ISectionable {
     public static final int CHECKED = 0, NOT_CHECKED = 1, UNCHECKABLE = 2;
