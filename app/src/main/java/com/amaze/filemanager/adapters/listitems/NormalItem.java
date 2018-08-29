@@ -1,52 +1,34 @@
 package com.amaze.filemanager.adapters.listitems;
 
 import android.view.View;
+import com.amaze.filemanager.R;
 import com.amaze.filemanager.adapters.data.LayoutElementParcelable;
+import com.amaze.filemanager.adapters.glide.RecyclerPreloadSizeProvider;
 import com.amaze.filemanager.adapters.holders.ItemViewHolder;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
 import eu.davidea.flexibleadapter.items.IFlexible;
+import eu.davidea.flexibleadapter.items.IHeader;
+import eu.davidea.flexibleadapter.items.ISectionable;
 
 import java.util.List;
 
 import static com.amaze.filemanager.adapters.RecyclerAdapter.TYPE_ITEM;
 
-public class NormalItem extends AbstractFlexibleItem<ItemViewHolder> {
+public class NormalItem extends AbstractFlexibleItem<ItemViewHolder> implements ISectionable {
     public static final int CHECKED = 0, NOT_CHECKED = 1, UNCHECKABLE = 2;
+
+    private final boolean isList;
+    private final RecyclerPreloadSizeProvider sizeProvider;
 
     private LayoutElementParcelable elem;
     private String id;
-    private int specialType;
-    private boolean checked;
-    private boolean animate;
 
-    public NormalItem(String id, LayoutElementParcelable elem) {
+    public NormalItem(boolean isList, RecyclerPreloadSizeProvider sizeProvider, String id, LayoutElementParcelable elem) {
+        this.isList = isList;
+        this.sizeProvider = sizeProvider;
         this.id = id;
         this.elem = elem;
-        specialType = TYPE_ITEM;
-    }
-
-    public NormalItem(String id, int specialType) {
-        this.id = id;
-        this.specialType = specialType;
-    }
-
-    public void setChecked(boolean checked) {
-        if(specialType == TYPE_ITEM) this.checked = checked;
-    }
-
-    public int getChecked() {
-        if(checked) return CHECKED;
-        else if(specialType == TYPE_ITEM) return NOT_CHECKED;
-        else return UNCHECKABLE;
-    }
-
-    public void setAnimate(boolean animating) {
-        if(specialType == -1) this.animate = animating;
-    }
-
-    public boolean getAnimating() {
-        return animate;
     }
 
     @Override
@@ -65,16 +47,31 @@ public class NormalItem extends AbstractFlexibleItem<ItemViewHolder> {
 
     @Override
     public int getLayoutRes() {
-        return 0;
+        if(isList) {
+            return R.layout.rowlayout;
+        } else {
+            return R.layout.griditem;
+        }
     }
 
     @Override
     public ItemViewHolder createViewHolder(View view, FlexibleAdapter<IFlexible> adapter) {
-        return null;
+        if (isList) {
+            sizeProvider.addView(VIEW_GENERIC, view.findViewById(R.id.generic_icon));
+            sizeProvider.addView(VIEW_PICTURE, view.findViewById(R.id.picture_icon));
+            sizeProvider.addView(VIEW_APK, view.findViewById(R.id.apk_icon));
+        } else {
+            sizeProvider.addView(VIEW_GENERIC, view.findViewById(R.id.generic_icon));
+            sizeProvider.addView(VIEW_THUMB, view.findViewById(R.id.icon_thumb));
+        }
+        sizeProvider.closeOffAddition();
+
+        return new ItemViewHolder(view);
     }
 
     @Override
     public void bindViewHolder(FlexibleAdapter<IFlexible> adapter, ItemViewHolder holder, int position, List<Object> payloads) {
 
     }
+
 }

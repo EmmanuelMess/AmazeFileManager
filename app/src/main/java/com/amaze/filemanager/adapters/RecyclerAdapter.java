@@ -413,50 +413,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view;
-
-        switch (viewType) {
-            case TYPE_HEADER_FOLDERS:
-            case TYPE_HEADER_FILES:
-
-                if (mainFrag.IS_LIST) {
-
-                    view = mInflater.inflate(R.layout.list_header, parent, false);
-                } else {
-
-                    view = mInflater.inflate(R.layout.grid_header, parent, false);
-                }
-
-                int type = viewType == TYPE_HEADER_FOLDERS ? SpecialViewHolder.HEADER_FOLDERS : SpecialViewHolder.HEADER_FILES;
-
-                return new SpecialViewHolder(context, view, utilsProvider, type);
-            case TYPE_ITEM:
-                if (mainFrag.IS_LIST) {
-                    view = mInflater.inflate(R.layout.rowlayout, parent, false);
-                    sizeProvider.addView(VIEW_GENERIC, view.findViewById(R.id.generic_icon));
-                    sizeProvider.addView(VIEW_PICTURE, view.findViewById(R.id.picture_icon));
-                    sizeProvider.addView(VIEW_APK, view.findViewById(R.id.apk_icon));
-                } else {
-                    view = mInflater.inflate(R.layout.griditem, parent, false);
-                    sizeProvider.addView(VIEW_GENERIC, view.findViewById(R.id.generic_icon));
-                    sizeProvider.addView(VIEW_THUMB, view.findViewById(R.id.icon_thumb));
-                }
-                sizeProvider.closeOffAddition();
-
-                return new ItemViewHolder(view);
-            case EMPTY_LAST_ITEM:
-                int totalFabHeight = (int) context.getResources().getDimension(R.dimen.fab_height),
-                        marginFab = (int) context.getResources().getDimension(R.dimen.fab_margin);
-                view = new View(context);
-                view.setMinimumHeight(totalFabHeight + marginFab);
-                return new EmptyViewHolder(view);
-            default:
-                throw new IllegalArgumentException("Illegal: " + viewType);
-        }
-    }
-
-    @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder vholder, int p) {
         if (vholder instanceof ItemViewHolder) {
             final ItemViewHolder holder = (ItemViewHolder) vholder;

@@ -9,6 +9,8 @@ import com.amaze.filemanager.R;
 import com.amaze.filemanager.utils.Utils;
 import com.amaze.filemanager.utils.provider.UtilitiesProvider;
 import com.amaze.filemanager.utils.theme.AppTheme;
+import eu.davidea.flexibleadapter.FlexibleAdapter;
+import eu.davidea.viewholders.FlexibleViewHolder;
 
 /**
  * Check {@link com.amaze.filemanager.adapters.RecyclerAdapter}'s doc.
@@ -17,15 +19,15 @@ import com.amaze.filemanager.utils.theme.AppTheme;
  *         on 29/5/2017, at 04:22.
  */
 
-public class SpecialViewHolder extends RecyclerView.ViewHolder {
+public class SpecialViewHolder extends FlexibleViewHolder {
     public static final int HEADER_FILES = 0, HEADER_FOLDERS = 1;
     // each data item is just a string in this case
     public final TextView txtTitle;
     public final int type;
 
-    public SpecialViewHolder(Context c, View view, UtilitiesProvider utilsProvider,
+    public SpecialViewHolder(View view, FlexibleAdapter flexibleAdapter, UtilitiesProvider utilsProvider,
                              int type) {
-        super(view);
+        super(view, flexibleAdapter);
 
         this.type = type;
         txtTitle = view.findViewById(R.id.text);
@@ -45,9 +47,9 @@ public class SpecialViewHolder extends RecyclerView.ViewHolder {
         //    view.setBackgroundResource(R.color.holo_dark_background);
 
         if (utilsProvider.getAppTheme().equals(AppTheme.LIGHT)) {
-            txtTitle.setTextColor(Utils.getColor(c, R.color.text_light));
+            txtTitle.setTextColor(Utils.getColor(view.getContext(), R.color.text_light));
         } else {
-            txtTitle.setTextColor(Utils.getColor(c, R.color.text_dark));
+            txtTitle.setTextColor(Utils.getColor(view.getContext(), R.color.text_dark));
         }
     }
 
