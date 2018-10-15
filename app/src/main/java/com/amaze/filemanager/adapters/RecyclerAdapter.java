@@ -834,7 +834,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target target, boolean isFirstResource) {
                 new Handler(msg -> {
-                    viewHolder.genericIcon.setVisibility(View.VISIBLE);
                     GlideApp.with(mainFrag).load(R.drawable.ic_broken_image_white_24dp).into(viewHolder.genericIcon);
                     return false;
                 }).obtainMessage().sendToTarget();
