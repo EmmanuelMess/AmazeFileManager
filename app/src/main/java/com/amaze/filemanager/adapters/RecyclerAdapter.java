@@ -541,8 +541,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
                 // resetting icons visibility
                 holder.genericIcon.setVisibility(View.VISIBLE);
-                holder.pictureIcon.setVisibility(View.INVISIBLE);
-                holder.apkIcon.setVisibility(View.INVISIBLE);
+                holder.pictureIcon.setVisibility(View.GONE);
+                holder.apkIcon.setVisibility(View.GONE);
                 holder.checkImageView.setVisibility(View.INVISIBLE);
 
                 // setting icons for various cases
