@@ -658,6 +658,12 @@ public class FileUtils {
             case SFTP:
                 return true;
             default:
+                if(currentFile.isRoot()) {
+                    return !currentFile.getName(context).equals("/");
+                }
+
+
+
                 return true;// TODO: 29/9/2017 there might be nothing to go back to (check parent)
         }
     }
