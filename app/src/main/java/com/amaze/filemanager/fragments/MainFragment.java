@@ -1284,17 +1284,17 @@ public class MainFragment extends android.support.v4.app.Fragment implements Bot
                             loadlist(home, false, OpenMode.FILE);
                         else
                             loadlist(currentFile.getParent(getContext()), true, openMode);
-                    } else if (CURRENT_PATH.equals("/") || CURRENT_PATH.equals(home) ||
-                            CURRENT_PATH.equals(OTGUtil.PREFIX_OTG + "/")
+                    } else if (CURRENT_PATH.equals("/") || CURRENT_PATH.equals(home)
+                            || CURRENT_PATH.equals(OTGUtil.PREFIX_OTG + "/")
                             || CURRENT_PATH.equals(CloudHandler.CLOUD_PREFIX_BOX + "/")
                             || CURRENT_PATH.equals(CloudHandler.CLOUD_PREFIX_DROPBOX + "/")
                             || CURRENT_PATH.equals(CloudHandler.CLOUD_PREFIX_GOOGLE_DRIVE + "/")
                             || CURRENT_PATH.equals(CloudHandler.CLOUD_PREFIX_ONE_DRIVE + "/")
-                            )
+                            || !FileUtils.canGoBack(getContext(), currentFile))  {
                         getMainActivity().exit();
-                    else if (FileUtils.canGoBack(getContext(), currentFile)) {
+                    } else {
                         loadlist(currentFile.getParent(getContext()), true, openMode);
-                    } else getMainActivity().exit();
+                    }
                 }
             } else {
                 // case when we had pressed on an item from search results and wanna go back
