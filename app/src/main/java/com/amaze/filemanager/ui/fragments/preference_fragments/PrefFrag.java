@@ -22,6 +22,13 @@ package com.amaze.filemanager.ui.fragments.preference_fragments;
 
 import static com.amaze.filemanager.R.string.feedback;
 import static com.amaze.filemanager.ui.activities.PreferencesActivity.START_PREFERENCE;
+import static com.amaze.filemanager.ui.preference.PreferencesConstants.PreferenceFragmentKey.ABOUT;
+import static com.amaze.filemanager.ui.preference.PreferencesConstants.PreferenceFragmentKey.ADVANCED_SEARCH;
+import static com.amaze.filemanager.ui.preference.PreferencesConstants.PreferenceFragmentKey.FEEDBACK;
+import static com.amaze.filemanager.ui.preference.PreferencesConstants.PreferenceFragmentKey.FOLDERS;
+import static com.amaze.filemanager.ui.preference.PreferencesConstants.PreferenceFragmentKey.COLORS;
+import static com.amaze.filemanager.ui.preference.PreferencesConstants.PreferenceFragmentKey.THEME;
+import static com.amaze.filemanager.ui.preference.PreferencesConstants.PreferenceFragmentKey.QUICKACCESSES;
 import static com.amaze.filemanager.utils.Utils.EMAIL_SUPPORT;
 
 import java.io.IOException;
@@ -73,15 +80,15 @@ public class PrefFrag extends PreferenceFragmentCompat
 
   private static final String[] PREFERENCE_KEYS = {
     PreferencesConstants.PREFERENCE_GRID_COLUMNS,
-    PreferencesConstants.FRAGMENT_THEME,
+          THEME,
     PreferencesConstants.PREFERENCE_ROOTMODE,
     PreferencesConstants.PREFERENCE_SHOW_HIDDENFILES,
-    PreferencesConstants.FRAGMENT_FEEDBACK,
-    PreferencesConstants.FRAGMENT_ABOUT,
-    PreferencesConstants.FRAGMENT_COLORS,
-    PreferencesConstants.FRAGMENT_FOLDERS,
-    PreferencesConstants.FRAGMENT_QUICKACCESSES,
-    PreferencesConstants.FRAGMENT_ADVANCED_SEARCH,
+          FEEDBACK,
+          ABOUT,
+          COLORS,
+          FOLDERS,
+          QUICKACCESSES,
+          ADVANCED_SEARCH,
     PreferencesConstants.PREFERENCE_ZIP_EXTRACT_PATH,
     PreferencesConstants.PREFERENCE_CLEAR_OPEN_FILE,
     PreferencesConstants.PREFERENCE_DRAG_AND_DROP_PREFERENCE
@@ -242,9 +249,9 @@ public class PrefFrag extends PreferenceFragmentCompat
                 });
         dragDialogBuilder.build().show();
         return true;
-      case PreferencesConstants.FRAGMENT_THEME:
+      case THEME:
         sort = getResources().getStringArray(R.array.theme);
-        current = Integer.parseInt(sharedPref.getString(PreferencesConstants.FRAGMENT_THEME, "0"));
+        current = Integer.parseInt(sharedPref.getString(THEME, "0"));
         builder = new MaterialDialog.Builder(getActivity());
         // builder.theme(utilsProvider.getAppTheme().getMaterialDialogTheme());
         builder
@@ -260,7 +267,7 @@ public class PrefFrag extends PreferenceFragmentCompat
         builder.title(R.string.theme);
         builder.build().show();
         return true;
-      case PreferencesConstants.FRAGMENT_FEEDBACK:
+      case FEEDBACK:
         Intent emailIntent = Utils.buildEmailIntent(null, EMAIL_SUPPORT);
 
         PackageManager packageManager = getActivity().getPackageManager();
@@ -277,21 +284,21 @@ public class PrefFrag extends PreferenceFragmentCompat
                   Toast.LENGTH_LONG)
               .show();
         return false;
-      case PreferencesConstants.FRAGMENT_ABOUT:
+      case ABOUT:
         startActivity(new Intent(getActivity(), AboutActivity.class));
         return false;
         /*FROM HERE BE FRAGMENTS*/
-      case PreferencesConstants.FRAGMENT_COLORS:
+      case COLORS:
         ((PreferencesActivity) getActivity()).selectItem(PreferencesActivity.COLORS_PREFERENCE);
         return true;
-      case PreferencesConstants.FRAGMENT_FOLDERS:
+      case FOLDERS:
         ((PreferencesActivity) getActivity()).selectItem(PreferencesActivity.FOLDERS_PREFERENCE);
         return true;
-      case PreferencesConstants.FRAGMENT_QUICKACCESSES:
+      case QUICKACCESSES:
         ((PreferencesActivity) getActivity())
             .selectItem(PreferencesActivity.QUICKACCESS_PREFERENCE);
         return true;
-      case PreferencesConstants.FRAGMENT_ADVANCED_SEARCH:
+      case ADVANCED_SEARCH:
         ((PreferencesActivity) getActivity())
             .selectItem(PreferencesActivity.ADVANCEDSEARCH_PREFERENCE);
         return true;

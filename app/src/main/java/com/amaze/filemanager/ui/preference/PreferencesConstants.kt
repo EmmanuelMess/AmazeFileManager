@@ -19,18 +19,16 @@
  */
 package com.amaze.filemanager.ui.preference
 
-/** @author Emmanuel Messulam <emmanuelbendavid></emmanuelbendavid>@gmail.com> on 1/1/2018, at 21:16.
- */
 object PreferencesConstants {
-    // START fragments
-    const val FRAGMENT_THEME = "theme"
-    const val FRAGMENT_COLORS = "colors"
-    const val FRAGMENT_FOLDERS = "sidebar_folders"
-    const val FRAGMENT_QUICKACCESSES = "sidebar_quickaccess"
-    const val FRAGMENT_ADVANCED_SEARCH = "advancedsearch"
-    const val FRAGMENT_ABOUT = "about"
-    const val FRAGMENT_FEEDBACK = "feedback"
-    // END fragments
+    object PreferenceFragmentKey {
+        const val THEME = "theme"
+        const val COLORS = "colors"
+        const val FOLDERS = "sidebar_folders"
+        const val QUICKACCESSES = "sidebar_quickaccess"
+        const val ADVANCED_SEARCH = "advancedsearch"
+        const val ABOUT = "about"
+        const val FEEDBACK = "feedback"
+    }
 
     // START preferences.xml constants
     const val PREFERENCE_INTELLI_HIDE_TOOLBAR = "intelliHideToolbar"

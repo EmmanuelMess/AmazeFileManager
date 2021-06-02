@@ -20,9 +20,9 @@
 
 package com.amaze.filemanager.ui.theme;
 
-import com.amaze.filemanager.ui.preference.PreferencesConstants;
-
 import android.content.SharedPreferences;
+
+import static com.amaze.filemanager.ui.preference.PreferencesConstants.PreferenceFragmentKey.THEME;
 
 /** Saves and restores the AppTheme */
 public class AppThemeManager {
@@ -31,7 +31,7 @@ public class AppThemeManager {
 
   public AppThemeManager(SharedPreferences preferences) {
     this.preferences = preferences;
-    String themeId = preferences.getString(PreferencesConstants.FRAGMENT_THEME, "0");
+    String themeId = preferences.getString(THEME, "0");
     appTheme = AppTheme.getTheme(Integer.parseInt(themeId)).getSimpleTheme();
   }
 
@@ -50,7 +50,7 @@ public class AppThemeManager {
     this.appTheme = appTheme;
     preferences
         .edit()
-        .putString(PreferencesConstants.FRAGMENT_THEME, Integer.toString(appTheme.getId()))
+        .putString(THEME, Integer.toString(appTheme.getId()))
         .apply();
     return this;
   }
