@@ -20,7 +20,7 @@
 
 package com.amaze.filemanager.ui.theme;
 
-import com.amaze.filemanager.ui.fragments.preference_fragments.PreferencesConstants;
+import com.amaze.filemanager.ui.preference.PreferencesConstants;
 
 import android.content.SharedPreferences;
 

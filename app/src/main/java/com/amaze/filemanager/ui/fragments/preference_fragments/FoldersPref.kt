@@ -37,6 +37,7 @@ import com.amaze.filemanager.database.models.OperationData
 import com.amaze.filemanager.databinding.DialogTwoedittextsBinding
 import com.amaze.filemanager.filesystem.files.FileUtils
 import com.amaze.filemanager.ui.activities.superclasses.ThemedActivity
+import com.amaze.filemanager.ui.preference.PreferencesConstants
 import com.amaze.filemanager.ui.views.preference.PathSwitchPreference
 import com.amaze.filemanager.utils.DataUtils
 import com.amaze.filemanager.utils.SimpleTextWatcher

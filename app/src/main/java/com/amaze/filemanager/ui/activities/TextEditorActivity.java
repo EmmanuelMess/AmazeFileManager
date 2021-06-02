@@ -22,7 +22,7 @@ package com.amaze.filemanager.ui.activities;
 
 import static com.amaze.filemanager.filesystem.EditableFileAbstraction.Scheme.CONTENT;
 import static com.amaze.filemanager.filesystem.EditableFileAbstraction.Scheme.FILE;
-import static com.amaze.filemanager.ui.fragments.preference_fragments.PreferencesConstants.PREFERENCE_TEXTEDITOR_NEWSTACK;
+import static com.amaze.filemanager.ui.preference.PreferencesConstants.PREFERENCE_TEXTEDITOR_NEWSTACK;
 
 import java.io.File;
 import java.util.ArrayList;

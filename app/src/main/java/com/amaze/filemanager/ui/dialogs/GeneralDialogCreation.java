@@ -22,7 +22,7 @@ package com.amaze.filemanager.ui.dialogs;
 
 import static android.os.Build.VERSION_CODES.M;
 import static com.amaze.filemanager.filesystem.files.FileUtils.toHybridFileArrayList;
-import static com.amaze.filemanager.ui.fragments.preference_fragments.PreferencesConstants.PREFERENCE_SORTBY_ONLY_THIS;
+import static com.amaze.filemanager.ui.preference.PreferencesConstants.PREFERENCE_SORTBY_ONLY_THIS;
 
 import java.io.File;
 import java.io.IOException;
@@ -64,7 +64,7 @@ import com.amaze.filemanager.filesystem.root.ChangeFilePermissionsCommand;
 import com.amaze.filemanager.ui.activities.MainActivity;
 import com.amaze.filemanager.ui.activities.superclasses.ThemedActivity;
 import com.amaze.filemanager.ui.fragments.MainFragment;
-import com.amaze.filemanager.ui.fragments.preference_fragments.PreferencesConstants;
+import com.amaze.filemanager.ui.preference.PreferencesConstants;
 import com.amaze.filemanager.ui.theme.AppTheme;
 import com.amaze.filemanager.ui.views.WarnableTextInputLayout;
 import com.amaze.filemanager.ui.views.WarnableTextInputValidator;

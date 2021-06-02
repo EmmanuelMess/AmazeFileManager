@@ -38,6 +38,7 @@ import com.amaze.filemanager.ui.activities.PreferencesActivity;
 import com.amaze.filemanager.ui.activities.superclasses.BasicActivity;
 import com.amaze.filemanager.ui.activities.superclasses.ThemedActivity;
 import com.amaze.filemanager.ui.dialogs.OpenFileDialogFragment;
+import com.amaze.filemanager.ui.preference.PreferencesConstants;
 import com.amaze.filemanager.ui.provider.UtilitiesProvider;
 import com.amaze.filemanager.ui.theme.AppTheme;
 import com.amaze.filemanager.ui.views.preference.CheckBox;

@@ -32,7 +32,7 @@ import com.amaze.filemanager.ui.fragments.preference_fragments.AdvancedSearchPre
 import com.amaze.filemanager.ui.fragments.preference_fragments.ColorPref;
 import com.amaze.filemanager.ui.fragments.preference_fragments.FoldersPref;
 import com.amaze.filemanager.ui.fragments.preference_fragments.PrefFrag;
-import com.amaze.filemanager.ui.fragments.preference_fragments.PreferencesConstants;
+import com.amaze.filemanager.ui.preference.PreferencesConstants;
 import com.amaze.filemanager.ui.fragments.preference_fragments.QuickAccessPref;
 import com.amaze.filemanager.ui.theme.AppTheme;
 import com.amaze.filemanager.utils.PreferenceUtils;

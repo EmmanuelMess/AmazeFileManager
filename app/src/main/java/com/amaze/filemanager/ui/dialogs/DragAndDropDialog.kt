@@ -35,7 +35,7 @@ import com.amaze.filemanager.R
 import com.amaze.filemanager.asynchronous.asynctasks.PrepareCopyTask
 import com.amaze.filemanager.filesystem.HybridFileParcelable
 import com.amaze.filemanager.ui.activities.MainActivity
-import com.amaze.filemanager.ui.fragments.preference_fragments.PreferencesConstants
+import com.amaze.filemanager.ui.preference.PreferencesConstants
 import com.amaze.filemanager.utils.safeLet
 
 class DragAndDropDialog : DialogFragment() {

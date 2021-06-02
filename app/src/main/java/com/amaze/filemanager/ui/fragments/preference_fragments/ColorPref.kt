@@ -40,6 +40,7 @@ import com.amaze.filemanager.ui.activities.PreferencesActivity
 import com.amaze.filemanager.ui.colors.ColorPreference
 import com.amaze.filemanager.ui.colors.UserColorPreferences
 import com.amaze.filemanager.ui.dialogs.ColorPickerDialog
+import com.amaze.filemanager.ui.preference.PreferencesConstants
 import com.amaze.filemanager.ui.views.preference.InvalidablePreferenceCategory
 import com.amaze.filemanager.ui.views.preference.SelectedColorsPreference
 

@@ -31,9 +31,8 @@ import com.amaze.filemanager.filesystem.HybridFile
 import com.amaze.filemanager.filesystem.HybridFileParcelable
 import com.amaze.filemanager.ui.dialogs.DragAndDropDialog
 import com.amaze.filemanager.ui.fragments.MainFragment
-import com.amaze.filemanager.ui.fragments.preference_fragments.PreferencesConstants
+import com.amaze.filemanager.ui.preference.PreferencesConstants
 import com.amaze.filemanager.utils.DataUtils
-import java.util.*
 import kotlin.collections.ArrayList
 
 class RecyclerAdapterDragListener(

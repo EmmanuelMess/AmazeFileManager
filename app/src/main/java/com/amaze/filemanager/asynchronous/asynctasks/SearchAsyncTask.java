@@ -20,7 +20,7 @@
 
 package com.amaze.filemanager.asynchronous.asynctasks;
 
-import static com.amaze.filemanager.ui.fragments.preference_fragments.PreferencesConstants.PREFERENCE_SHOW_HIDDENFILES;
+import static com.amaze.filemanager.ui.preference.PreferencesConstants.PREFERENCE_SHOW_HIDDENFILES;
 
 import java.lang.ref.WeakReference;
 import java.util.regex.Pattern;

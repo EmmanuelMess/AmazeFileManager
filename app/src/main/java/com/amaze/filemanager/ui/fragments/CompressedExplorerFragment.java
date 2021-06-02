@@ -21,7 +21,7 @@
 package com.amaze.filemanager.ui.fragments;
 
 import static com.amaze.filemanager.filesystem.compressed.CompressedHelper.SEPARATOR;
-import static com.amaze.filemanager.ui.fragments.preference_fragments.PreferencesConstants.PREFERENCE_COLORED_NAVIGATION;
+import static com.amaze.filemanager.ui.preference.PreferencesConstants.PREFERENCE_COLORED_NAVIGATION;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ import com.amaze.filemanager.filesystem.files.FileUtils;
 import com.amaze.filemanager.ui.activities.MainActivity;
 import com.amaze.filemanager.ui.activities.superclasses.BasicActivity;
 import com.amaze.filemanager.ui.colors.ColorPreferenceHelper;
-import com.amaze.filemanager.ui.fragments.preference_fragments.PreferencesConstants;
+import com.amaze.filemanager.ui.preference.PreferencesConstants;
 import com.amaze.filemanager.ui.provider.UtilitiesProvider;
 import com.amaze.filemanager.ui.theme.AppTheme;
 import com.amaze.filemanager.ui.views.DividerItemDecoration;
