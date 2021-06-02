@@ -22,6 +22,12 @@ package com.amaze.filemanager.adapters;
 
 import static com.amaze.filemanager.filesystem.compressed.CompressedHelper.*;
 import static com.amaze.filemanager.ui.preference.PreferencesConstants.PREFERENCE_COLORIZE_ICONS;
+import static com.amaze.filemanager.ui.preference.PreferencesConstants.PREFERENCE_DRAG_AND_DROP_PREFERENCE;
+import static com.amaze.filemanager.ui.preference.PreferencesConstants.DragAndDrop.DRAG_DEFAULT;
+import static com.amaze.filemanager.ui.preference.PreferencesConstants.DragAndDrop.PREFERENCE_DRAG_REMEMBER_COPY;
+import static com.amaze.filemanager.ui.preference.PreferencesConstants.DragAndDrop.PREFERENCE_DRAG_REMEMBER_MOVE;
+import static com.amaze.filemanager.ui.preference.PreferencesConstants.DragAndDrop.PREFERENCE_DRAG_TO_MOVE_COPY;
+import static com.amaze.filemanager.ui.preference.PreferencesConstants.DragAndDrop.DRAG_TO_SELECT;
 import static com.amaze.filemanager.ui.preference.PreferencesConstants.PREFERENCE_SHOW_FILE_SIZE;
 import static com.amaze.filemanager.ui.preference.PreferencesConstants.PREFERENCE_SHOW_GOBACK_BUTTON;
 import static com.amaze.filemanager.ui.preference.PreferencesConstants.PREFERENCE_SHOW_HEADERS;
@@ -155,8 +161,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         sharedPrefs.getBoolean(PreferencesConstants.PREFERENCE_ENABLE_MARQUEE_FILENAME, true);
     this.dragAndDropPreference =
         sharedPrefs.getInt(
-            PreferencesConstants.PREFERENCE_DRAG_AND_DROP_PREFERENCE,
-            PreferencesConstants.PREFERENCE_DRAG_TO_SELECT);
+            PREFERENCE_DRAG_AND_DROP_PREFERENCE,
+            DRAG_TO_SELECT);
 
     mInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
     accentColor = m.getMainActivity().getAccent();
@@ -325,7 +331,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     if (holder instanceof ItemViewHolder) {
       ((ItemViewHolder) holder).rl.clearAnimation();
       ((ItemViewHolder) holder).txtTitle.setSelected(false);
-      if (dragAndDropPreference != PreferencesConstants.PREFERENCE_DRAG_DEFAULT) {
+      if (dragAndDropPreference != DRAG_DEFAULT) {
         ((ItemViewHolder) holder).rl.setOnDragListener(null);
       }
     }
@@ -545,7 +551,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         itemsDigested.get(p).setAnimate(true);
       }
       final LayoutElementParcelable rowItem = itemsDigested.get(p).elem;
-      if (dragAndDropPreference != PreferencesConstants.PREFERENCE_DRAG_DEFAULT) {
+      if (dragAndDropPreference != DRAG_DEFAULT) {
         holder.rl.setOnDragListener(
             new RecyclerAdapterDragListener(this, holder, dragAndDropPreference, mainFrag));
       }
@@ -553,8 +559,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
       holder.rl.setOnLongClickListener(
           p1 -> {
             if (!isBackButton) {
-              if (dragAndDropPreference == PreferencesConstants.PREFERENCE_DRAG_DEFAULT
-                  || (dragAndDropPreference == PreferencesConstants.PREFERENCE_DRAG_TO_MOVE_COPY
+              if (dragAndDropPreference == DRAG_DEFAULT
+                  || (dragAndDropPreference == PREFERENCE_DRAG_TO_MOVE_COPY
                       && itemsDigested.get(vholder.getAdapterPosition()).getChecked()
                           != ListItem.CHECKED)) {
                 toggleChecked(
@@ -908,9 +914,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
   }
 
   private void initDragListener(int position, View view, ItemViewHolder itemViewHolder) {
-    if (dragAndDropPreference != PreferencesConstants.PREFERENCE_DRAG_DEFAULT
+    if (dragAndDropPreference != DRAG_DEFAULT
         && (itemsDigested.get(position).getChecked() == ListItem.CHECKED
-            || dragAndDropPreference == PreferencesConstants.PREFERENCE_DRAG_TO_SELECT)) {
+            || dragAndDropPreference == DRAG_TO_SELECT)) {
       // toggle drag flag to true for list item due to the fact
       // that we might have set it false in a previous drag event
       if (!itemsDigested.get(position).shouldToggleDragChecked) {
@@ -918,7 +924,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
       }
 
       View shadowView =
-          dragAndDropPreference == PreferencesConstants.PREFERENCE_DRAG_TO_SELECT
+          dragAndDropPreference == DRAG_TO_SELECT
               ? itemViewHolder.dummyView
               : getDragShadow(getCheckedItems().size());
       View.DragShadowBuilder dragShadowBuilder = new View.DragShadowBuilder(shadowView);
@@ -930,7 +936,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
       mainFrag
           .getMainActivity()
           .initCornersDragListener(
-              false, dragAndDropPreference != PreferencesConstants.PREFERENCE_DRAG_TO_SELECT);
+              false, dragAndDropPreference != DRAG_TO_SELECT);
     }
   }
 
@@ -966,10 +972,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
   private int getDragIconReference(String rememberMovePreference) {
     int iconRef = R.drawable.ic_add_white_24dp;
     if (rememberMovePreference.equalsIgnoreCase(
-        PreferencesConstants.PREFERENCE_DRAG_REMEMBER_MOVE)) {
+        PREFERENCE_DRAG_REMEMBER_MOVE)) {
       iconRef = R.drawable.ic_content_cut_white_36dp;
     } else if (rememberMovePreference.equalsIgnoreCase(
-        PreferencesConstants.PREFERENCE_DRAG_REMEMBER_COPY)) {
+        PREFERENCE_DRAG_REMEMBER_COPY)) {
       iconRef = R.drawable.ic_content_copy_white_24dp;
     }
     return iconRef;

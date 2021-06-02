@@ -36,6 +36,11 @@ import com.amaze.filemanager.asynchronous.asynctasks.PrepareCopyTask
 import com.amaze.filemanager.filesystem.HybridFileParcelable
 import com.amaze.filemanager.ui.activities.MainActivity
 import com.amaze.filemanager.ui.preference.PreferencesConstants
+import com.amaze.filemanager.ui.preference.PreferencesConstants.PREFERENCE_DRAG_AND_DROP_PREFERENCE
+import com.amaze.filemanager.ui.preference.PreferencesConstants.DragAndDrop.PREFERENCE_DRAG_REMEMBER_MOVE
+import com.amaze.filemanager.ui.preference.PreferencesConstants.DragAndDrop.PREFERENCE_DRAG_REMEMBER_COPY
+import com.amaze.filemanager.ui.preference.PreferencesConstants.DragAndDrop.PREFERENCE_DRAG_TO_MOVE_COPY
+import com.amaze.filemanager.ui.preference.PreferencesConstants.DragAndDrop.DRAG_TO_SELECT
 import com.amaze.filemanager.utils.safeLet
 
 class DragAndDropDialog : DialogFragment() {
@@ -60,16 +65,16 @@ class DragAndDropDialog : DialogFragment() {
         ) {
             val dragAndDropPref = activity.prefs
                 .getInt(
-                    PreferencesConstants.PREFERENCE_DRAG_AND_DROP_PREFERENCE,
-                    PreferencesConstants.PREFERENCE_DRAG_TO_SELECT
+                    PREFERENCE_DRAG_AND_DROP_PREFERENCE,
+                    DRAG_TO_SELECT
                 )
-            if (dragAndDropPref == PreferencesConstants.PREFERENCE_DRAG_TO_MOVE_COPY) {
+            if (dragAndDropPref == PREFERENCE_DRAG_TO_MOVE_COPY) {
                 val dragAndDropCopy = activity.prefs
                     .getString(PreferencesConstants.PREFERENCE_DRAG_AND_DROP_REMEMBERED, "")
                 if (dragAndDropCopy != "") {
                     startCopyOrMoveTask(
                         pasteLocation, files,
-                        PreferencesConstants.PREFERENCE_DRAG_REMEMBER_MOVE
+                        PREFERENCE_DRAG_REMEMBER_MOVE
                             .equals(dragAndDropCopy, ignoreCase = true),
                         activity
                     )
@@ -192,8 +197,8 @@ class DragAndDropDialog : DialogFragment() {
         mainActivity?.prefs?.edit()
             ?.putString(
                 PreferencesConstants.PREFERENCE_DRAG_AND_DROP_REMEMBERED,
-                if (shouldMove) PreferencesConstants.PREFERENCE_DRAG_REMEMBER_MOVE
-                else PreferencesConstants.PREFERENCE_DRAG_REMEMBER_COPY
+                if (shouldMove) PREFERENCE_DRAG_REMEMBER_MOVE
+                else PREFERENCE_DRAG_REMEMBER_COPY
             )?.apply()
     }
 }

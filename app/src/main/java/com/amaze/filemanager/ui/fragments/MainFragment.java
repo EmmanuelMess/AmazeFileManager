@@ -22,6 +22,7 @@ package com.amaze.filemanager.ui.fragments;
 
 import static android.os.Build.VERSION_CODES.JELLY_BEAN;
 import static com.amaze.filemanager.filesystem.ssh.SshConnectionPool.SSH_URI_PREFIX;
+import static com.amaze.filemanager.ui.preference.PreferencesConstants.DragAndDrop.DRAG_TO_SELECT;
 import static com.amaze.filemanager.ui.preference.PreferencesConstants.PREFERENCE_DIRECTORY_SORT_MODE;
 import static com.amaze.filemanager.ui.preference.PreferencesConstants.PREFERENCE_GRID_COLUMNS;
 import static com.amaze.filemanager.ui.preference.PreferencesConstants.PREFERENCE_SHOW_DIVIDERS;
@@ -211,8 +212,7 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
     sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
     dragAndDropPreference =
         sharedPref.getInt(
-            PreferencesConstants.PREFERENCE_DRAG_AND_DROP_PREFERENCE,
-            PreferencesConstants.PREFERENCE_DRAG_TO_SELECT);
+            PreferencesConstants.PREFERENCE_DRAG_AND_DROP_PREFERENCE, DRAG_TO_SELECT);
     res = getResources();
 
     no = getArguments().getInt("no", 1);

@@ -22,6 +22,7 @@ package com.amaze.filemanager.ui.fragments.preference_fragments;
 
 import static com.amaze.filemanager.R.string.feedback;
 import static com.amaze.filemanager.ui.activities.PreferencesActivity.START_PREFERENCE;
+import static com.amaze.filemanager.ui.preference.PreferencesConstants.DragAndDrop.DRAG_TO_SELECT;
 import static com.amaze.filemanager.ui.preference.PreferencesConstants.PreferenceFragmentKey.ABOUT;
 import static com.amaze.filemanager.ui.preference.PreferencesConstants.PreferenceFragmentKey.ADVANCED_SEARCH;
 import static com.amaze.filemanager.ui.preference.PreferencesConstants.PreferenceFragmentKey.FEEDBACK;
@@ -230,7 +231,7 @@ public class PrefFrag extends PreferenceFragmentCompat
         int currentDragPreference =
             sharedPref.getInt(
                 PreferencesConstants.PREFERENCE_DRAG_AND_DROP_PREFERENCE,
-                PreferencesConstants.PREFERENCE_DRAG_TO_SELECT);
+                DRAG_TO_SELECT);
         dragDialogBuilder
             .items(dragToMoveArray)
             .itemsCallbackSingleChoice(

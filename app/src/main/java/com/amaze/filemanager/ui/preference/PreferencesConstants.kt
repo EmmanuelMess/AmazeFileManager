@@ -97,11 +97,11 @@ object PreferencesConstants {
     const val PREFERENCE_APPLIST_ISASCENDING = "AppsListFragment.isAscending"
     // END sort preferences
 
-    // START drag and drop preferences
-    const val PREFERENCE_DRAG_DEFAULT = 0
-    const val PREFERENCE_DRAG_TO_SELECT = 1
-    const val PREFERENCE_DRAG_TO_MOVE_COPY = 2
-    const val PREFERENCE_DRAG_REMEMBER_COPY = "copy"
-    const val PREFERENCE_DRAG_REMEMBER_MOVE = "move"
-    // END drag and drop preferences
+    object DragAndDrop {
+        const val DRAG_DEFAULT = 0
+        const val DRAG_TO_SELECT = 1
+        const val PREFERENCE_DRAG_TO_MOVE_COPY = 2
+        const val PREFERENCE_DRAG_REMEMBER_COPY = "copy"
+        const val PREFERENCE_DRAG_REMEMBER_MOVE = "move"
+    }
 }

@@ -31,9 +31,10 @@ import com.amaze.filemanager.filesystem.HybridFile
 import com.amaze.filemanager.filesystem.HybridFileParcelable
 import com.amaze.filemanager.ui.dialogs.DragAndDropDialog
 import com.amaze.filemanager.ui.fragments.MainFragment
-import com.amaze.filemanager.ui.preference.PreferencesConstants
 import com.amaze.filemanager.utils.DataUtils
 import kotlin.collections.ArrayList
+
+import com.amaze.filemanager.ui.preference.PreferencesConstants.DragAndDrop.DRAG_TO_SELECT
 
 class RecyclerAdapterDragListener(
     private val adapter: RecyclerAdapter,
@@ -51,10 +52,10 @@ class RecyclerAdapterDragListener(
                 mainFragment.mainActivity.initCornersDragListener(
                     true,
                     dragAndDropPref
-                        != PreferencesConstants.PREFERENCE_DRAG_TO_SELECT
+                        != DRAG_TO_SELECT
                 )
                 if (dragAndDropPref
-                    != PreferencesConstants.PREFERENCE_DRAG_TO_SELECT
+                    != DRAG_TO_SELECT
                 ) {
                     val dataUtils = DataUtils.getInstance()
                     dataUtils.checkedItemsList = null
@@ -69,7 +70,7 @@ class RecyclerAdapterDragListener(
                         holder.adapterPosition < adapter.itemsDigested.size
                     ) {
                         val listItem = (adapter.itemsDigested[holder.adapterPosition])
-                        if (dragAndDropPref == PreferencesConstants.PREFERENCE_DRAG_TO_SELECT) {
+                        if (dragAndDropPref == DRAG_TO_SELECT) {
                             if (listItem.specialType != RecyclerAdapter.TYPE_BACK &&
                                 listItem.shouldToggleDragChecked
                             ) {
@@ -98,7 +99,7 @@ class RecyclerAdapterDragListener(
                         holder.adapterPosition < adapter.itemsDigested.size
                     ) {
                         val listItem = (adapter.itemsDigested[holder.adapterPosition])
-                        if (dragAndDropPref != PreferencesConstants.PREFERENCE_DRAG_TO_SELECT) {
+                        if (dragAndDropPref != DRAG_TO_SELECT) {
                             val checkedItems:
                                 ArrayList<LayoutElementParcelable> = adapter.checkedItems
                             val currentElement = listItem.elem
@@ -123,7 +124,7 @@ class RecyclerAdapterDragListener(
             }
             DragEvent.ACTION_DRAG_LOCATION -> {
                 holder?.run {
-                    if (dragAndDropPref != PreferencesConstants.PREFERENCE_DRAG_TO_SELECT) {
+                    if (dragAndDropPref != DRAG_TO_SELECT) {
                         holder.rl.run {
                             isFocusable = true
                             isFocusableInTouchMode = true
@@ -134,7 +135,7 @@ class RecyclerAdapterDragListener(
                 true
             }
             DragEvent.ACTION_DROP -> {
-                if (dragAndDropPref != PreferencesConstants.PREFERENCE_DRAG_TO_SELECT) {
+                if (dragAndDropPref != DRAG_TO_SELECT) {
                     var checkedItems: ArrayList<LayoutElementParcelable> = adapter.checkedItems
                     var currentFileParcelable: HybridFileParcelable? = null
                     var isCurrentElementDirectory: Boolean? = null
