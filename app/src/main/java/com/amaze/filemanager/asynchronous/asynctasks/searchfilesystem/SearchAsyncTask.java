@@ -42,11 +42,13 @@ public class SearchAsyncTask extends AsyncTask<String, HybridFileParcelable, Voi
 
   private static final String TAG = "SearchAsyncTask";
 
-  private WeakReference<Activity> activity;
+  private final WeakReference<Activity> activity;
   private SearchWorkerFragment.HelperCallbacks callbacks;
-  private String input;
-  private OpenMode openMode;
-  private boolean rootMode, isRegexEnabled, isMatchesEnabled;
+  private final String input;
+  private final OpenMode openMode;
+  private final boolean rootMode;
+  private final boolean isRegexEnabled;
+  private final boolean isMatchesEnabled;
 
   public SearchAsyncTask(
       Activity a, String input, OpenMode openMode, boolean root, boolean regex, boolean matches) {

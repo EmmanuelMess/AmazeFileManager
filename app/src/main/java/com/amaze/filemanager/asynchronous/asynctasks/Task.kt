@@ -25,6 +25,7 @@ import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import org.reactivestreams.Publisher
 import java.util.concurrent.Callable
 
 interface Task<V, T : Callable<V>> {
@@ -48,6 +49,34 @@ interface Task<V, T : Callable<V>> {
     fun onFinish(value: V)
 }
 
+interface PublisherTask<V, T : Publisher<V>> {
+    /**
+     * This should return a callable to be run on a worker thread
+     * The [Callable] cannot return null
+     */
+    fun getTask(): T
+
+    /**
+     * This function will be called on main thread if an exception is thrown
+     */
+    @MainThread
+    fun onError(error: Throwable)
+
+    /**
+     * If the task does not return null, and doesn't throw an error this
+     * function will be called with the result of the operation on main thread
+     */
+    @MainThread
+    fun onNext(value: V)
+
+    /**
+     * If the task does not return null, and doesn't throw an error this
+     * function will be called on main thread
+     */
+    @MainThread
+    fun onFinish()
+}
+
 /**
  * This creates and starts a [Flowable] from a [Task].
  */
@@ -56,4 +85,14 @@ fun <V, T : Callable<V>> fromTask(task: Task<V, T>): Disposable {
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(task::onFinish, task::onError)
+}
+
+/**
+ * This creates and starts a [Flowable] from a [Task].
+ */
+fun <V, T : Publisher<V>> fromTask(task: PublisherTask<V, T>): Disposable {
+    return Flowable.fromPublisher(task.getTask())
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(task::onNext, task::onError, task::onFinish)
 }
