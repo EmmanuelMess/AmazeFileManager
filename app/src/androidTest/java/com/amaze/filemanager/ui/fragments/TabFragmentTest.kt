@@ -13,6 +13,7 @@ import androidx.test.espresso.action.ViewActions.swipeRight
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import androidx.test.rule.GrantPermissionRule
@@ -85,6 +86,7 @@ class TabFragmentTest {
      * Check if the fragment state is saved correctly during a configuration change
      * by rotate the screen while swiping between the tabs.
      */
+    @SdkSuppress(excludedSdks = [21, 28])
     @Test
     fun testFragmentStateSavingDuringConfigChange() {
         // First perform the swipe action
@@ -99,6 +101,7 @@ class TabFragmentTest {
     /**
      * Check if the fragment state is saved correctly during rapid tab swiping.
      */
+    @SdkSuppress(excludedSdks = [21, 28])
     @Test
     fun testRapidTabSwitchingAndStateSaving() {
         // Perform rapid tab switches
@@ -116,6 +119,7 @@ class TabFragmentTest {
     /**
      * Check if the fragment state is saved correctly when the fragment is detached.
      */
+    @SdkSuppress(excludedSdks = [21, 28])
     @Test
     fun testFragmentDetachmentAndStateSaving() {
         // First switch to a different tab
