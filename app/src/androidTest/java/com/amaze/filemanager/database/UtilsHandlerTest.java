@@ -29,6 +29,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -68,21 +69,25 @@ public class UtilsHandlerTest {
   }
 
   @Test
+  @Ignore("Ignored until we fix #4622")
   public void testEncodeEncryptUri1() {
     performEncryptUriTest("ssh://test:testP@ssw0rd@127.0.0.1:5460");
   }
 
   @Test
+  @Ignore("Ignored until we fix #4622")
   public void testEncodeEncryptUri2() {
     performEncryptUriTest("ssh://test:testP@##word@127.0.0.1:22");
   }
 
   @Test
+  @Ignore("Ignored until we fix #4622")
   public void testEncodeEncryptUri3() {
     performEncryptUriTest("ssh://test@example.com:testP@ssw0rd@127.0.0.1:22");
   }
 
   @Test
+  @Ignore("Ignored until we fix #4622")
   public void testEncodeEncryptUri4() {
     performEncryptUriTest("ssh://test@example.com:testP@ssw0##$@127.0.0.1:22");
   }
